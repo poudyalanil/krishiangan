@@ -41,6 +41,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'agmarket.urls'
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
 
 TEMPLATES = [
     {
@@ -61,7 +63,7 @@ TEMPLATES = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -77,9 +79,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, 'db.sqlite1')
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'localhost',
+        'PORT': 5432,
+        'NAME': 'krishiangan',
+        'USER': 'postgres',
+        'PASSWORD': 'admin'
     }
 }
 
