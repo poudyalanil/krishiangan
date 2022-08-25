@@ -56,3 +56,52 @@ class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = subscripiton
         fields = ('email',)
+
+
+# make separate form for admin panel and staff
+class CategoriesAdminForm(forms.ModelForm):
+    class Meta:
+        model = categories
+        fields = '__all__'
+
+
+class CategoriesForm(forms.ModelForm):
+    class Meta:
+        model = categories
+        exclude = ['client', ]
+
+
+class ItemAdminForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        exclude = ['client', ]
+
+
+class OrderAdminForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ['client', ]
+
+
+class OrderItemAdminForm(forms.ModelForm):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+
+
+class OrderItemForm(forms.ModelForm):
+    class Meta:
+        model = OrderItem
+        exclude = ['client', ]

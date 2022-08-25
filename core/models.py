@@ -3,10 +3,35 @@ from django.shortcuts import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
+from django.utils.translation import gettext_lazy as _
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 
+
+class Client(models.Model):
+    name = models.CharField(max_length=200, unique=True,
+                            help_text=_(
+                                'Required. 200 characters or fewer.'),
+                            error_messages={
+                                'unique': _("A user with that username already exists."),
+                            })
+    email = models.EmailField(_('email address'), blank=True)
+    phone = models.CharField(max_length=20, blank=True, default='')
+    address = models.CharField(max_length=200, blank=True, default='')
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ClientUser(models.Model):
+    user = models.ForeignKey(User, verbose_name=_(
+        "User"), on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, verbose_name=_(
+        "Client"), on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -39,6 +64,8 @@ class categories(models.Model):
     category_ne = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField()
+    client = models.ForeignKey(Client, verbose_name=_(
+        "Client"), on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name_plural = "categories"
@@ -62,6 +89,7 @@ class Item(models.Model):
     sold = models.IntegerField(default=0)
     unit = models.CharField(max_length=10, default="Kg")
     home_delivery = models.BooleanField(default=False)
+    show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
     thumbnail = models.ImageField(upload_to='images/', default=None)
@@ -75,6 +103,8 @@ class Item(models.Model):
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(
         User, related_name='item_like',  blank=True)
+    client = models.ForeignKey(Client, verbose_name=_(
+        "Client"), on_delete=models.CASCADE, null=True)
 
     def number_of_likes(self):
         return self.likes.count()
@@ -167,6 +197,8 @@ class OrderItem(models.Model):
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    client = models.ForeignKey(Client, verbose_name=_(
+        "Client"), on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
@@ -193,6 +225,8 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
+    client = models.ForeignKey(Client, verbose_name=_(
+        "Client"), on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.user.username
