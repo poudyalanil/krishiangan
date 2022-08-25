@@ -42,6 +42,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'agmarket.urls'
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
 
 
 TEMPLATES = [
