@@ -25,7 +25,13 @@ class CustomModelAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         else:
-            return qs.filter(client_id=clientUser.client_id)| qs.filter(client_id=superClientUser.client_id)
+            qs1=qs2=qs
+            if clientUser is not None:
+                qs1=qs.filter(client_id=clientUser.client_id)
+            if superClientUser is not None:
+                qs2=qs.filter(client_id=superClientUser.client_id)
+            # return qs.filter(client_id=clientUser.client_id)| qs.filter(client_id=superClientUser.client_id)
+            return qs1|qs2
 
     def save_model(self, request, obj, form, change):
         if request.user.is_staff:
