@@ -7,8 +7,10 @@
 
 <main>
 	<div class="container margin_30">
-		<div class="countdown_inner">-{{ object.get_discount_percent }}% This item ends in <div
+		<div class="countdown_inner">-{{ object.get_discount_percent }}% 
+			{% if object.show_expiry %} This item ends in <div
 				data-countdown="{{object.expiry_date|date:"Y/m/d"}}" class="countdown"></div>
+				{%endif%}
 		</div>
 		<div class="row">
 			<div class="col-md-6">
@@ -57,7 +59,7 @@
 							class="icon-star voted"></i><i class="icon-star"></i><em>{{ number_of_likes }} People Liked
 							this Product</em></span>
 					<p><small>Author : {{ object.user.username }}</small></p>
-					<span class="new_price">Available : {{object.get_available_item}} {{object.unit}}</span>
+					<span class="new_price">Available : {{object.get_available_item}}</span>
 
 					<div class="prod_options">
 
@@ -204,7 +206,7 @@
 											<tbody>
 												<tr>
 													<td><strong>Available</strong></td>
-													<td>{{object.get_available_item}} {{object.unit}}</td>
+													<td>{{object.get_available_item}}</td>
 												</tr>
 
 												<tr>

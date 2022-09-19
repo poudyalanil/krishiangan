@@ -12,8 +12,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         User, related_name='user', on_delete=models.CASCADE)
     photo = models.ImageField(verbose_name=("Profile Picture"),
-                              upload_to=(
-        "main.UserProfile.photo", "profiles"), null=True, blank=True)
+                              upload_to=("profile_photos/"), null=True, blank=True)
 
     bio = models.TextField(default='', blank=True)
     phone = models.CharField(max_length=20, blank=True, default='')
@@ -62,6 +61,7 @@ class Item(models.Model):
     sold = models.IntegerField(default=0)
     unit = models.CharField(max_length=10, default="Kg")
     home_delivery = models.BooleanField(default=False)
+    show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
     thumbnail = models.ImageField(upload_to='images/', default=None)
@@ -70,7 +70,7 @@ class Item(models.Model):
         related_query_name='hit_count_generic_relation')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    expiry_date = models.DateField(null=True)
+    expiry_date = models.DateField(null=True,blank=True)
     upload_date = models.DateField(auto_now_add=True, null=True)
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(
@@ -80,7 +80,11 @@ class Item(models.Model):
         return self.likes.count()
 
     def get_available_item(self):
-        return self.available-self.sold
+        available_quantity = self.available-self.sold
+        if(available_quantity < 1):
+            return 'Out of Stock'
+        else:
+            return '%s  %s' % (self.available-self.sold, self.unit)
 
     def __str__(self):
         return self.title

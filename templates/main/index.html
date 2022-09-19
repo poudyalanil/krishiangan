@@ -1,303 +1,249 @@
 {% extends "main/base.html" %}
 {% load hitcount_tags %}
 {% load custom_tags %}
-
 {% block content %}
 {% load static %}	
-	<main>
-
-		<div id="carousel-home">
-			<div class="owl-carousel owl-theme">
-			{% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"0:3"%}
-                                
-				<div class="owl-slide cover" style="background-image: url({{item.thumbnail.url}});">
-					<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-						<div class="container">
-							<div class="row justify-content-center justify-content-md-start">
-								<div class="col-lg-6 static">
-									<div class="slide-text white">
-										<h2 class="owl-slide-animated owl-slide-title">{{item.title}}</h2>
-										<h5 style="color:white;" class="owl-slide-animated owl-slide-title"><strong>{{item.category}}</strong></h5>
-									
-				
-								<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price" style="color:white;">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price" style="color:white;">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-					
-										<p class="owl-slide-animated owl-slide-subtitle">
-											{{item.description|truncatewords:20}}
-										</p>
-										
-										<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{item.get_absolute_url}}" role="button">Shop Now</a></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				{% endfor %}
-				<!--/owl-slide-->
-				
-				
-			</div>
-			<div id="icon_drag_mobile"></div>
-		</div>
-		<hr class="mb-0">
-		
-
-		<!--/carousel-->
-		{% comment %} {% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"2:3"%} {% endcomment %}
-		{% comment %} <div class="featured lazy" data-bg="#">
-			<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-				<div class="container margin_60"> {% endcomment %}
-						<div class="container ">
-		{% comment %} <ul id="banners_grid" class="clearfix"> {% endcomment %}
-			<div class="owl-carousel owl-theme products_carousel">
-
-		{% for category in categories  %}
-				<div class="item">
-					<div class="grid_item">
-					<figure>
-							<a href=" {{category.get_absolute_url}} ">
+<main>
+    <div id="carousel-home">
+        <div class="owl-carousel owl-theme">
+            {% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"0:3"%}
+            <div class="owl-slide cover" style="background-image: url({{item.thumbnail.url}});">
+                <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                    <div class="container">
+                        <div class="row justify-content-center justify-content-md-start">
+                            <div class="col-lg-6 static">
+                                <div class="slide-text white">
+                                    <h2 class="owl-slide-animated owl-slide-title">{{item.title}}</h2>
+                                    <h5 style="color:white;" class="owl-slide-animated owl-slide-title"><strong>{{item.category}}</strong></h5>
+                                    <div class="price_box">
+                                        {% if item.discount_price %}
+                                        <span class="new_price" style="color:white;">Rs.{{ item.discount_price }}</span>
+                                        <span class="old_price">Rs.{{ item.price }}</span>
+                                        {% else %}
+                                        <span class="new_price" style="color:white;">Rs.{{ item.price }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="owl-slide-animated owl-slide-subtitle">
+                                        {{item.description|truncatewords:20}}
+                                    </p>
+                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{item.get_absolute_url}}" role="button">Shop Now</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!--/owl-slide-->
+        </div>
+        <div id="icon_drag_mobile"></div>
+    </div>
+    <hr class="mb-0">
+    <!--/carousel-->
+		<div class="container ">
+				<div class="owl-carousel owl-theme products_carousel">
+					{% for category in categories  %}
+					<div class="item">
+						<div class="grid_item">
+							<figure>
+								<a href=" {{category.get_absolute_url}} ">
 								<img class="owl-lazy" src=" {{category.image.url}}" data-src="{{category.image.url}}" alt="">
-							</a>
-						
-							
-						</figure>
-						 
-						{% comment %} <a href=" {{category.get_absolute_url}} "> {% endcomment %}
-							
-						{% comment %} </a> {% endcomment %}
-						
-					
-		
+								</a>
+							</figure>
 							<div><a href=" {{category.get_absolute_url}} "><span class="btn_1">{{category.category}}</span></a></div>
-							
-						
-
-				</div>
-				</div>
-
-		
-			{% endfor %}
-			</div>
-		 </div> 
-				{% comment %} </div>
-			</div>
-		</div> {% endcomment %}
-				{% comment %} {% endfor %} {% endcomment %}
-
-
-		
-		{% comment %} </ul> {% endcomment %}
-		<!--/banners_grid -->
-		
-		<hr class="mb-0">
-		
-		<div class="container margin_60_35">
-			<div class="main_title">
-				<h2>Latest Products</h2>
-				<span>Latest Products</span>
-				<p>New Products listed in Market</p>
-			</div>
-			 
-
-			<div class="row small-gutters">
-			{% for item in items|sort_by:'-upload_date'|slice:"0:8"%}
-				<div class="col-6 col-md-4 col-xl-3">
-					<div class="grid_item">
-						<figure>
-							<span class="ribbon off">-{{ item.get_discount_percent }}%</span>
-							<a href="{{ item.get_absolute_url }}">
-							{% if item.thumbnail %}
-								<img class="img-fluid lazy" src="{{item.thumbnail.url}}" data-src="{{item.thumbnail.url|default_if_none:'#'}}" alt="">
-								{% comment %} <img class="img-fluid lazy" src="{{item.thumbnail.url}}" data-src="{{item.thumbnail.url|default_if_none:'#'}}" alt=""> {% endcomment %}
-								{% endif %}
-							</a>
-							<div data-countdown="{{item.expiry_date|date:"Y/m/d"}}" class="countdown"></div> 
-						</figure>
-						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="{{ item.get_absolute_url }}">
-							<h3>{{item.title}}</h3>
-						</a>
-						<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-						<ul>
-
-							{% if post_is_liked %}
-							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-down"></i><span>Unlike</span></a></li>
-								{% else %}
-							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a></li>
-{% endif %}
-							<li><a href="{{ item.get_add_to_cart_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-						</ul>
-					</div>
-					<!-- /grid_item -->
-				</div>
-{% endfor %}
-			</div>
-			
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-			{% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"3:4"%}
-
-		<div class="featured lazy" data-bg="url( {{item.thumbnail.url}})">
-			<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-				<div class="container margin_60">
-					<div class="row justify-content-center justify-content-md-start">
-						<div class="col-lg-6 wow" data-wow-offset="150">
-							<h3>{{item.title}}</h3>
-							<p>{{item.description|truncatewords:30}}</p>
-							<div class="feat_text_block">
-								<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-								<a class="btn_1" href=" {{item.get_absolute_url}} " role="button">Shop Now</a>
-							</div>
 						</div>
 					</div>
+					{% endfor %}
 				</div>
-			</div>
 		</div>
-		{%endfor %}
-		<!-- /featured -->
-
-		<div class="container margin_60_35">
-			<div class="main_title">
-				<h2>Most Viewed Products</h2>
-				<span>Most Viewed</span>
-				<p>Mostly viewded products in this market</p>
-			</div>
-			<div class="owl-carousel owl-theme products_carousel">
-			
-             {% for item in items|sort_by:'-hit_count_generic__hits'|slice:":8"%}
-			
-				<div class="item">
-					<div class="grid_item">
-					 {% if item.discount_price %}
-						<span class="ribbon off">-{{ item.get_discount_percent }}%</span>
-						{% endif%}
-						<figure>
-							<a href=" {{item.get_absolute_url}} ">
-								<img class="owl-lazy" src=" {{item.thumbnail.url}}" data-src="{{item.thumbnail.url}}" alt="">
-							</a>
-						</figure>
-						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href=" {{item.thumbnail.url}} ">
-							<h3>{{item.title}}</h3>
-						</a>
-						<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-						<ul>
-							<li><a href=" #0 " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-							<li><a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-						</ul>
-					</div>
-					<!-- /grid_item -->
-				</div>
-				{%endfor%}
-				<!-- /item -->
-			</div>
-			<!-- /products_carousel -->
-		</div>
-
-			{% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"4:5"%}
-
-		<div class="featured lazy" data-bg="url( {{item.thumbnail.url}})">
-			<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-				<div class="container margin_60">
-					<div class="row justify-content-center justify-content-md-start">
-						<div class="col-lg-6 wow" data-wow-offset="150">
-							<h3>{{item.title}}</h3>
-							<p>{{item.description|truncatewords:30}}</p>
-							<div class="feat_text_block">
-								<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-								<a class="btn_1" href=" {{item.get_absolute_url}} " role="button">Shop Now</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		{%endfor %}
-		<!-- /container -->
-	<div class="container margin_60_35">
-			<div class="main_title">
-				<h2>Best Selling Products</h2>
-				<span>Best Selling</span>
-				<p>Top Products with Most Sales </p>
-			</div>
-			<div class="owl-carousel owl-theme products_carousel">
-			
-                 {% for item in items|sort_by:'-sold'|slice:"0:8"%}
-
-			
-				<div class="item">
-					<div class="grid_item">
-					 {% if item.discount_price %}
-						<span class="ribbon off">-{{ item.get_discount_percent }}%</span>
-						{% endif%}
-						<figure>
-							<a href=" {{item.get_absolute_url}} ">
-								<img class="owl-lazy" src=" {{item.thumbnail.url}}" data-src="{{item.thumbnail.url}}" alt="">
-							</a>
-						</figure>
-						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href=" {{item.thumbnail.url}} ">
-							<h3>{{item.title}}</h3>
-						</a>
-						<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-						<ul>
-							<li><a href=" #0 " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-							<li><a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-						</ul>
-					</div>
-					<!-- /grid_item -->
-				</div>
-				{%endfor%}
-				<!-- /item -->
-			</div>
-			<!-- /products_carousel -->
-		</div>
-	
-	</main>
-	<!-- /main -->
-	{% endblock content %}
+    <!--/banners_grid -->
+    <hr class="mb-0">
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Latest Products</h2>
+            <span>Latest Products</span>
+            <p>New Products listed in Market</p>
+        </div>
+        <div class="row small-gutters">
+            {% for item in items|sort_by:'-upload_date'|slice:"0:8"%}
+            <div class="col-6 col-md-4 col-xl-3">
+                <div class="grid_item">
+                    <figure>
+                        <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                        <a href="{{ item.get_absolute_url }}">
+                        {% if item.thumbnail %}
+                        <img class="img-fluid lazy" src="{{item.thumbnail.url}}" data-src="{{item.thumbnail.url|default_if_none:'#'}}" alt="">
+                        {% endif %}
+                        </a>
+                        {% if item.show_expiry %}
+                        <div data-countdown="{{item.expiry_date|date:"Y/m/d"}}" class="countdown">
+                </div>
+                {% endif %}
+                </figure>
+                <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
+                <a href="{{ item.get_absolute_url }}">
+                    <h3>{{item.title}}</h3>
+                </a>
+                <div class="price_box">
+                    {% if item.discount_price %}
+                    <span class="new_price">Rs.{{ item.discount_price }}</span>
+                    <span class="old_price">Rs.{{ item.price }}</span>
+                    {% else %}
+                    <span class="new_price">Rs.{{ item.price }}</span>
+                    {% endif %}
+                </div>
+                <ul>
+                    {% if post_is_liked %}
+                    <li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-down"></i><span>Unlike</span></a></li>
+                    {% else %}
+                    <li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a></li>
+                    {% endif %}
+                    <li><a href="{{ item.get_add_to_cart_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
+                </ul>
+            </div>
+            <!-- /grid_item -->
+        </div>
+        {% endfor %}
+    </div>
+    <!-- /row -->
+    </div>
+    <!-- /container -->
+    {% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"3:4"%}
+    <div class="featured lazy" data-bg="url( {{item.thumbnail.url}})">
+        <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+            <div class="container margin_60">
+                <div class="row justify-content-center justify-content-md-start">
+                    <div class="col-lg-6 wow" data-wow-offset="150">
+                        <h3>{{item.title}}</h3>
+                        <p>{{item.description|truncatewords:30}}</p>
+                        <div class="feat_text_block">
+                            <div class="price_box">
+                                {% if item.discount_price %}
+                                <span class="new_price">Rs.{{ item.discount_price }}</span>
+                                <span class="old_price">Rs.{{ item.price }}</span>
+                                {% else %}
+                                <span class="new_price">Rs.{{ item.price }}</span>
+                                {% endif %}
+                            </div>
+                            <a class="btn_1" href=" {{item.get_absolute_url}} " role="button">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor %}
+    <!-- /featured -->
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Most Viewed Products</h2>
+            <span>Most Viewed</span>
+            <p>Mostly viewded products in this market</p>
+        </div>
+        <div class="owl-carousel owl-theme products_carousel">
+            {% for item in items|sort_by:'-hit_count_generic__hits'|slice:":8"%}
+            <div class="item">
+                <div class="grid_item">
+                    {% if item.discount_price %}
+                    <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                    {% endif%}
+                    <figure>
+                        <a href=" {{item.get_absolute_url}} ">
+                        <img class="owl-lazy" src=" {{item.thumbnail.url}}" data-src="{{item.thumbnail.url}}" alt="">
+                        </a>
+                    </figure>
+                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
+                    <a href=" {{item.thumbnail.url}} ">
+                        <h3>{{item.title}}</h3>
+                    </a>
+                    <div class="price_box">
+                        {% if item.discount_price %}
+                        <span class="new_price">Rs.{{ item.discount_price }}</span>
+                        <span class="old_price">Rs.{{ item.price }}</span>
+                        {% else %}
+                        <span class="new_price">Rs.{{ item.price }}</span>
+                        {% endif %}
+                    </div>
+                    <ul>
+                        <li><a href=" #0 " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
+                        <li><a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
+                    </ul>
+                </div>
+                <!-- /grid_item -->
+            </div>
+            {%endfor%}
+            <!-- /item -->
+        </div>
+        <!-- /products_carousel -->
+    </div>
+    {% for item in items|filter_featured:'-True'|sort_by:'-upload_date'|slice:"4:5"%}
+    <div class="featured lazy" data-bg="url( {{item.thumbnail.url}})">
+        <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+            <div class="container margin_60">
+                <div class="row justify-content-center justify-content-md-start">
+                    <div class="col-lg-6 wow" data-wow-offset="150">
+                        <h3>{{item.title}}</h3>
+                        <p>{{item.description|truncatewords:30}}</p>
+                        <div class="feat_text_block">
+                            <div class="price_box">
+                                {% if item.discount_price %}
+                                <span class="new_price">Rs.{{ item.discount_price }}</span>
+                                <span class="old_price">Rs.{{ item.price }}</span>
+                                {% else %}
+                                <span class="new_price">Rs.{{ item.price }}</span>
+                                {% endif %}
+                            </div>
+                            <a class="btn_1" href=" {{item.get_absolute_url}} " role="button">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor %}
+    <!-- /container -->
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Best Selling Products</h2>
+            <span>Best Selling</span>
+            <p>Top Products with Most Sales </p>
+        </div>
+        <div class="owl-carousel owl-theme products_carousel">
+            {% for item in items|sort_by:'-sold'|slice:"0:8"%}
+            <div class="item">
+                <div class="grid_item">
+                    {% if item.discount_price %}
+                    <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                    {% endif%}
+                    <figure>
+                        <a href=" {{item.get_absolute_url}} ">
+                        <img class="owl-lazy" src=" {{item.thumbnail.url}}" data-src="{{item.thumbnail.url}}" alt="">
+                        </a>
+                    </figure>
+                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
+                    <a href=" {{item.thumbnail.url}} ">
+                        <h3>{{item.title}}</h3>
+                    </a>
+                    <div class="price_box">
+                        {% if item.discount_price %}
+                        <span class="new_price">Rs.{{ item.discount_price }}</span>
+                        <span class="old_price">Rs.{{ item.price }}</span>
+                        {% else %}
+                        <span class="new_price">Rs.{{ item.price }}</span>
+                        {% endif %}
+                    </div>
+                    <ul>
+                        <li><a href=" #0 " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
+                        <li><a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
+                    </ul>
+                </div>
+                <!-- /grid_item -->
+            </div>
+            {%endfor%}
+            <!-- /item -->
+        </div>
+        <!-- /products_carousel -->
+    </div>
+</main>
+<!-- /main -->
+{% endblock content %}
