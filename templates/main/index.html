@@ -1,6 +1,8 @@
 {% extends "main/base.html" %}
 {% load hitcount_tags %}
 {% load custom_tags %}
+{% load convert_2_nepali_num_tags %}
+
 {% block content %}
 {% load static %}	
 <main>
@@ -17,16 +19,16 @@
                                     <h5 style="color:white;" class="owl-slide-animated owl-slide-title"><strong>{{item.category}}</strong></h5>
                                     <div class="price_box">
                                         {% if item.discount_price %}
-                                        <span class="new_price" style="color:white;">Rs.{{ item.discount_price }}</span>
-                                        <span class="old_price">Rs.{{ item.price }}</span>
+                                        <span class="new_price" style="color:white;">रू {{ item.discount_price|convertToNepali }}</span>
+                                        <span class="old_price">रू {{ item.price }}</span>
                                         {% else %}
-                                        <span class="new_price" style="color:white;">Rs.{{ item.price }}</span>
+                                        <span class="new_price" style="color:white;">रू {{ item.price|convertToNepali }}</span>
                                         {% endif %}
                                     </div>
                                     <p class="owl-slide-animated owl-slide-subtitle">
                                         {{item.description|truncatewords:20}}
                                     </p>
-                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{item.get_absolute_url}}" role="button">Shop Now</a></div>
+                                    <div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{item.get_absolute_url}}" role="button">किनमेल गर्नुहोस्</a></div>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +71,7 @@
             <div class="col-6 col-md-4 col-xl-3">
                 <div class="grid_item">
                     <figure>
-                        <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                        <span class="ribbon off">-{{ item.get_discount_percent|convertToNepali }}%</span>
                         <a href="{{ item.get_absolute_url }}">
                         {% if item.thumbnail %}
                         <img class="img-fluid lazy" src="{{item.thumbnail.url}}" data-src="{{item.thumbnail.url|default_if_none:'#'}}" alt="">
@@ -86,10 +88,10 @@
                 </a>
                 <div class="price_box">
                     {% if item.discount_price %}
-                    <span class="new_price">Rs.{{ item.discount_price }}</span>
-                    <span class="old_price">Rs.{{ item.price }}</span>
+                    <span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+                    <span class="old_price">रू {{ item.price|convertToNepali }}</span>
                     {% else %}
-                    <span class="new_price">Rs.{{ item.price }}</span>
+                    <span class="new_price">रू {{ item.price|convertToNepali }}</span>
                     {% endif %}
                 </div>
                 <ul>
@@ -119,13 +121,13 @@
                         <div class="feat_text_block">
                             <div class="price_box">
                                 {% if item.discount_price %}
-                                <span class="new_price">Rs.{{ item.discount_price }}</span>
-                                <span class="old_price">Rs.{{ item.price }}</span>
+                                <span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+                                <span class="old_price">रू {{ item.price|convertToNepali }}</span>
                                 {% else %}
-                                <span class="new_price">Rs.{{ item.price }}</span>
+                                <span class="new_price">रू {{ item.price|convertToNepali }}</span>
                                 {% endif %}
                             </div>
-                            <a class="btn_1" href=" {{item.get_absolute_url}} " role="button">Shop Now</a>
+                            <a class="btn_1" href=" {{item.get_absolute_url}} " role="button">किनमेल गर्नुहोस्</a>
                         </div>
                     </div>
                 </div>
@@ -145,7 +147,7 @@
             <div class="item">
                 <div class="grid_item">
                     {% if item.discount_price %}
-                    <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                    <span class="ribbon off">-{{ item.get_discount_percent|convertToNepali }}%</span>
                     {% endif%}
                     <figure>
                         <a href=" {{item.get_absolute_url}} ">
@@ -158,10 +160,10 @@
                     </a>
                     <div class="price_box">
                         {% if item.discount_price %}
-                        <span class="new_price">Rs.{{ item.discount_price }}</span>
-                        <span class="old_price">Rs.{{ item.price }}</span>
+                        <span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+                        <span class="old_price">रू {{ item.price|convertToNepali }}</span>
                         {% else %}
-                        <span class="new_price">Rs.{{ item.price }}</span>
+                        <span class="new_price">रू {{ item.price|convertToNepali }}</span>
                         {% endif %}
                     </div>
                     <ul>
@@ -187,13 +189,13 @@
                         <div class="feat_text_block">
                             <div class="price_box">
                                 {% if item.discount_price %}
-                                <span class="new_price">Rs.{{ item.discount_price }}</span>
-                                <span class="old_price">Rs.{{ item.price }}</span>
+                                <span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+                                <span class="old_price">रू {{ item.price|convertToNepali }}</span>
                                 {% else %}
-                                <span class="new_price">Rs.{{ item.price }}</span>
+                                <span class="new_price">रू {{ item.price|convertToNepali }}</span>
                                 {% endif %}
                             </div>
-                            <a class="btn_1" href=" {{item.get_absolute_url}} " role="button">Shop Now</a>
+                            <a class="btn_1" href=" {{item.get_absolute_url}} " role="button">किनमेल गर्नुहोस्</a>
                         </div>
                     </div>
                 </div>
@@ -213,7 +215,7 @@
             <div class="item">
                 <div class="grid_item">
                     {% if item.discount_price %}
-                    <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                    <span class="ribbon off">-{{ item.get_discount_percent|convertToNepali }}%</span>
                     {% endif%}
                     <figure>
                         <a href=" {{item.get_absolute_url}} ">
@@ -226,10 +228,10 @@
                     </a>
                     <div class="price_box">
                         {% if item.discount_price %}
-                        <span class="new_price">Rs.{{ item.discount_price }}</span>
-                        <span class="old_price">Rs.{{ item.price }}</span>
+                        <span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+                        <span class="old_price">रू {{ item.price|convertToNepali }}</span>
                         {% else %}
-                        <span class="new_price">Rs.{{ item.price }}</span>
+                        <span class="new_price">रू {{ item.price|convertToNepali }}</span>
                         {% endif %}
                     </div>
                     <ul>

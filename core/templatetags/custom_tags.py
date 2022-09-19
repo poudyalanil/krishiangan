@@ -15,3 +15,5 @@ def filter_category(queryset, filter):
 @register.filter_function
 def filter_featured(queryset, filter):
     return queryset.filter(featured=True)
+
+

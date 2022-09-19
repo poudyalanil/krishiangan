@@ -47,7 +47,10 @@ class categories(models.Model):
 
     def get_absolute_url(self):
         return reverse("core:category", kwargs={"pk": self.pk})
-
+    
+    
+def convertToNepali(input):
+    return str(input).replace(',',',').replace('.','.').replace('0','०').replace('1','१').replace('2','२').replace('3','३').replace('4','४').replace('5','५').replace('6','६').replace('7','७').replace('8','८').replace('9','९')
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
@@ -128,7 +131,6 @@ class Item(models.Model):
             return round(percent, 2)
         except:
             return 0
-
 
 def get_image_filename(instance, filename):
     try:
