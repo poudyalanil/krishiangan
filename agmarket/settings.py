@@ -14,19 +14,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
-    'django.contrib.sites',
+    'core', 
+    'crispy_forms',
+    "pinax.templates",
+    "pinax.messages",
+    'hitcount',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'crispy_forms',
-    "pinax.messages",
-    'rest_framework',
-    "bootstrapform",
-    "pinax.templates",
-    'material',
-    'hitcount',
-
+    
 ]
 
 MIDDLEWARE = [
