@@ -1,429 +1,345 @@
 {% extends "main/base.html" %}
 {% load hitcount_tags %}
 {% load custom_tags %}
-
 {% block content %}
 {% load static %}
-
 <main>
-	<div class="container margin_30">
-		<div class="countdown_inner">-{{ object.get_discount_percent }}% 
-			{% if object.show_expiry %} This item ends in <div
-				data-countdown="{{object.expiry_date|date:"Y/m/d"}}" class="countdown"></div>
-				{%endif%}
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="all">
-					<div class="slider">
-						<div class="owl-carousel owl-theme main">
-							{% for p in photos %}
-							
-							<div style="background-image: url( {{p.image.url}} );" class="item-box"></div>
-        {% empty %}
-							<div style="background-image: url( {{object.thumbnail.url}} );" class="item-box"></div>
-
-							{% endfor %}
-						</div>
-						<div class="left nonl"><i class="ti-angle-left"></i></div>
-						<div class="right"><i class="ti-angle-right"></i></div>
+    <div class="container margin_30">
+        <div class="countdown_inner">-{{ object.get_discount_percent|convertToNepali }}% 
+            {% if object.show_expiry %} This item ends in <div
+            data-countdown="{{object.expiry_date|date:"Y/m/d"}}" class="countdown">
+        </div>
+        {%endif%}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="all">
+                <div class="slider">
+                    <div class="owl-carousel owl-theme main">
+                        {% for p in photos %}
+                        <div style="background-image: url( {{p.image.url}} );" class="item-box"></div>
+                        {% empty %}
+                        <div style="background-image: url( {{object.thumbnail.url}} );" class="item-box"></div>
+                        {% endfor %}
+                    </div>
+                    <div class="left nonl"><i class="ti-angle-left"></i></div>
+                    <div class="right"><i class="ti-angle-right"></i></div>
+                </div>
+                <div class="slider-two">
+                    <div class="owl-carousel owl-theme thumbs">
+                        {% for p in photos %}
+                        <div style="background-image: url( {{p.image.url}});"
+                            class="{% if forloop.counter0 == 0 %} item active {% else %}item{% endif %}"></div>
+                        {% endfor %}
+                    </div>
+                    <div class="left-t nonl-t"></div>
+                    <div class="right-t"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="http://127.0.0.1:8000">गृहपृष्ठ</a></li>
+                    <li><a href="#">{{object.category.category}}</a></li>
+                    <li>{{ object.title}}</li>
+                </ul>
+            </div>
+            <!-- /page_header -->
+            <div class="prod_info">
+                <h1>{{ object.title}}</h1>
+                <span class="rating">
+                <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
+                    class="icon-star voted"></i><i class="icon-star"></i><em>{{ number_of_likes|convertToNepali }} मानिसहरूले यो उत्पादन मन पराए</em></span>
+                <p><small>प्रयोगकर्ता : {{ object.user.username }}</small></p>
+                <span class="new_price">उपलब्ध : {{object.get_available_item}}</span>
+                <div class="prod_options">
+                    <div class="row">
+                        {% comment %} <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Contact
+                        Seller</strong></label> {% endcomment %}
+                        <div class="col-lg-5 col-md-6">
+                            {% if  request.user.username != object.user.username%} 
+                            <a href="{% url "pinax_messages:message_user_create" user_id=object.user.id %}"
+                            class="btn btn-outline-success"><i class="ti-email"></i> सन्देश पठाउनुहोस्</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="prod_options">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-6 ">
+                            {% if post_is_liked %}
+                            <a href="{{ object.get_like_url }}" class="btn btn-info"><i class="ti-thumb-down"></i>
+                            लाइक हटाउनुहोस्</a>
+                            {% else %}
+                            <a href="{{ object.get_like_url }}" class="btn btn-info"><i class="ti-thumb-up"></i>
+							लाइक गर्नुहोस्</a>
+                            {% endif %}
+                            <strong class="text-secondary">{{ number_of_likes|convertToNepali }}
+								लाइक</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="prod_options">
+                    <div class="row">
+                        <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>मात्रा
+                        ({{object.unit}})</strong></label>
+                        <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+                            <div class="numbers-row">
+                                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-6">
+                        <div class="price_main">
+                            {% if object.discount_price %}
+                            <span class="new_price">रू {{ object.discount_price|convertToNepali }}</span><span
+                                class="percentage">-{{object.get_discount_percent|convertToNepali}}%</span> <span
+                                class="old_price">रू {{object.price|convertToNepali}}</span>
+                        </div>
+                        {% else %}
+                        <span class="new_price">रू {{object.price|convertToNepali}}</span>
+                        {% endif %}
+                    </div>
+					<div class="form-row">
+						<div class="col btn_add_to_cart pt-3"><a href="{{ object.get_add_to_cart_url }}" class="btn_1">Add to Wishlist</a></div>
+						<div class="col place_your_bid pt-3 ml-3"><a href="{{ object.get_place_bid_url }}" class="btn_2">Place Your Bid</a></div>
 					</div>
-					<div class="slider-two">
-						<div class="owl-carousel owl-theme thumbs">
-							{% for p in photos %}
-
-							<div style="background-image: url( {{p.image.url}});"
-								class="{% if forloop.counter0 == 0 %} item active {% else %}item{% endif %}"></div>
-
-							{% endfor %}
-						</div>
-						<div class="left-t nonl-t"></div>
-						<div class="right-t"></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="breadcrumbs">
-					<ul>
-						<li><a href="http://127.0.0.1:8000">Home</a></li>
-						<li><a href="#">{{object.category.category}}</a></li>
-						<li>{{ object.title}}</li>
-					</ul>
-				</div>
-				<!-- /page_header -->
-				<div class="prod_info">
-					<h1>{{ object.title}}</h1>
-					<span class="rating">
-
-						<i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-							class="icon-star voted"></i><i class="icon-star"></i><em>{{ number_of_likes }} People Liked
-							this Product</em></span>
-					<p><small>Author : {{ object.user.username }}</small></p>
-					<span class="new_price">Available : {{object.get_available_item}}</span>
-
-					<div class="prod_options">
-
-
-						<div class="row">
-							{% comment %} <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Contact
-									Seller</strong></label> {% endcomment %}
-							<div class="col-lg-5 col-md-6">
-							 {% if  request.user.username != object.user.username%} 
-
-								<a href="{% url "pinax_messages:message_user_create" user_id=object.user.id %}"
-									class="btn btn-outline-success"><i class="ti-email"></i> Send Message</a>
-							{% endif %}
-							</div>
-						</div>
-
-
-
-					</div>
-					<div class="prod_options">
-
-						<div class="row">
-
-							<div class="col-lg-5 col-md-6 ">
-
-
-								{% if post_is_liked %}
-								<a href="{{ object.get_like_url }}" class="btn btn-info"><i class="ti-thumb-down"></i>
-									Unlike</a>
-
-
-								{% else %}
-								<a href="{{ object.get_like_url }}" class="btn btn-info"><i class="ti-thumb-up"></i>
-									Like</a>
-
-								{% endif %}
-								<strong class="text-secondary">{{ number_of_likes }}
-									Like{{ number_of_likes|pluralize }}</strong>
-
-							</div>
-						</div>
-
-
-
-
-					</div>
-					<div class="prod_options">
-						<div class="row">
-							<label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity
-									({{object.unit}})</strong></label>
-							<div class="col-xl-4 col-lg-5 col-md-6 col-6">
-								<div class="numbers-row">
-									<input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
-								</div>
-							</div>
-						</div>
-
-
-
-
-					</div>
-
-
-					<div class="row">
-						<div class="col-lg-5 col-md-6">
-							<div class="price_main">
-								{% if object.discount_price %}
-
-								<span class="new_price">Rs.{{ object.discount_price }}</span><span
-									class="percentage">-{{object.get_discount_percent}}%</span> <span
-									class="old_price">Rs.{{object.price}}</span></div>
-							{% else %}
-							<span class="new_price">Rs.{{object.price}}</span>
-							{% endif %}
-						</div>
-							<div class="btn_add_to_cart"><a href="{{ object.get_add_to_cart_url }}" class="btn_1">Add to Cart</a></div>
-
-						{% comment %} <div class="col-lg-4 col-md-6">
-						</div> {% endcomment %}
-					</div>
-				</div>
-				<!-- /prod_info -->
-				{% comment %} <div class="product_actions">
-					<ul>
-						<li>
-							{% if post_is_liked %}
-							<a href="{{ object.get_like_url }}"><i class="ti-thumb-up"></i><span>Like</span></a>
-
-							{% else %}
-							<span>You liked this item</span>
-							<a href="{{ object.get_like_url }}"><i class="ti-thumb-down"></i><span>Unlike</span></a>
-							{% endif %}
-						</li>
-						<li>
-							<a href="#"><i class="ti-control-shuffle"></i><span>Add to Compare</span></a>
-						</li>
-					</ul>
-				</div>
-				<!-- /product_actions --> {% endcomment %}
-			</div>
-		</div>
-		<!-- /row -->
-	</div>
-	<!-- /container -->
-
-	<div class="tabs_product">
-		<div class="container">
-			<ul class="nav nav-tabs" role="tablist">
-				<li class="nav-item">
-					<a id="tab-A" href="#pane-A" class="nav-link active" data-toggle="tab" role="tab">Description</a>
-				</li>
-				<li class="nav-item">
-					<a id="tab-B" href="#pane-B" class="nav-link" data-toggle="tab" role="tab">Comments</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-
-	<div class="tab_content_wrapper">
-		<div class="container">
-			<div class="tab-content" role="tablist">
-				<div id="pane-A" class="card tab-pane fade active show" role="tabpanel" aria-labelledby="tab-A">
-					<div class="card-header" role="tab" id="heading-A">
-						<h5 class="mb-0">
-							<a class="collapsed" data-toggle="collapse" href="#collapse-A" aria-expanded="false"
-								aria-controls="collapse-A">
-								Description
-							</a>
-						</h5>
-					</div>
-					<div id="collapse-A" class="collapse" role="tabpanel" aria-labelledby="heading-A">
-						<div class="card-body">
-							<div class="row justify-content-between">
-								<div class="col-lg-6">
-									<h3>Details</h3>
-									<p>{{object.description}}</p>
-
-								</div>
-								<div class="col-lg-5">
-									<h3>Options</h3>
-									<div class="table-responsive">
-										<table class="table table-sm table-striped">
-											<tbody>
-												<tr>
-													<td><strong>Available</strong></td>
-													<td>{{object.get_available_item}}</td>
-												</tr>
-
-												<tr>
-													<td><strong>Uploaded Date</strong></td>
-													<td>{{object.upload_date}}</td>
-												</tr>
-												<tr>
-													<td><strong>Home Delivery</strong></td>
-													{% if object.home_delivery %}
-													<td>Yes</td>
-													{% else %}
-													<td>No</td>
-													{% endif %}
-
-												</tr>
-												<tr>
-													<td><strong>Negotiable</strong></td>
-													{% if object.price_negotiable %}
-													<td>Yes</td>
-													{% else %}
-													<td>No</td>
-													{% endif %}
-												</tr>
-											</tbody>
-										</table>
-									</div>
-									<!-- /table-responsive -->
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /tabs_product -->
-
-				<!-- /TAB A -->
-
-				<div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
-					<div class="card-header" role="tab" id="heading-B">
-						<h5 class="mb-0">
-							<a class="collapsed" data-toggle="collapse" href="#collapse-B" aria-expanded="false"
-								aria-controls="collapse-B">
-								Comments
-							</a>
-						</h5>
-					</div>
-					<div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
-						<div class="card-body">
-							<div class="row justify-content-between">
-								{% if not object.comments.all %}
-								<div class="col-lg-6">
-
-									<p><strong>No Comments Yet...</strong> </p>
-									<form action="{{ object.get_add_comment_url }}" method="POST">
-										{% csrf_token %}
-										Comment: <br />
-										<input type="textarea" name="body" />
-										<input type="hidden" name="commentsno" value="" />
-										<br />
-										<br />
-										<input class="btn_1" type="submit" value="Post Comment" />
-									</form>
-									<br />
-								</div>
-
-
-
-								{%else %}
-
-								{% for comment in object.comments.all %}
-								{% if not comment.parent %}
-
-
-								<div class="col-lg-6">
-									<div class="review_content">
-										<div class="clearfix add_bottom_10">
-											<span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i
-													class="icon-star"></i><i class="icon-star"></i><i
-													class="icon-star"></i><em>5.0/5.0</em></span>
-											<em>{{ comment.date_added }}</em>
-										</div>
-										<h4>{{ comment.user.username }}</h4>
-										<p> {{ comment.body}}</p>
-										<!-- <form action="{{ object.get_add_comment_url }}" method="POST">
-												{% csrf_token %}
-
-												Reply: <br />
-												<input type="text" name="body" />
-												<input type="hidden" name="commentsno" value="{{ comment.sno}}" />
-
-												<br />
-												<input type="submit" value="Reply" />
-											</form> -->
-									</div>
-
-
-								</div>
-
-								{% endif %}
-								{% endfor %}
-								<form action="{{ object.get_add_comment_url }}" method="POST">
-									{% csrf_token %}
-									Comment: <br />
-									<input type="textarea" name="body" />
-									<input type="hidden" name="commentsno" value="" />
-									<br />
-									<br />
-									<input class="btn_1" type="submit" value="Post Comment" />
-								</form>
-								<br />
-
-								{% endif %}
-							</div>
-							<!-- /card-body -->
-						</div>
-					</div>
-					<!-- /tab B -->
-				</div>
-				<!-- /tab-content -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /tab_content_wrapper -->
-
-		<div class="container margin_60_35">
-			<div class="main_title">
-				<h2>Related</h2>
-				<span>Products</span>
-				<p>User who viewed this item also viewed: </p>
-			</div>
-			<div class="owl-carousel owl-theme products_carousel">
-				{% for item in items|sort_by:'-hit_count_generic__hits'|filter_category:object.category.category|slice:":6"%}
-
-				<div class="item">
-					<div class="grid_item">
-						{% if item.discount_price %}
-						<span class="ribbon off">-{{ item.get_discount_percent }}%</span>
-						{% endif%}
-						<figure>
-							<a href=" {{item.get_absolute_url}} ">
-								<img class="owl-lazy" src=" {{item.image.url}}" data-src="{{item.thumbnail.url}}" alt="">
-							</a>
-						</figure>
-						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-								class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i>
-						</div>
-						<a href=" {{item.image.url}} ">
-							<h3>{{item.title}}</h3>
-						</a>
-						<div class="price_box">
-							{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							{% else %}
-							<span class="new_price">Rs.{{ item.price }}</span>
-							{% endif %}
-						</div>
-						<ul>
-							{% if post_is_liked %}
-							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-down"></i><span>Unlike</span></a></li>
-					
-
-
-								{% else %}
-							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a></li>
-{% endif %}
-							</li>
-						
-							<li><a href=" #0 " class="tooltip-1" data-toggle="tooltip" data-placement="left"
-									title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
-							</li>
-						</ul>
-					</div>
-					<!-- /grid_item -->
-				</div>
-				{%endfor%}
-
-				<!-- /item -->
-			</div>
-			<!-- /products_carousel -->
-		</div>
-		<!-- /container -->
-
-		<div class="feat">
-			<div class="container">
-				<ul>
-					<li>
-						<div class="box">
-							<i class="ti-gift"></i>
-							<div class="justify-content-center">
-								<h3>Home Delivery </h3>
-								<p>For all oders over Rs.500</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="box">
-							<i class="ti-wallet"></i>
-							<div class="justify-content-center">
-								<h3>Cash On Delivery</h3>
-								<p>100% Reliable</p>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="box">
-							<i class="ti-headphone-alt"></i>
-							<div class="justify-content-center">
-								<h3>24/7 Support</h3>
-								<p>Online top support</p>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<!--/feat-->
-
+                    {% comment %} 
+                    <div class="col-lg-4 col-md-6">
+                    </div>
+                    {% endcomment %}
+                </div>
+            </div>
+            <!-- /prod_info -->
+        </div>
+    </div>
+    <!-- /row -->
+    </div>
+    <!-- /container -->
+    <div class="tabs_product">
+        <div class="container">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a id="tab-A" href="#pane-A" class="nav-link active" data-toggle="tab" role="tab">Description</a>
+                </li>
+                <li class="nav-item">
+                    <a id="tab-B" href="#pane-B" class="nav-link" data-toggle="tab" role="tab">Comments</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab_content_wrapper">
+    <div class="container">
+        <div class="tab-content" role="tablist">
+            <div id="pane-A" class="card tab-pane fade active show" role="tabpanel" aria-labelledby="tab-A">
+                <div class="card-header" role="tab" id="heading-A">
+                    <h5 class="mb-0">
+                        <a class="collapsed" data-toggle="collapse" href="#collapse-A" aria-expanded="false"
+                            aria-controls="collapse-A">
+                        Description
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapse-A" class="collapse" role="tabpanel" aria-labelledby="heading-A">
+                    <div class="card-body">
+                        <div class="row justify-content-between">
+                            <div class="col-lg-6">
+                                <h3>Details</h3>
+                                <p>{{object.description}}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <h3>Options</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Available</strong></td>
+                                                <td>{{object.get_available_item}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Uploaded Date</strong></td>
+                                                <td>{{object.upload_date}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Home Delivery</strong></td>
+                                                {% if object.home_delivery %}
+                                                <td>Yes</td>
+                                                {% else %}
+                                                <td>No</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Negotiable</strong></td>
+                                                {% if object.price_negotiable %}
+                                                <td>Yes</td>
+                                                {% else %}
+                                                <td>No</td>
+                                                {% endif %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /table-responsive -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /tabs_product -->
+            <!-- /TAB A -->
+            <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B">
+                <div class="card-header" role="tab" id="heading-B">
+                    <h5 class="mb-0">
+                        <a class="collapsed" data-toggle="collapse" href="#collapse-B" aria-expanded="false"
+                            aria-controls="collapse-B">
+                        Comments
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
+                    <div class="card-body">
+                        <div class="row justify-content-between">
+                            {% if not object.comments.all %}
+                            <div class="col-lg-6">
+                                <p><strong>No Comments Yet...</strong> </p>
+                                <form action="{{ object.get_add_comment_url }}" method="POST">
+                                    {% csrf_token %}
+                                    Comment: <br />
+                                    <input type="textarea" name="body" />
+                                    <input type="hidden" name="commentsno" value="" />
+                                    <br />
+                                    <br />
+                                    <input class="btn_1" type="submit" value="Post Comment" />
+                                </form>
+                                <br />
+                            </div>
+                            {%else %}
+                            {% for comment in object.comments.all %}
+                            {% if not comment.parent %}
+                            <div class="col-lg-6">
+                                <div class="review_content">
+                                    <div class="clearfix add_bottom_10">
+                                        <span class="rating"><i class="icon-star"></i><i class="icon-star"></i><i
+                                            class="icon-star"></i><i class="icon-star"></i><i
+                                            class="icon-star"></i><em>5.0/5.0</em></span>
+                                        <em>{{ comment.date_added }}</em>
+                                    </div>
+                                    <h4>{{ comment.user.username }}</h4>
+                                    <p> {{ comment.body}}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <form action="{{ object.get_add_comment_url }}" method="POST">
+                                {% csrf_token %}
+                                Comment: <br />
+                                <input type="textarea" name="body" />
+                                <input type="hidden" name="commentsno" value="" />
+                                <br />
+                                <br />
+                                <input class="btn_1" type="submit" value="Post Comment" />
+                            </form>
+                            <br />
+                            {% endif %}
+                        </div>
+                        <!-- /card-body -->
+                    </div>
+                </div>
+                <!-- /tab B -->
+            </div>
+            <!-- /tab-content -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /tab_content_wrapper -->
+    <div class="container margin_60_35">
+        <div class="main_title">
+            <h2>Related</h2>
+            <span>Products</span>
+            <p>User who viewed this item also viewed: </p>
+        </div>
+        <div class="owl-carousel owl-theme products_carousel">
+            {% for item in items|sort_by:'-hit_count_generic__hits'|filter_category:object.category.category|slice:":6"%}
+            <div class="item">
+                <div class="grid_item">
+                    {% if item.discount_price %}
+                    <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                    {% endif%}
+                    <figure>
+                        <a href=" {{item.get_absolute_url}} ">
+                        <img class="owl-lazy" src=" {{item.image.url}}" data-src="{{item.thumbnail.url}}" alt="">
+                        </a>
+                    </figure>
+                    <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i
+                        class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i>
+                    </div>
+                    <a href=" {{item.image.url}} ">
+                        <h3>{{item.title}}</h3>
+                    </a>
+                    <div class="price_box">
+                        {% if item.discount_price %}
+                        <span class="new_price">Rs.{{ item.discount_price }}</span>
+                        <span class="old_price">Rs.{{ item.price }}</span>
+                        {% else %}
+                        <span class="new_price">Rs.{{ item.price }}</span>
+                        {% endif %}
+                    </div>
+                    <ul>
+                        {% if post_is_liked %}
+                        <li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-down"></i><span>Unlike</span></a></li>
+                        {% else %}
+                        <li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a></li>
+                        {% endif %}
+                        </li>
+                        <li><a href=" #0 " class="tooltip-1" data-toggle="tooltip" data-placement="left"
+                            title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /grid_item -->
+            </div>
+            {%endfor%}
+            <!-- /item -->
+        </div>
+        <!-- /products_carousel -->
+    </div>
+    <!-- /container -->
+    <div class="feat">
+        <div class="container">
+            <ul>
+                <li>
+                    <div class="box">
+                        <i class="ti-gift"></i>
+                        <div class="justify-content-center">
+                            <h3>Home Delivery </h3>
+                            <p>For all oders over Rs.500</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <i class="ti-wallet"></i>
+                        <div class="justify-content-center">
+                            <h3>Cash On Delivery</h3>
+                            <p>100% Reliable</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="box">
+                        <i class="ti-headphone-alt"></i>
+                        <div class="justify-content-center">
+                            <h3>24/7 Support</h3>
+                            <p>Online top support</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/feat-->
 </main>
-
 {% endblock content %}

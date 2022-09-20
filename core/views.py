@@ -382,10 +382,9 @@ def addComment(request, pk):
 @login_required
 def add_to_cart(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    print(item.user.id)
-    print(request.user.id)
+ 
     if item.user.id is request.user.id:
-        messages.info(request, "You can not add your own item to your cart.")
+        messages.info(request, "You cannot add your own item to your cart.")
         return redirect("core:product", pk=pk)
 
     else:
@@ -419,7 +418,16 @@ def add_to_cart(request, pk):
             order.items.add(order_item)
             messages.info(request, "This item was added to your cart.")
             return redirect("core:order-summary")
-
+        
+        
+@login_required
+def place_item_bid(request,pk):
+    item = get_object_or_404(Item, pk=pk)
+ 
+    if item.user.id is request.user.id:
+        messages.info(request, "You cannot place bid on your own item.")
+        return redirect("core:product", pk=pk)
+    return redirect('/')
 
 @login_required
 def remove_from_cart(request, pk):

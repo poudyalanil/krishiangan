@@ -99,6 +99,10 @@ class Item(models.Model):
         return reverse("core:add-to-cart", kwargs={
             'pk': self.pk
         })
+    def get_place_bid_url(self):
+        return reverse("core:place-item-bid", kwargs={
+            'pk': self.pk
+        })
 
     def get_add_comment_url(self):
         return reverse("core:add_comment", kwargs={

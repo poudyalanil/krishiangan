@@ -17,6 +17,8 @@ urlpatterns = [
     path('old-orders/', old_orders_View.as_view(), name='old-orders'),
 
     path('add-to-cart/<int:pk>/', add_to_cart, name='add-to-cart'),
+    
+    path('place-item-bid/<int:pk>/', place_item_bid, name='place-item-bid'),
     path('about/', about, name='about'),
     path('terms/', terms, name='terms'),
 
