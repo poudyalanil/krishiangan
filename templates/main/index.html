@@ -1,7 +1,6 @@
 {% extends "main/base.html" %}
 {% load hitcount_tags %}
 {% load custom_tags %}
-{% load convert_2_nepali_num_tags %}
 
 {% block content %}
 {% load static %}	
@@ -62,9 +61,9 @@
     <hr class="mb-0">
     <div class="container margin_60_35">
         <div class="main_title">
-            <h2>Latest Products</h2>
-            <span>Latest Products</span>
-            <p>New Products listed in Market</p>
+            <h2>नवीनतम उत्पादनहरू</h2>
+            <span>नवीनतम उत्पादनहरू</span>
+            <p>बजारमा सूचीबद्ध नयाँ उत्पादनहरू</p>
         </div>
         <div class="row small-gutters">
             {% for item in items|sort_by:'-upload_date'|slice:"0:8"%}
@@ -138,9 +137,9 @@
     <!-- /featured -->
     <div class="container margin_60_35">
         <div class="main_title">
-            <h2>Most Viewed Products</h2>
-            <span>Most Viewed</span>
-            <p>Mostly viewded products in this market</p>
+            <h2>धेरै हेरिएको उत्पादनहरू</h2>
+            <span>धेरै हेरिएको उत्पादनहरू</span>
+            <p>यस बजारमा प्रायः हेरिने उत्पादनहरू</p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
             {% for item in items|sort_by:'-hit_count_generic__hits'|slice:":8"%}
@@ -206,9 +205,9 @@
     <!-- /container -->
     <div class="container margin_60_35">
         <div class="main_title">
-            <h2>Best Selling Products</h2>
-            <span>Best Selling</span>
-            <p>Top Products with Most Sales </p>
+            <h2>उत्तम बिक्री उत्पादनहरू</h2>
+            <span>उत्तम बिक्री उत्पादनहरू</span>
+            <p>धेरै बिक्री भएको शीर्ष उत्पादनहरू </p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
             {% for item in items|sort_by:'-sold'|slice:"0:8"%}
