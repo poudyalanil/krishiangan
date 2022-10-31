@@ -56,3 +56,9 @@ class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = subscripiton
         fields = ('email',)
+
+
+class BidItemForm(forms.ModelForm):
+    class Meta:
+        model=BidItem
+        fields=['quantity','price'];

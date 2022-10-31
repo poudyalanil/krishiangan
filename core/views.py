@@ -237,13 +237,14 @@ class ItemDetailView(HitCountDetailView):
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
             userformset = ProfileInlineFormset(instance=self.request.user)
-
+            biditemform = BidItemForm()
             postForm = AdditemForm()
             itemformset = ImageFormSet(queryset=Images.objects.none())
             data['noodle'] = pknew
             data['noodle_form'] = user_form
             data['userformset'] = userformset
             data['postForm'] = postForm
+            data['biditemform'] = biditemform
             data['formset'] = itemformset
         data['categories'] = category
         data['photos'] = photos
@@ -427,7 +428,15 @@ def place_item_bid(request,pk):
     if item.user.id is request.user.id:
         messages.info(request, "You cannot place bid on your own item.")
         return redirect("core:product", pk=pk)
-    return redirect('/')
+    else:
+        item_bid = BidItem.objects.create(
+            user_id=request.user.id,
+            item_id = item.id,
+            quantity= request.POST.get('quantity'),
+            price=request.POST.get('price'))
+        messages.info(request, "Your bid is successfully placed.")
+        return redirect("core:product", pk=pk)
+
 
 @login_required
 def remove_from_cart(request, pk):

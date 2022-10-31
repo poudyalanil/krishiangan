@@ -502,5 +502,40 @@
                 </div>
             </div>
         </div>
+
+         <!-- bid item modal -->
+<div class="modal fade" id="itemBidModal" tabindex="-1" role="dialog" aria-labelledby="itemBidModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Place Your Bid</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if request.user.is_authenticated %}
+                <form id="item_bid_form"  method="POST" action="{{ object.get_place_bid_url }}" enctype="multipart/form-data">
+                    {% csrf_token %} {{ biditemform|crispy }}
+                    <div class="divider"></div>
+                    
+                </form>
+                {% else %}
+                <h3>Login First </h3>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button onclick="form_submit()" class="btn btn-primary">Save changes</button> 
+            </div>
+            <script type="text/javascript">
+                function form_submit(){
+                 document.getElementById("item_bid_form").submit();
+                
+                }
+            </script> 
+        </div>
+    </div>
+</div>
     </body>
 </html>

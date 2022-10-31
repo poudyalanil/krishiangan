@@ -214,6 +214,18 @@ class Order(models.Model):
         return total
 
 
+class BidItem(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    price = models.FloatField()
+    bid_date = models.DateTimeField(auto_now_add=True, null=True)
+    
+    def __str__(self):
+        return self.user.username
+    
+
 class Comment(models.Model):
     sno = models.AutoField(primary_key=True)
     Item = models.ForeignKey(

@@ -2,6 +2,8 @@
 {% load hitcount_tags %}
 {% load custom_tags %}
 {% block content %}
+{% load crispy_forms_tags %}
+
 {% load static %}
 <main>
     <div class="container margin_30">
@@ -103,19 +105,24 @@
                         <span class="new_price">रू {{object.price|convertToNepali}}</span>
                         {% endif %}
                     </div>
+                    <div class="col-md-12">
+
 					<div class="form-row">
 						<div class="col btn_add_to_cart pt-3"><a href="{{ object.get_add_to_cart_url }}" class="btn_1">Add to Wishlist</a></div>
-						<div class="col place_your_bid pt-3 ml-3"><a href="{{ object.get_place_bid_url }}" class="btn_2">Place Your Bid</a></div>
+						<div class="col place_your_bid pt-3 ml-3">
+                            <a  href=" #" data-toggle="modal" class="header-title btn_2" data-target="#itemBidModal" ><i class="fa fa-item"></i> Place Your Bid</a>
+                            {% comment %} <a href="{{ object.get_place_bid_url }}" class="btn_2">Place Your Bid</a> {% endcomment %}
+                        </div>
 					</div>
-                    {% comment %} 
-                    <div class="col-lg-4 col-md-6">
-                    </div>
-                    {% endcomment %}
+                </div>
+                
                 </div>
             </div>
             <!-- /prod_info -->
         </div>
     </div>
+
+
     <!-- /row -->
     </div>
     <!-- /container -->
@@ -341,5 +348,8 @@
         </div>
     </div>
     <!--/feat-->
+
+   
 </main>
+
 {% endblock content %}
