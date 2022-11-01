@@ -642,6 +642,19 @@ def user_items(request, pk):
     userformset = ProfileInlineFormset(instance=request.user)
     return render(request, "main/user_category_page.html", {'items': items, 'categories': categoriestest, 'noodle': pknew,
                                                             'noodle_form': user_form, 'userformset': userformset, 'postForm': postform, 'formset': postformset, })
+@login_required()    
+def user_items_bids(request,pk):
+    
+    user = User.objects.get(pk=pk)
+    items = Item.objects.filter(user=user).values_list('id',flat=True)
+    
+    bid_items = BidItem.objects.filter(item__in=items)
+    
+    
+    
+    print(user,items,bid_items)
+    return render(request, "main/item-bids.html",{'bid_items':bid_items})
+        
 
     # category = get_object_or_404(categories, pk=pk)
     # items = Item.objects.filter(category=category)
