@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^users/items/(?P<pk>[\-\w]+)/$',
         user_items, name='user_items'),
     url(r'^users/items-bid/(?P<pk>[\-\w]+)/$',
-        user_items_bids, name='user_items'),
+        user_items_bids, name='user_items_bids'),
     url(r'^edit/item/(?P<pk>[\-\w]+)/$',
         edit_item, name='edit_item'),
     path('item-like/<int:pk>', ItemLike, name="item_like"),
