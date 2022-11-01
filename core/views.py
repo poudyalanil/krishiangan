@@ -650,9 +650,6 @@ def user_items_bids(request,pk):
     
     bid_items = BidItem.objects.filter(item__in=items)
     
-    
-    
-    print(user,items,bid_items)
     return render(request, "main/item-bids.html",{'bid_items':bid_items})
         
 
