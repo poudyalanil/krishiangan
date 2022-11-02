@@ -115,6 +115,39 @@
                         </div>
 					</div>
                 </div>
+
+                <!-- bidding list-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" style="text-align:center">Bid list</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in productbidlist %}
+                                        <tr>
+                                            <td>{{ forloop.counter}}</td>
+                                            <td>{{ item.user}}</td>
+                                            <td>Qt. : {{ item.quantity}}</a></td>
+                                            <td>Price: {{ item.price}}</td>
+                                            <td>
+                                                {% if request.user.id == item.user_id %}
+                                                <a href="{% url "pinax_messages:message_user_create" user_id=item.user.id %}"
+                                                class="btn btn-outline-danger btn-sm"><i class="fa fa-cut"></i> Withdraw</a>
+                                                {%endif%}
+                                            </td>
+                                        </tr>
+                                {% empty %}
+                                        <td colspan='5'> List is empty</td>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
                 
                 </div>
             </div>

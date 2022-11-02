@@ -231,6 +231,7 @@ class ItemDetailView(HitCountDetailView):
         ImageFormSet = modelformset_factory(Images,
                                             form=ImageForm
                                             )
+        data['productbidlist'] = BidItem.objects.filter(item=self.kwargs['pk'],is_withdrawn=False)
         if self.request.user.is_authenticated:
             pknew = self.request.user.id
             user_form = UserForm(instance=self.request.user)
@@ -648,7 +649,7 @@ def user_items_bids(request,pk):
     user = User.objects.get(pk=pk)
     items = Item.objects.filter(user=user).values_list('id',flat=True)
     
-    bid_items = BidItem.objects.filter(item__in=items)
+    bid_items = BidItem.objects.filter(item__in=items,is_withdrawn=False)
     
     return render(request, "main/item-bids.html",{'bid_items':bid_items})
         
