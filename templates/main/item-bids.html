@@ -29,7 +29,7 @@
                 </tr>
             </thead>
 		    <tbody>
-                {% for item in bid_items %}
+                {% for item in bid_items|sort_by:'-bid_date' %}
                         <tr>
                             <td>{{ forloop.counter}}</td>
                             <td>

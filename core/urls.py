@@ -8,6 +8,7 @@ urlpatterns = [
     path('', HomeView, name='home'),
 
     path('product/<int:pk>/', ItemDetailView.as_view(), name='product'),
+    path('product/<int:pk>/withdraw-bid', withdraw_bid, name='withdraw_bid'),
     path('category/<int:pk>/', categoryview, name='category'),
 
 

@@ -652,7 +652,16 @@ def user_items_bids(request,pk):
     bid_items = BidItem.objects.filter(item__in=items,is_withdrawn=False)
     
     return render(request, "main/item-bids.html",{'bid_items':bid_items})
-        
+
+@login_required()    
+def withdraw_bid(request,pk):
+    item = get_object_or_404(BidItem,pk=pk)
+    bid_item = BidItem.objects.get(pk=pk,is_withdrawn=False)
+    bid_item.is_withdrawn=True
+    bid_item.save()
+    
+    return redirect("core:product", pk=item.item_id)
+    
 
     # category = get_object_or_404(categories, pk=pk)
     # items = Item.objects.filter(category=category)

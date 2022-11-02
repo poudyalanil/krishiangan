@@ -49,3 +49,13 @@ a.btn_2:hover{
     text-decoration: underline;
 
 }
+
+#bid-table>thead>tr>th,#bid-table>tbody>tr>td{
+    font-size: 15px;
+    padding-top:2px !important;
+    padding-bottom:2px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    padding:0.2rem !important;
+}
