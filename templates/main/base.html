@@ -48,7 +48,7 @@
                 <!-- Mobile menu overlay mask -->
                 <div class="main_header">
                     <div class="container">
-                        <div class="row small-gutters">
+                        <div class="row small-gutters" width="100%">
                             <div class="col-xl-2 col-lg-2 d-lg-flex align-items-center">
                                 <div id="logo">
                                     <a href=" {% url 'core:home' %} "><img src=" {% static 'main/img/logo.png' %} " alt=""
@@ -101,8 +101,10 @@
                                 </div>
                                 <!--/main-menu -->
                             </nav>
-                            <div class="col-xl-2 col-lg-2 d-lg-flex align-items-center justify-content-end text-right">
-                                <a class="phone_top" href="http://price.krishiangan.com/" target="_blank"><strong><span>मूल्य खण्ड</span></strong></a>
+                            <div class="col-xl-2 col-lg-2 d-lg-flex align-items-center justify-content-end text-right font-small">
+                                <a class="phone_top" href="http://price.krishiangan.com/" target="_blank"><span>मूल्य खण्ड</span></a>
+                                {% comment %} <a class="phone_top" href="file:///agmarket/android-file/krishiangan.apk" download="Krishiangan.apk"><span class="fa fa-android pl-3"> मोबाइल एप</span></a> {% endcomment %}
+                                <a class="phone_top" href="{% static 'main/app/krishiangan.apk' %}" download="Krishiangan.apk"><span class="fa fa-android pl-3"> मोबाइल एप</span></a>
                             </div>
                         </div>
                         <!-- /row -->

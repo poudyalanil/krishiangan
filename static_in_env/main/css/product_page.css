@@ -258,7 +258,7 @@
 }
 
 .prod_options {
-  padding: 20px 0 20px 0;
+  padding: 10px 0 10px 0;
 }
 @media (max-width: 991px) {
   .prod_options {
@@ -367,7 +367,6 @@
 }
 .price_main .old_price {
   font-size: 18px !important;
-  font-size: 18px !important/16pxrem;
 }
 .price_main .new_price {
   font-size: 24px;

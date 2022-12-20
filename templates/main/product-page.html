@@ -3,7 +3,7 @@
 {% load custom_tags %}
 {% block content %}
 {% load crispy_forms_tags %}
-
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ed7de596973dba7"></script>
 {% load static %}
 <main>
     <div class="container margin_30">
@@ -64,6 +64,9 @@
                             <a href="{% url "pinax_messages:message_user_create" user_id=object.user.id %}"
                             class="btn btn-outline-success"><i class="ti-email"></i> सन्देश पठाउनुहोस्</a>
                             {% endif %}
+                            <div class="d-flex pt-3">
+                                <div class="addthis_inline_share_toolbox"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -59,3 +59,12 @@ a.btn_2:hover{
 .dataTables_wrapper .dataTables_paginate .paginate_button{
     padding:0.2rem !important;
 }
+
+@media (min-width: 1200px){
+    .container{
+        max-width:1250px !important;
+    }
+}
+a.phone_top {
+    font-size: 15px !important;
+}
