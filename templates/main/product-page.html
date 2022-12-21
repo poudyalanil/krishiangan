@@ -10,10 +10,9 @@
 <meta property="og:url" content="{{request.build_absolute_uri}}" />
 
 <meta property="og:description" content="{{object.description}}"/>
-<meta property="og:image" content="{{ object.thumbnail }}" />
+<meta property="og:image" content="/media/{{object.thumbnail}}" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="कृषिआँगन" />
-{% comment %} 
 <script type="text/javascript">
     window.fbAsyncInit = function () {
         FB.init({
@@ -33,7 +32,7 @@
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-</script> {% endcomment %}
+</script> 
 {% endblock %}
 
 
@@ -106,12 +105,11 @@
                             {% endif %}
                             <div class="d-flex pt-3">
                                 {% comment %} {% post_to_facebook "<img src='object.thumbnail.url'>" "Post to Facebook!"%} {% endcomment %}
-                                {% comment %} <div id="fb-root"></div>
+                                 <div id="fb-root"></div>
                                 <div class="fb-share-button" 
                                     data-href="{{ request.build_absolute_uri }}" 
                                     data-layout="button_count">
-                                </div> {% endcomment %}
-                                <div class="addthis_inline_share_toolbox"></div>
+                                </div> 
                                 {% comment %} <div class="addthis_inline_share_toolbox"></div> {% endcomment %}
                             </div>
                         </div>
