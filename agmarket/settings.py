@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "pinax.templates",
     'material',
     'hitcount',
-
+    'django_social_share'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +60,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 "pinax.messages.context_processors.user_messages",
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.custom_processor'
+                'core.context_processors.custom_processor',
             ],
         },
     },

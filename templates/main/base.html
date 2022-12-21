@@ -10,9 +10,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="Ansonika">
-        <title>कृषि आंगन | नेपालमा कृषि बजार</title>
+
+        {% block extra_head %}
+        {% endblock %}
+
+        <title>कृषिआँगन | नेपालमा कृषि बजार</title>
         <!-- Favicons-->
         <link rel="shortcut icon" href=" #" type="image/x-icon">
         <link rel="apple-touch-icon" type="image/x-icon"
@@ -425,6 +427,8 @@
         <script src=" {% static 'main/js/carousel-home.min.js' %} "></script>
         <script src=" {% static 'main/js/isotope.min.js' %} "></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        
         <script>
             // Isotope filter
             $(window).on('load', function () {

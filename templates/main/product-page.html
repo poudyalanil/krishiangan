@@ -1,10 +1,50 @@
 {% extends "main/base.html" %}
 {% load hitcount_tags %}
 {% load custom_tags %}
+{% load static %}
+
+
+{% block extra_head %}
+
+<meta property="og:title" content="{{object.title}}" />
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+
+<meta property="og:description" content="{{object.description}}"/>
+<meta property="og:image" content="{{ object.thumbnail }}" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="कृषिआँगन" />
+{% comment %} 
+<script type="text/javascript">
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '2647386398732305',
+            xfbml: true,
+            version: 'v2.7'
+        });
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script> {% endcomment %}
+{% endblock %}
+
+
+
 {% block content %}
 {% load crispy_forms_tags %}
+{% comment %} {% load social_share %} {% endcomment %}
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ed7de596973dba7"></script>
-{% load static %}
+{% comment %} <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ed7de596973dba7"></script> {% endcomment %}
+
+
 <main>
     <div class="container margin_30">
         <div class="countdown_inner">-{{ object.get_discount_percent|convertToNepali }}% 
@@ -65,7 +105,14 @@
                             class="btn btn-outline-success"><i class="ti-email"></i> सन्देश पठाउनुहोस्</a>
                             {% endif %}
                             <div class="d-flex pt-3">
+                                {% comment %} {% post_to_facebook "<img src='object.thumbnail.url'>" "Post to Facebook!"%} {% endcomment %}
+                                {% comment %} <div id="fb-root"></div>
+                                <div class="fb-share-button" 
+                                    data-href="{{ request.build_absolute_uri }}" 
+                                    data-layout="button_count">
+                                </div> {% endcomment %}
                                 <div class="addthis_inline_share_toolbox"></div>
+                                {% comment %} <div class="addthis_inline_share_toolbox"></div> {% endcomment %}
                             </div>
                         </div>
                     </div>
