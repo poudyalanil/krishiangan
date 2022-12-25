@@ -92,7 +92,7 @@
                                         </li>
                                        
                                         <li>
-                                            <a  href="#"  data-toggle="modal" class="header-title" data-target="#exampleModalCenter" ><i class="fa fa-sellsy"></i> उत्पादन वस्तु बेच्नुहोस्</a> 
+                                            <a  href="#"  data-toggle="modal" class="header-title" data-target="#exampleModalCenter" id="sell-product-btn" ><i class="fa fa-sellsy"></i> उत्पादन वस्तु बेच्नुहोस्</a> 
                                         </li>
                                         <li>
                                             <a href="{% url 'core:home' %}users/items-bid/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> Item Bids</a>
@@ -190,7 +190,7 @@
                                             {% comment %} <a href=" {% url 'core:add_item' %} "
                                                 class="access_link"><span>{{request.user.username}}</span></a> {% endcomment %}
                                             <div class="dropdown-menu">
-                                                <a  class="btn_1" data-toggle="modal" data-target="#exampleModalCenter" >उत्पादन वस्तु बेच्नुहोस्</a>
+                                                <a  class="btn_1" data-toggle="modal" data-target="#exampleModalCenter" id="sell-product-btn">उत्पादन वस्तु बेच्नुहोस्</a>
                                                 <ul>
                                                     <li>
                                                         <a  href=" #" data-toggle="modal" data-target="#usermodal" ><i
@@ -427,7 +427,6 @@
         <script src=" {% static 'main/js/carousel-home.min.js' %} "></script>
         <script src=" {% static 'main/js/isotope.min.js' %} "></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
         
         <script>
             // Isotope filter
@@ -452,6 +451,11 @@
                 lengthChange:false,
                 pageLength:5
             });
+
+            $('#sell-product-btn').on('click',function(){
+                $('.main-menu').removeClass('show');
+            });
+
             
         </script>
         <!-- Modal -->
