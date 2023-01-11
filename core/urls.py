@@ -6,6 +6,9 @@ app_name = 'core'
 
 urlpatterns = [
     path('', HomeView, name='home'),
+    
+    path('accounts/update/<int:pk>/',updateUserProfile , name='account_update'),
+    
 
     path('product/<int:pk>/', ItemDetailView.as_view(), name='product'),
     path('product/<int:pk>/withdraw-bid', withdraw_bid, name='withdraw_bid'),

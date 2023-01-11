@@ -50,7 +50,11 @@ def HomeView(request):
                                                    "userformset": userformset, })
     else:
         return render(request, "main/index.html", {'items': items, 'categories': category, })
-
+    
+    
+def updateUserProfile(request,pk):
+    print(request, pk)
+    return
 
 def subscribe(request):
     if request.method == 'POST':

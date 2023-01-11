@@ -24,12 +24,14 @@ class MyCustomSignupForm(SignupForm):
         # Ensure you call the parent class's save.
         # .save() returns a User object.
         user = super(MyCustomSignupForm, self).save(request)
-        user.username= request.POST.get('mobile')
+        user_saved = User.objects.get(id=user.id)
+        user_saved.username = request.POST.get('mobile')
+        user_saved.save()
 
         # Add your own processing here.
 
         # You must return the original result.
-        return user
+        return user_saved
   
 class MyCustomLoginForm(forms.Form):
     mobile = forms.RegexField(
