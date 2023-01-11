@@ -1,9 +1,55 @@
 from django import forms
-
+from allauth.account.forms import SignupForm,LoginForm,PasswordField
 from .models import *
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
+from allauth.utils import set_form_field_order
+from allauth.account.utils import perform_login
 
+class MyCustomSignupForm(SignupForm):
+    mobile = forms.RegexField(
+        label="Mobile",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Mobile"}
+        ),
+        regex="^\\d+$",
+        min_length=10,
+        max_length=10
+    )
+    
+    field_order = ["mobile","username","email", "password1","password2"]
+        
+    def save(self, request):
 
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super(MyCustomSignupForm, self).save(request)
+        user.username= request.POST.get('mobile')
+
+        # Add your own processing here.
+
+        # You must return the original result.
+        return user
+  
+class MyCustomLoginForm(forms.Form):
+    mobile = forms.RegexField(
+                label="Mobile",
+                widget=forms.TextInput(
+                    attrs={"placeholder": "Mobile", "autocomplete": "mobile"}
+                ),
+                regex="^\\d+$",
+                min_length=10,
+                max_length=10
+            )
+    password = PasswordField(label="Password", autocomplete="current-password")
+    
+    
+    field_order = ["mobile",  "password"]
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super(MyCustomLoginForm, self).__init__(*args, **kwargs)
+        set_form_field_order(self, ["mobile", "password"])
+    
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
