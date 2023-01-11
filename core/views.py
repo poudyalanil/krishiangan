@@ -18,15 +18,37 @@ from rest_framework.response import Response
 from rest_framework import status
 from .forms import *
 from hitcount.views import HitCountDetailView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse,JsonResponse
 from django.urls import reverse
 from django.db.models import Q
+from django.contrib.auth import authenticate, login
+
 
 from django.views.generic import ListView, DetailView, View, CreateView
 
 from django.forms.models import modelformset_factory
 
 
+def accountLogin(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    
+    # check if the username exist in database
+    try:
+        user = User.objects.get(username=username)
+    except:
+        messages.error(request,'Username does not exist')
+
+    # check the credential
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        login(request, user)
+        return redirect("/")
+    else:
+        return redirect('/accounts/login/')
+
+    
 def HomeView(request):
     items = Item.objects.all()
     category = categories.objects.all()
@@ -53,8 +75,31 @@ def HomeView(request):
     
     
 def updateUserProfile(request,pk):
-    print(request, pk)
-    return
+    user = get_object_or_404(User,pk=pk)
+    statuss = 'false'
+    message='Some Error Occured !!'
+    if(user):
+        user.first_name =request.POST.get('first_name'); 
+        user.last_name =request.POST.get('last_name'); 
+        user.email =request.POST.get('email');
+        user.save();
+        
+        user_profile = UserProfile.objects.get(user_id=pk)
+        if(user_profile is None):
+            user_profile = UserProfile
+            user_profile.user_id=pk
+        user_profile.bio = request.POST.get('user-0-bio');
+        user_profile.phone = request.POST.get('user-0-phone');
+        user_profile.city = request.POST.get('user-0-city');
+        user_profile.country = request.POST.get('user-0-country');
+        user_profile.organization = request.POST.get('user-0-organization');
+        user_profile.photo = request.POST.get('user-0-photo')
+        user_profile.save();
+        
+        statuss='true';
+        message='Profile successfully updated !!'
+    return JsonResponse({'status':statuss,'message': message})
+
 
 def subscribe(request):
     if request.method == 'POST':

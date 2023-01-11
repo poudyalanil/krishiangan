@@ -37,7 +37,7 @@
           <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-1">SIGN UP</a> first.{% endblocktrans %}</p>
           {% endif %}
 
-          <form class="login" method="POST" action="{% url 'account_login' %}">
+          <form class="login" method="POST" action="{% url 'core:account_login' %}">
             {% csrf_token %}
             {{ form|crispy }}
             {% if redirect_field_value %}

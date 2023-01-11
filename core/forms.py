@@ -34,10 +34,10 @@ class MyCustomSignupForm(SignupForm):
         return user_saved
   
 class MyCustomLoginForm(forms.Form):
-    mobile = forms.RegexField(
+    username = forms.RegexField(
                 label="Mobile",
                 widget=forms.TextInput(
-                    attrs={"placeholder": "Mobile", "autocomplete": "mobile"}
+                    attrs={"placeholder": "Mobile"}
                 ),
                 regex="^\\d+$",
                 min_length=10,
@@ -45,13 +45,12 @@ class MyCustomLoginForm(forms.Form):
             )
     password = PasswordField(label="Password", autocomplete="current-password")
     
-    
-    field_order = ["mobile",  "password"]
+    field_order = ["username",  "password"]
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request", None)
         super(MyCustomLoginForm, self).__init__(*args, **kwargs)
-        set_form_field_order(self, ["mobile", "password"])
-    
+        set_form_field_order(self, ["username", "password"])
+        
 class UserForm(forms.ModelForm):
     class Meta:
         model = User

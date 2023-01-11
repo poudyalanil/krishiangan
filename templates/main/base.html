@@ -292,7 +292,7 @@
             <!-- /header -->
             {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show bg-light text-danger" role="alert">
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -442,6 +442,9 @@
             $('.leavecomment').on('click', function (event) {
             	$(this).next('.testdiv').toggle('swing');
             });
+            $.ajaxSetup({
+                data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+            });
 
             $('#bid-table').DataTable({
                 paging: true,
@@ -501,8 +504,9 @@
                     </div>
                     <div class="modal-body">
                         {% if request.user.is_authenticated %}
-                        <form id="search_form"  method="POST" action="{% url 'core:account_update' request.user.id %}" enctype="multipart/form-data">
-                            {% csrf_token %} {{ noodle_form|crispy }}
+                        <form id="user_profile_form" method="POST" action="{% url 'core:account_update' request.user.id %}" enctype="multipart/form-data">
+                            {% csrf_token %} 
+                            {{ noodle_form|crispy }}
                             <div class="divider"></div>
                             {{ userformset.management_form }}
                             {{ userformset|crispy }}
@@ -514,16 +518,48 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         {% if request.user.is_authenticated %}
-                            <button onclick="form_submit()" class="btn btn-primary">Save changes</button> 
+                            <a id="form_submit_btn" type="button" class="btn btn-primary text-white">Save changes</a> 
                             {% else %}
                             <a href=" {% url 'account_login' %} " class="btn_1">साइन इन </a>
                         {% endif %}    
                     </div>
                     <script type="text/javascript">
-                        function form_submit(){
-                         document.getElementById("search_form").submit();
-                        }
-                        
+                        $('#form_submit_btn').click(function(){
+                            let form = $('#user_profile_form')[0];
+                            let form_data = new FormData(document.getElementById('user_profile_form'))
+                            let upload_files = '';     
+
+                            if($("[name='user-0-photo']").val()){
+                                upload_files = $("[name='user-0-photo']")[0].files;
+                            }
+                    
+                            if(upload_files !=''){
+                                form_data.append('user-0-photo',upload_files[0],upload_files[0].name)
+                            }
+                            $.ajax({
+                                    type:'POST',
+                                    url:form.action,
+                                    data:form_data,
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: 'multipart/form-data',
+                                }).done(function(response){
+                                    if(response.status == 'true'){
+                                        swal({
+                                        position: 'top',
+                                        icon: 'success',
+                                        title: response.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                        })
+                                        location.reload();
+                                    }
+                                    if(response.status =='false'){
+                                    debugger;
+                                        swal(response.message)
+                                    }
+                                });
+                        });
                         
                     </script> 
                 </div>
