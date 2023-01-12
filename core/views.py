@@ -1,11 +1,9 @@
 from django.forms.models import inlineformset_factory
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404,redirect
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect
 from .models import Item, OrderItem, Order, Comment
 from django.utils import timezone
 from django.contrib import messages
@@ -18,15 +16,55 @@ from rest_framework.response import Response
 from rest_framework import status
 from .forms import *
 from hitcount.views import HitCountDetailView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse,JsonResponse
 from django.urls import reverse
 from django.db.models import Q
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login
+
 
 from django.views.generic import ListView, DetailView, View, CreateView
 
 from django.forms.models import modelformset_factory
 
+def accountSignup(request):
+    username=request.POST.get('mobile');
+    user_exist = User.objects.filter(username=username)
+    if(user_exist):
+        messages.error(request,'Mobile no. already registered !!')
+        # return redirect('/account/sign_up/')
+        return redirect(reverse("account_signup"))
+    else:
+        if(request.POST.get('password1') != request.POST.get('password2')):
+            messages.error(request,'Passord is not same !!')
+            return redirect(reverse("account_signup"))
 
+        else:
+            user = User.objects.create_user(
+                    username=username,
+                    email=request.POST.get('email'),
+                    password=request.POST.get('password1'),
+                )
+            return redirect("/accounts/login/")
+    
+def accountLogin(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    # check if the username exist in database
+    try:
+        User.objects.filter(username=username)
+    except:
+        messages.error(request,'Username does not exist')
+
+    # check the credential
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect("/")
+    else:
+        return redirect('/accounts/login/')
+
+    
 def HomeView(request):
     items = Item.objects.all()
     category = categories.objects.all()
@@ -50,6 +88,38 @@ def HomeView(request):
                                                    "userformset": userformset, })
     else:
         return render(request, "main/index.html", {'items': items, 'categories': category, })
+    
+    
+def updateUserProfile(request,pk):
+    user = get_object_or_404(User,pk=pk)
+    statuss = 'false'
+    message='Some Error Occured !!'
+    if(user):
+        user.first_name =request.POST.get('first_name'); 
+        user.last_name =request.POST.get('last_name'); 
+        user.email =request.POST.get('email');
+        user.save();
+        
+        print(request.FILES)
+        user_profile = UserProfile.objects.get(user_id=pk)
+        if(user_profile is None):
+            user_profile = UserProfile
+            user_profile.user_id=pk
+        user_profile.bio = request.POST.get('user-0-bio');
+        user_profile.phone = request.POST.get('user-0-phone');
+        user_profile.city = request.POST.get('user-0-city');
+        user_profile.country = request.POST.get('user-0-country');
+        user_profile.organization = request.POST.get('user-0-organization');
+        
+        if(request.FILES):
+            user_profile.photo = request.FILES['user-0-photo'];
+        else:
+            user_profile.photo = user_profile.photo    
+        user_profile.save();
+        
+        statuss='true';
+        message='Profile successfully updated !!'
+    return JsonResponse({'status':statuss,'message': message})
 
 
 def subscribe(request):
@@ -231,19 +301,21 @@ class ItemDetailView(HitCountDetailView):
         ImageFormSet = modelformset_factory(Images,
                                             form=ImageForm
                                             )
+        data['productbidlist'] = BidItem.objects.filter(item=self.kwargs['pk'],is_withdrawn=False)
         if self.request.user.is_authenticated:
             pknew = self.request.user.id
             user_form = UserForm(instance=self.request.user)
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
             userformset = ProfileInlineFormset(instance=self.request.user)
-
+            biditemform = BidItemForm()
             postForm = AdditemForm()
             itemformset = ImageFormSet(queryset=Images.objects.none())
             data['noodle'] = pknew
             data['noodle_form'] = user_form
             data['userformset'] = userformset
             data['postForm'] = postForm
+            data['biditemform'] = biditemform
             data['formset'] = itemformset
         data['categories'] = category
         data['photos'] = photos
@@ -382,10 +454,9 @@ def addComment(request, pk):
 @login_required
 def add_to_cart(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    print(item.user.id)
-    print(request.user.id)
+ 
     if item.user.id is request.user.id:
-        messages.info(request, "You can not add your own item to your cart.")
+        messages.info(request, "You cannot add your own item to your cart.")
         return redirect("core:product", pk=pk)
 
     else:
@@ -419,6 +490,23 @@ def add_to_cart(request, pk):
             order.items.add(order_item)
             messages.info(request, "This item was added to your cart.")
             return redirect("core:order-summary")
+        
+        
+@login_required
+def place_item_bid(request,pk):
+    item = get_object_or_404(Item, pk=pk)
+ 
+    if item.user.id is request.user.id:
+        messages.info(request, "You cannot place bid on your own item.")
+        return redirect("core:product", pk=pk)
+    else:
+        item_bid = BidItem.objects.create(
+            user_id=request.user.id,
+            item_id = item.id,
+            quantity= request.POST.get('quantity'),
+            price=request.POST.get('price'))
+        messages.info(request, "Your bid is successfully placed.")
+        return redirect("core:product", pk=pk)
 
 
 @login_required
@@ -625,6 +713,25 @@ def user_items(request, pk):
     userformset = ProfileInlineFormset(instance=request.user)
     return render(request, "main/user_category_page.html", {'items': items, 'categories': categoriestest, 'noodle': pknew,
                                                             'noodle_form': user_form, 'userformset': userformset, 'postForm': postform, 'formset': postformset, })
+@login_required()    
+def user_items_bids(request,pk):
+    
+    user = User.objects.get(pk=pk)
+    items = Item.objects.filter(user=user).values_list('id',flat=True)
+    
+    bid_items = BidItem.objects.filter(item__in=items,is_withdrawn=False)
+    
+    return render(request, "main/item-bids.html",{'bid_items':bid_items})
+
+@login_required()    
+def withdraw_bid(request,pk):
+    item = get_object_or_404(BidItem,pk=pk)
+    bid_item = BidItem.objects.get(pk=pk,is_withdrawn=False)
+    bid_item.is_withdrawn=True
+    bid_item.save()
+    
+    return redirect("core:product", pk=item.item_id)
+    
 
     # category = get_object_or_404(categories, pk=pk)
     # items = Item.objects.filter(category=category)

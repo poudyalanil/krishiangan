@@ -34,17 +34,18 @@
 
           {% else %}
           <p>{% blocktrans %}If you have not created an account yet, then please
-          <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+          <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-1">SIGN UP</a> first.{% endblocktrans %}</p>
           {% endif %}
 
-          <form class="login" method="POST" action="{% url 'account_login' %}">
+          <form class="login" method="POST" action="{% url 'core:account_login' %}">
             {% csrf_token %}
             {{ form|crispy }}
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            <a class="btn btn-default" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
             <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+            <br/>
+            <a class="btn btn-default text-primary" href="{% url 'account_reset_password' %}">{% trans "Forgot Password ?" %}</a>
           </form>
           </div>
         </div>

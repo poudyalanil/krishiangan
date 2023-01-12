@@ -14,14 +14,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core', 
-    'crispy_forms',
-    "pinax.templates",
-    "pinax.messages",
-    'hitcount',
+    'core',
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
-    
+    'allauth.socialaccount',
+    'crispy_forms',
+    "pinax.messages",
+    'rest_framework',
+    "bootstrapform",
+    "pinax.templates",
+    'material',
+    'hitcount',
+    'django_social_share'
 ]
 
 MIDDLEWARE = [
@@ -36,11 +41,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'agmarket.urls'
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+ACCOUNT_USERNAME_REQUIRED = False
+
+ACCOUNT_FORMS = {'signup': 'core.forms.MyCustomSignupForm',
+                 'login': 'core.forms.MyCustomLoginForm'
+                }
 
 TEMPLATES = [
     {
@@ -54,7 +61,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 "pinax.messages.context_processors.user_messages",
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.custom_processor'
+                'core.context_processors.custom_processor',
             ],
         },
     },
@@ -122,3 +129,4 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

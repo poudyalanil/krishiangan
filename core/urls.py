@@ -6,8 +6,14 @@ app_name = 'core'
 
 urlpatterns = [
     path('', HomeView, name='home'),
+    
+    path('accounts/sign_up',accountSignup , name='account_signup'),
+    path('accounts/login',accountLogin , name='account_login'),
+    path('accounts/update/<int:pk>',updateUserProfile , name='account_update'),
+    
 
     path('product/<int:pk>/', ItemDetailView.as_view(), name='product'),
+    path('product/<int:pk>/withdraw-bid', withdraw_bid, name='withdraw_bid'),
     path('category/<int:pk>/', categoryview, name='category'),
 
 
@@ -17,6 +23,8 @@ urlpatterns = [
     path('old-orders/', old_orders_View.as_view(), name='old-orders'),
 
     path('add-to-cart/<int:pk>/', add_to_cart, name='add-to-cart'),
+    
+    path('place-item-bid/<int:pk>/', place_item_bid, name='place-item-bid'),
     path('about/', about, name='about'),
     path('terms/', terms, name='terms'),
 
@@ -33,6 +41,8 @@ urlpatterns = [
 
     url(r'^users/items/(?P<pk>[\-\w]+)/$',
         user_items, name='user_items'),
+    url(r'^users/items-bid/(?P<pk>[\-\w]+)/$',
+        user_items_bids, name='user_items_bids'),
     url(r'^edit/item/(?P<pk>[\-\w]+)/$',
         edit_item, name='edit_item'),
     path('item-like/<int:pk>', ItemLike, name="item_like"),

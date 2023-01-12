@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.shortcuts import reverse
 from django.conf import settings
@@ -12,8 +13,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         User, related_name='user', on_delete=models.CASCADE)
     photo = models.ImageField(verbose_name=("Profile Picture"),
-                              upload_to=(
-        "main.UserProfile.photo", "profiles"), null=True, blank=True)
+                              upload_to=("profile_photos/"), null=True, blank=True)
 
     bio = models.TextField(default='', blank=True)
     phone = models.CharField(max_length=20, blank=True, default='')
@@ -48,7 +48,10 @@ class categories(models.Model):
 
     def get_absolute_url(self):
         return reverse("core:category", kwargs={"pk": self.pk})
-
+    
+    
+def convertToNepali(input):
+    return str(input).replace(',',',').replace('.','.').replace('0','०').replace('1','१').replace('2','२').replace('3','३').replace('4','४').replace('5','५').replace('6','६').replace('7','७').replace('8','८').replace('9','९')
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
@@ -62,6 +65,7 @@ class Item(models.Model):
     sold = models.IntegerField(default=0)
     unit = models.CharField(max_length=10, default="Kg")
     home_delivery = models.BooleanField(default=False)
+    show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
     thumbnail = models.ImageField(upload_to='images/', default=None)
@@ -70,7 +74,7 @@ class Item(models.Model):
         related_query_name='hit_count_generic_relation')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    expiry_date = models.DateField(null=True)
+    expiry_date = models.DateField(null=True,blank=True)
     upload_date = models.DateField(auto_now_add=True, null=True)
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(
@@ -80,7 +84,11 @@ class Item(models.Model):
         return self.likes.count()
 
     def get_available_item(self):
-        return self.available-self.sold
+        available_quantity = self.available-self.sold
+        if(available_quantity < 1):
+            return 'Out of Stock'
+        else:
+            return '%s  %s' % (self.available-self.sold, self.unit)
 
     def __str__(self):
         return self.title
@@ -90,6 +98,10 @@ class Item(models.Model):
 
     def get_add_to_cart_url(self):
         return reverse("core:add-to-cart", kwargs={
+            'pk': self.pk
+        })
+    def get_place_bid_url(self):
+        return reverse("core:place-item-bid", kwargs={
             'pk': self.pk
         })
 
@@ -124,7 +136,6 @@ class Item(models.Model):
             return round(percent, 2)
         except:
             return 0
-
 
 def get_image_filename(instance, filename):
     try:
@@ -203,6 +214,19 @@ class Order(models.Model):
             total += order_item.get_final_price()
         return total
 
+
+class BidItem(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    price = models.FloatField()
+    bid_date = models.DateTimeField(auto_now_add=True, null=True)
+    is_withdrawn = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.user.username
+    
 
 class Comment(models.Model):
     sno = models.AutoField(primary_key=True)
