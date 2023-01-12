@@ -83,6 +83,8 @@ def updateUserProfile(request,pk):
         user.last_name =request.POST.get('last_name'); 
         user.email =request.POST.get('email');
         user.save();
+        
+        print(request.FILES)
         user_profile = UserProfile.objects.get(user_id=pk)
         if(user_profile is None):
             user_profile = UserProfile
@@ -92,7 +94,11 @@ def updateUserProfile(request,pk):
         user_profile.city = request.POST.get('user-0-city');
         user_profile.country = request.POST.get('user-0-country');
         user_profile.organization = request.POST.get('user-0-organization');
-        user_profile.photo = request.FILES['user-0-photo'];
+        
+        if(request.FILES):
+            user_profile.photo = request.FILES['user-0-photo'];
+        else:
+            user_profile.photo = user_profile.photo    
         user_profile.save();
         
         statuss='true';
