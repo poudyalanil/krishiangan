@@ -1,0 +1,70 @@
+/*============================================================================================*/
+/* Your custom styles below */
+/*============================================================================================*/
+a.header-title{
+    font-size:16px !important;
+}
+
+.category-title{
+    font-size: 18px;
+}
+
+.footer_title>h3{
+    font-size: 18px !important;
+}
+
+a.btn_2{
+width: 80% !important;
+}
+a.btn_2{
+border: none;
+color: #fff;
+background: orange;
+outline: none;
+cursor: pointer;
+display: inline-block;
+text-decoration: none;
+padding: 12px 20px;
+width: 80%;
+color: #fff;
+font-weight: 500;
+text-align: center;
+font-size: 0.875rem;
+text-transform: uppercase;
+-moz-transition: all 0.3s ease-in-out;
+-o-transition: all 0.3s ease-in-out;
+-webkit-transition: all 0.3s ease-in-out;
+-ms-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+-ms-border-radius: 3px;
+border-radius: 3px;
+line-height: normal;
+}
+
+a.btn_2:hover{
+    background: orangered;
+    color:black;
+    text-decoration: underline;
+
+}
+
+#bid-table>thead>tr>th,#bid-table>tbody>tr>td{
+    font-size: 15px;
+    padding-top:2px !important;
+    padding-bottom:2px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    padding:0.2rem !important;
+}
+
+@media (min-width: 1200px){
+    .container{
+        max-width:1250px !important;
+    }
+}
+a.phone_top {
+    font-size: 15px !important;
+}

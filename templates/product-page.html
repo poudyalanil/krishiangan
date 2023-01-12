@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          <img src="{{ object.image.url }}" class="img-fluid" alt="">
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          <!--Content-->
+          <div class="p-4">
+
+            <div class="mb-3">
+              <a href="">
+                <span class="badge purple mr-1">{{ object.category.category }} <span/>
+              </a>
+              <h1>
+                  <strong>
+                    <a href="" class="dark-grey-text">{{ object.title}}
+                    </a>
+                  </strong>
+                </h1>
+             
+            </div>
+
+            <p class="lead">
+              {% if object.discount_price %}
+              <span class="mr-1">
+                <del>${{ object.price }}</del>
+              </span>
+              <span>${{ object.discount_price }}</span>
+              {% else %}
+              <span>${{ object.price }}</span>
+              {% endif %}
+            </p>
+
+            <p class="lead font-weight-bold">Description</p>
+
+            <p>{{object.description}}</p>
+
+            {% comment %} <form class="d-flex justify-content-left">
+              <!-- Default input -->
+              <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+              <button class="btn btn-primary btn-md my-0 p" type="submit">Add to cart
+                <i class="fas fa-shopping-cart ml-1"></i>
+              </button>
+
+            </form> {% endcomment %}
+             <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p" >Add to cart
+                <i class="fas fa-shopping-cart ml-1"></i>
+              </a>
+              <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p">
+              Remove from cart
+            </a>
+            <a href="{% url "pinax_messages:message_user_create" user_id=object.user.id %}" class="btn btn-default">Message Seller</a>
+            <!-- LIKES -->
+
+    {% if post_is_liked %}
+    <a href="{{ object.get_like_url }}" class="btn btn-info">Unlike <i class="far fa-thumbs-down"></i> </a>
+    
+
+    {% else %}
+    <a href="{{ object.get_like_url }}" class="btn btn-info">Like <i class="far fa-thumbs-up"></i> </a>
+
+    {% endif %}
+<strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
+          </div>
+          <!--Content-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <hr>
+
+      <!--Grid row-->
+      <div class="row d-flex justify-content-center wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 text-center">
+
+          <h4 class="my-4 h4">Additional information</h4>
+
+          <p>{{ object.description }}</p>
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-lg-4 col-md-12 mb-4">
+
+          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-4 col-md-6 mb-4">
+
+          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-4 col-md-6 mb-4">
+
+          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+    </div>
+    <div class="container bootstrap snippets bootdey">
+    <div class="row">
+		<div class="col-md-12">
+		    <div class="blog-comment">
+				<h3 >Comments</h3>
+                <hr/>
+                {% csrf_token %} 
+                
+
+                 <form action="{{ object.get_add_comment_url }}" method="POST">
+                {% csrf_token %} 
+                  Comment: <br/>
+                  <input type="text" name="body"/>
+                  <input type="hidden" name="commentsno" value=""/>
+                  <br/>               
+                  <input type="submit" value="Post"/>
+                  </form>
+				<ul class="comments">
+        {% comment %} <a href = "{% url 'add_comment' items.pk %}"> Add Comment </a> {% endcomment %}
+        {% if not object.comments.all %}
+
+         <h7> No comments yet ....</h7>
+        {%else %}
+          {% for comment in object.comments.all %}
+         
+          {% if not comment.parent %}
+          
+          
+
+        
+				<li class="clearfix">
+				  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
+				  <div class="post-comments">
+				      <p class="meta">{{ comment.date_added }} <a href="#">{{ comment.user.username }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+				      <p>
+				          {{ comment.body}}
+				      </p>
+           
+              
+				  </div>
+          <form action="{{ object.get_add_comment_url }}" method="POST">
+                {% csrf_token %} 
+                  
+                  Reply: <br/>
+                  <input type="text" name="body"/>
+                  <input type="hidden" name="commentsno" value="{{ comment.sno}}"/>
+
+                  <br/>               
+                  <input type="submit" value="Post"/>
+                  </form>
+             
+          
+          <p>
+
+				</li>
+        {% else %}
+        
+        <li class="clearfix">
+				  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
+				  <div class="post-comments">
+				      <p class="meta">in reply of " {{ comment.parent.body }} " <a href="#">{{ comment.user.username }}</a> replies : </a></i></p>
+				      <p>
+				          {{ comment.body}}
+				      </p>
+           
+              
+				  </div>
+          <form action="{{ object.get_add_comment_url }}" method="POST">
+                {% csrf_token %} 
+                  
+                  Reply: <br/>
+                  <input type="text" name="body"/>
+                  <input type="hidden" name="commentsno" value="{{ comment.sno}}"/>
+
+                  <br/>               
+                  <input type="submit" value="Post"/>
+                  </form>
+             
+          
+          <p>
+
+				</li>
+
+        {% endif %}
+        {% endfor %} 
+        {% endif %}
+			
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  </main>
+  <!--Main layout-->
+
+
+
+
+{% endblock content %}

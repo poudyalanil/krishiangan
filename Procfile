@@ -1,0 +1,1 @@
+web: gunicorn agmarket.wsgi --log-file=-
