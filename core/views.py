@@ -93,7 +93,7 @@ def updateUserProfile(request,pk):
         user_profile.city = request.POST.get('user-0-city');
         user_profile.country = request.POST.get('user-0-country');
         user_profile.organization = request.POST.get('user-0-organization');
-        user_profile.photo = request.POST.get('user-0-photo')
+        user_profile.photo = request.POST.get('user-0-photo');
         user_profile.save();
         
         statuss='true';
