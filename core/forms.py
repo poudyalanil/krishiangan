@@ -4,7 +4,10 @@ from .models import *
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from allauth.utils import set_form_field_order
-from allauth.account.utils import perform_login
+from django.contrib import messages
+from django.shortcuts import render, HttpResponseRedirect,get_object_or_404,redirect
+
+
 
 class MyCustomSignupForm(SignupForm):
     mobile = forms.RegexField(
@@ -19,19 +22,22 @@ class MyCustomSignupForm(SignupForm):
     
     field_order = ["mobile","username","email", "password1","password2"]
         
-    def save(self, request):
+    # def save(self, request):
 
-        # Ensure you call the parent class's save.
-        # .save() returns a User object.
-        user = super(MyCustomSignupForm, self).save(request)
-        user_saved = User.objects.get(id=user.id)
-        user_saved.username = request.POST.get('mobile')
-        user_saved.save()
-
-        # Add your own processing here.
-
-        # You must return the original result.
-        return user_saved
+    #     # Ensure you call the parent class's save.
+    #     # .save() returns a User object.
+    #     user_exists = User.objects.get(username=request.POST.get('mobile'))
+    #     if(user_exists):
+    #         messages.error(request,'Mobile no. already registered !!')
+    #         return redirect('/accounts/signup')
+    
+    #     else:
+    #         return
+            # user = super(MyCustomSignupForm, self).save(request)
+            # user_saved = User.objects.get(id=user.id)
+            # user_saved.username = request.POST.get('mobile')
+            # user_saved.save()
+            # return user_saved
   
 class MyCustomLoginForm(forms.Form):
     username = forms.RegexField(

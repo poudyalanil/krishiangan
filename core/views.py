@@ -1,11 +1,9 @@
 from django.forms.models import inlineformset_factory
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404,redirect
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect
 from .models import Item, OrderItem, Order, Comment
 from django.utils import timezone
 from django.contrib import messages
@@ -21,6 +19,7 @@ from hitcount.views import HitCountDetailView
 from django.http import HttpResponseRedirect, HttpResponse,JsonResponse
 from django.urls import reverse
 from django.db.models import Q
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
 
 
@@ -28,7 +27,31 @@ from django.views.generic import ListView, DetailView, View, CreateView
 
 from django.forms.models import modelformset_factory
 
+def accountSignup(request):
+    username=request.POST.get('mobile');
+    user_exist = User.objects.filter(username=username)
+    if(user_exist):
+        messages.error(request,'Mobile no. already registered !!')
+        # return redirect('/account/sign_up/')
+        return redirect(reverse("account_signup"))
+    else:
+        if(request.POST.get('password1') != request.POST.get('password2')):
+            messages.error(request,'Passord is not same !!')
+            return redirect(reverse("account_signup"))
 
+        else:
+            user = User.objects.create_user(
+                    username=username,
+                    email=request.POST.get('email'),
+                    password=make_password(request.POST.get('password1')),
+                    is_superuser=False,
+                    is_staff=False,
+                )
+            
+            user_created = authenticate(username=username, password=request.POST.get('password1'))
+            login(request, user_created)
+            return redirect("/")
+    
 def accountLogin(request):
     username = request.POST.get('username')
     password = request.POST.get('password')

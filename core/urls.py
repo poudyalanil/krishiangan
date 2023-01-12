@@ -7,6 +7,7 @@ app_name = 'core'
 urlpatterns = [
     path('', HomeView, name='home'),
     
+    path('accounts/sign_up',accountSignup , name='account_signup'),
     path('accounts/login',accountLogin , name='account_login'),
     path('accounts/update/<int:pk>',updateUserProfile , name='account_update'),
     
