@@ -51,13 +51,13 @@
                 <div class="main_header">
                     <div class="container">
                         <div class="row small-gutters" width="100%">
-                            <div class="col-xl-1 col-lg-1 d-lg-flex align-items-center">
+                            <div class="col-xl-2 col-lg-2 d-lg-flex align-items-center">
                                 <div id="logo">
                                     <a href=" {% url 'core:home' %} "><img src=" {% static 'main/img/logo.png' %} " alt=""
                                         width="100" height="35"></a>
                                 </div>
                             </div>
-                            <nav class="col-xl-9 col-lg-9">
+                            <nav class="col-xl-8 col-lg-8">
                                 <a class="open_close" href=" # ">
                                     <div class="hamburger hamburger--spin">
                                         <div class="hamburger-box">
@@ -104,7 +104,7 @@
                                 <!--/main-menu -->
                             </nav>
                             <div class="col-xl-2 col-lg-2 d-lg-flex d-sm-d-md-inline-block align-items-center justify-content-end text-right font-small">
-                                <a class="text-white" href="http://price.krishiangan.com/" target="_blank"><span class="fa fa-money"> मूल्य खण्ड</span></a>
+                                {% comment %} <a class="text-white" href="http://price.krishiangan.com/" target="_blank"><span class="fa fa-money"> मूल्य खण्ड</span></a> {% endcomment %}
                                 <a class="text-white" href="{% static 'main/app/krishiaangan.apk' %}" download="Krishiaangan.apk"><span class="fa fa-android pl-3"> मोबाइल एप</span></a>
                             </div>
                         </div>
