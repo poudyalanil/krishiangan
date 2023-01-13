@@ -40,14 +40,11 @@ class MyCustomSignupForm(SignupForm):
             # return user_saved
   
 class MyCustomLoginForm(forms.Form):
-    username = forms.RegexField(
+    username = forms.CharField(
                 label="Mobile",
                 widget=forms.TextInput(
                     attrs={"placeholder": "Mobile"}
                 ),
-                regex="^\\d+$",
-                min_length=10,
-                max_length=10
             )
     password = PasswordField(label="Password", autocomplete="current-password")
     

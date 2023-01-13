@@ -141,7 +141,7 @@ def get_image_filename(instance, filename):
     try:
 
         id = instance.item.id
-        return "item_images/%s" % (id)
+        return "item_images/%s/%s" % (id,filename)
     except:
         return "item_images/"
 

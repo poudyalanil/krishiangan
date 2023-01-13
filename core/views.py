@@ -601,11 +601,9 @@ def itemlist(request):
             # user = get_object_or_404(User, pk=request.user.id)
             user = User.objects.get(pk=request.user.id)
             # print(user.id)
-
             post_form.user_id = user.id
 
             mtest = post_form.save()
-            print(post_form.id)
             iteminstance = Item.objects.get(pk=post_form.id)
             print(request.FILES)
 
