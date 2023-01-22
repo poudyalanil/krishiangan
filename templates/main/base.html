@@ -482,16 +482,20 @@
                         <form id="post_form" method="post" action="/add-item/" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-row">
+                                
                                 {% for pform in postForm %}
-                                {{pform.field.isBooleanField}}
-                                <div class="col-md-6">
-                                    {{ pform|as_crispy_field}}
-                                </div>
+                                    {% if pform|field_type == 'CheckboxInput'%}
+                                        <div class="col-md-6 py-2">{{ pform|as_crispy_field}}</div>
+                                    {% elif pform|field_type in 'Textarea,ClearableFileInput'%}
+                                        <div class="col-md-12">{{ pform|as_crispy_field}}</div>
+
+                                    {%else%}
+                                        <div class="col-md-6">{{ pform|as_crispy_field}}</div>
+                                    {%endif%}
                                 {%endfor%}
-                            {% comment %} {{ postForm|crispy }} {% endcomment %}
                             {{ formset.management_form }}
                             {% for form in formset %} 
-                            {{ form|crispy }}
+                                <div class="col-md-12 py-2">{{ form|crispy}}</div>
                             {% endfor %}
                             </div>
                     </div>

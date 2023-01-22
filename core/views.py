@@ -481,7 +481,7 @@ def add_to_cart(request, pk):
                     return redirect("core:order-summary")
             else:
                 order.items.add(order_item)
-                messages.info(request, "This item was added to your cart.")
+                messages.info(request, "सामान बास्केटमा राखियो ")
                 return redirect("core:order-summary")
         else:
             ordered_date = timezone.now()

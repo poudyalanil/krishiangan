@@ -68,3 +68,12 @@ a.btn_2:hover{
 a.phone_top {
     font-size: 15px !important;
 }
+
+.asteriskField{
+    color:red;
+    font-weight: bold;
+}
+.close{
+    color:red;
+    font-weight: bold;
+}

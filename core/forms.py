@@ -87,12 +87,12 @@ class AdditemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ('title','price','discount_price','category','available','unit','home_delivery','show_expiry','price_negotiable','description','thumbnail','expiry_date')
+        fields = ('title','price','discount_price','category','available','unit','home_delivery','price_negotiable','show_expiry','expiry_date','description','thumbnail')
         exclude = ('likes', 'user', 'sold', 'hit_count_generic', 'featured')
         labels = ({
                     'title': 'नाम',
                     'price': 'मूल्य',
-                    'discount_price': 'Discount पछिको मूल्य',
+                    'discount_price': 'छुट पछिको मूल्य',
                     'category': 'वर्ग',
                     'available': 'उपलब्ध संख्या',
                     'unit': 'ईकाई',
@@ -118,7 +118,7 @@ class AdditemForm(forms.ModelForm):
 
 class ImageForm(forms.ModelForm):
     image = forms.ImageField(
-        label='Image', widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    label='फोटोहरु<sub>(१ वा १ भन्दा बढी)<sub>', widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Images
