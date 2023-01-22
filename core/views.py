@@ -81,11 +81,12 @@ def HomeView(request):
         user_form = UserForm(instance=request.user)
         ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
             'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-        userformset = ProfileInlineFormset(instance=request.user)
+        
+        profile_id = UserProfile.objects.filter(user=request.user).first()
+        userformset = UserProfileForm(instance=profile_id)
 
         return render(request, "main/index.html", {'items': items, 'categories': category, 'postForm': form, 'formset': formset, "noodle": pknew,
-                                                   "noodle_form": user_form,
-                                                   "userformset": userformset, })
+                                                   "noodle_form": user_form,"userformset": userformset, })
     else:
         return render(request, "main/index.html", {'items': items, 'categories': category, })
     
@@ -156,7 +157,10 @@ def about(request):
         user_form = UserForm(instance=request.user)
         ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
             'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-        userformset = ProfileInlineFormset(instance=request.user)
+        profile_id = UserProfile.objects.filter(user=request.user).first()
+        userformset = UserProfileForm(instance=profile_id)
+        
+        # userformset = ProfileInlineFormset(instance=request.user)
 
         return render(request, "main/about.html", {'categories': category, 'postForm': postform, 'formset': postformset, "noodle": pknew,
                                                    "noodle_form": user_form,
@@ -216,7 +220,10 @@ class SearchResultsView(ListView):
             user_form = UserForm(instance=self.request.user)
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-            userformset = ProfileInlineFormset(instance=self.request.user)
+            profile_id = UserProfile.objects.filter(user=request.user).first()
+            userformset = UserProfileForm(instance=profile_id)
+            
+            # userformset = ProfileInlineFormset(instance=self.request.user)
 
             postForm = AdditemForm()
             itemformset = ImageFormSet(queryset=Images.objects.none())
@@ -265,7 +272,10 @@ def categoryview(request, pk):
         user_form = UserForm(instance=request.user)
         ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
             'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-        userformset = ProfileInlineFormset(instance=request.user)
+        # userformset = ProfileInlineFormset(instance=request.user)
+        profile_id = UserProfile.objects.filter(user=request.user).first()
+        userformset = UserProfileForm(instance=profile_id)
+        
 
         return render(request, "main/category_page.html", {'items': items, 'categories': categoriestest, 'category': category, 'postForm': postform, 'formset': postformset, "noodle": pknew,
                                                            "noodle_form": user_form,
@@ -307,7 +317,10 @@ class ItemDetailView(HitCountDetailView):
             user_form = UserForm(instance=self.request.user)
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-            userformset = ProfileInlineFormset(instance=self.request.user)
+            # userformset = ProfileInlineFormset(instance=self.request.user)
+            profile_id = UserProfile.objects.filter(user=request.user).first()
+            userformset = UserProfileForm(instance=profile_id)
+            
             biditemform = BidItemForm()
             postForm = AdditemForm()
             itemformset = ImageFormSet(queryset=Images.objects.none())
@@ -391,7 +404,10 @@ class OrderSummaryView(LoginRequiredMixin, View):
             user_form = UserForm(instance=self.request.user)
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio', ))
-            userformset = ProfileInlineFormset(instance=self.request.user)
+            # userformset = ProfileInlineFormset(instance=self.request.user)
+            profile_id = UserProfile.objects.filter(user=request.user).first()
+            userformset = UserProfileForm(instance=profile_id)
+            
 
             postForm = AdditemForm()
             itemformset = ImageFormSet(queryset=Images.objects.none())
@@ -585,7 +601,10 @@ def itemlist(request):
         user_form = UserForm(instance=request.user)
         ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
             'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-        userformset = ProfileInlineFormset(instance=request.user)
+        # userformset = ProfileInlineFormset(instance=request.user)
+        profile_id = UserProfile.objects.filter(user=request.user).first()
+        userformset = UserProfileForm(instance=profile_id)
+        
 
         return render(request, "add_item.html", {'categories': category, 'items': items, 'postForm': postform, 'formset': postformset, "noodle": pknew,
                                                  "noodle_form": user_form,
@@ -635,7 +654,10 @@ def edit_item(request, pk):
             user_form = UserForm(instance=request.user)
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-            userformset = ProfileInlineFormset(instance=request.user)
+            # userformset = ProfileInlineFormset(instance=request.user)
+            profile_id = UserProfile.objects.filter(user=request.user).first()
+            userformset = UserProfileForm(instance=profile_id)
+            
 
             return render(request, "add_item.html", {'categories': category, 'postForm': postform, 'formset': postformset, "noodle": pknew,
                                                      "noodle_form": user_form,
@@ -676,6 +698,7 @@ def edit_user(request):
         user = User.objects.get(pk=request.user.id)
 
         user_form = UserForm(request.POST, request.FILES, instance=user)
+        
 
         formset = ProfileInlineFormset(
             request.POST, request.FILES, instance=user)
@@ -708,7 +731,10 @@ def user_items(request, pk):
     user_form = UserForm(instance=request.user)
     ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
         'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-    userformset = ProfileInlineFormset(instance=request.user)
+    # userformset = ProfileInlineFormset(instance=request.user)
+    profile_id = UserProfile.objects.filter(user=request.user).id
+    userformset = UserProfileForm(instance=profile_id)
+    
     return render(request, "main/user_category_page.html", {'items': items, 'categories': categoriestest, 'noodle': pknew,
                                                             'noodle_form': user_form, 'userformset': userformset, 'postForm': postform, 'formset': postformset, })
 @login_required()    

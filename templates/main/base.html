@@ -512,7 +512,7 @@
             </div>
         </div>
         <div class="modal fade" id="usermodal" tabindex="-1" role="dialog" aria-labelledby="usermodalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="usermodalLongTitle">Update Your Info</h5>
@@ -523,11 +523,30 @@
                     <div class="modal-body">
                         {% if request.user.is_authenticated %}
                         <form id="user_profile_form" method="POST" action="{% url 'core:account_update' request.user.id %}" enctype="multipart/form-data">
-                            {% csrf_token %} 
-                            {{ noodle_form|crispy }}
+                            {% csrf_token %}
+                            <div class="form-row"> 
+                            {% for nform in noodle_form %}
+                                {% if nform|field_type == 'TextInput'%}
+                                    <div class="col-md-6 py-2">{{ nform|as_crispy_field}}</div>
+                                {% elif nform|field_type == 'EmailInput'%}
+                                    <div class="col-md-12">{{ nform|as_crispy_field}}</div>
+                                {%endif%}
+                            {%endfor%}
+                                
                             <div class="divider"></div>
-                            {{ userformset.management_form }}
-                            {{ userformset|crispy }}
+                            {% comment %} {{ userformset.management_form }}
+                            {{userformset|crispy}} {% endcomment %}
+                            {% for uform in userformset %}
+                                {% if uform|field_type == 'TextInput'%}
+                                    <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
+                                {% elif uform|field_type in 'Textarea,ClearableFileInput'%}
+                                    <div class="col-md-12">{{ uform|as_crispy_field}}</div>
+
+                                {%else%}
+                                    <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
+                                {%endif%}
+                            {%endfor%}
+                        </div>
                         </form>
                         {% else %}
                         <h3>Login First </h3>

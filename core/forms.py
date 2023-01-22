@@ -58,11 +58,28 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+        labels = ({
+                    'first_name': 'नाम',
+                    'last_name': 'थर',
+                    'email': 'ई-मेल',
+                })
         
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['photo', 'bio', 'phone','city','country','organization','user']
+        fields = ['phone','city','country','organization','photo', 'bio' ]
+        labels = ({
+                    'phone': 'मोबाइल नं.',
+                    'city': 'ठेगाना',
+                    'country': 'देश',
+                    'organization': 'संगठन / संस्था',
+                    'photo': 'फोटो',
+                    'bio': 'छोटो जीवनी',
+                })
+        
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows':3}),
+        }
 
 # class AddCommentForm(forms.ModelForm):
 
