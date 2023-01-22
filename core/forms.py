@@ -77,24 +77,43 @@ class UserProfileForm(forms.ModelForm):
 
 
 class AdditemForm(forms.ModelForm):
-    expiry_date = forms.DateField(
-        widget=forms.TextInput(
-            attrs={'type': 'date'}
+    # expiry_date = forms.DateField(
+    #     widget=forms.TextInput(
+    #         attrs={'type': 'date','required':False}
 
-        )
-    )
+    #     )
+    # )
     # image = forms.ImageField(label='Image')
 
     class Meta:
         model = Item
+        fields = ('title','price','discount_price','category','available','unit','home_delivery','show_expiry','price_negotiable','description','thumbnail','expiry_date')
         exclude = ('likes', 'user', 'sold', 'hit_count_generic', 'featured')
+        labels = ({
+                    'title': 'नाम',
+                    'price': 'मूल्य',
+                    'discount_price': 'Discount पछिको मूल्य',
+                    'category': 'वर्ग',
+                    'available': 'उपलब्ध संख्या',
+                    'unit': 'ईकाई',
+                    'home_delivery': 'होम डेलिभरी',
+                    'show_expiry': 'म्याद सकिने मिति देखाउने',
+                    'price_negotiable': 'मूल्य बार्गेनिङ गर्न मिल्ने',
+                    'description': 'विवरण',
+                    'thumbnail': 'थम्बनेल',
+                    'expiry_date': 'म्याद समाप्ती मिति',
+                    'image': 'फोटोहरु',
+                })
 
+        widgets = {
+            'expiry_date': forms.DateInput(attrs={'type':'date','required':False}),
+            'description': forms.Textarea(attrs={'rows':3}),
+        }
         # fields = ['title', 'price', 'discount_price', 'category', 'available', 'unit',
         #   'home_delivery', 'price_negotiable', 'description', 'image', 'expiry_date', 'featured']
 
     def __init__(self, *args, **kwargs):
         super(AdditemForm, self).__init__(*args, **kwargs)
-        # self.fields['thumbnail'].required = False
 
 
 class ImageForm(forms.ModelForm):

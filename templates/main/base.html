@@ -142,7 +142,7 @@
                                     </ul>
                                 </nav>
                             </div>
-                            <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
+                            <div class="col-xl-5 col-lg-5 col-md-5 d-none d-md-block">
                                 <div class="custom-search-input">
                                     <form action="{% url 'core:search_results' %}" method="get">
                                         <input name="q"  type="text" placeholder="उत्पादन वस्तु खोज्नुहोस्">
@@ -150,7 +150,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-2 col-md-3"> 
+                            <div class="col-xl-4 col-lg-4 col-md-4"> 
                                 {% load pinax_messages_tags %}
                                 <ul class="top_tools">
                                     {% if request.user.is_authenticated %}
@@ -186,7 +186,13 @@
                                         {% if request.user.is_authenticated %}
                                         <div class="dropdown dropdown-access">
                                             <a href=" #" data-toggle="modal" data-target="#usermodal"><i
-                                                class="ti-user"></i> {{request.user.username}}</a>
+                                                class="ti-user"></i>
+                                                {% if request.user.first_name%}
+                                                    {{request.user.first_name}}
+                                                {%else%} 
+                                                    {{request.user.username}}
+                                                {%endif%}
+                                            </a>
                                             {% comment %} <a href=" {% url 'core:add_item' %} "
                                                 class="access_link"><span>{{request.user.username}}</span></a> {% endcomment %}
                                             <div class="dropdown-menu">
@@ -268,7 +274,7 @@
                     .modal.show .modal-dialog {
                     -webkit-transform: none;
                     transform: none;
-                    margin-top: 60px;
+                    margin-top: 30px;
                     }
                     .modal-content {
                     margin-top:60px !important;
@@ -463,7 +469,7 @@
         </script>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">आफ्नो उत्पादन वस्तु बेच्नुहोस्</h5>
@@ -475,11 +481,19 @@
                         {% if request.user.is_authenticated %}
                         <form id="post_form" method="post" action="/add-item/" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {{ postForm|crispy }}
+                            <div class="form-row">
+                                {% for pform in postForm %}
+                                {{pform.field.isBooleanField}}
+                                <div class="col-md-6">
+                                    {{ pform|as_crispy_field}}
+                                </div>
+                                {%endfor%}
+                            {% comment %} {{ postForm|crispy }} {% endcomment %}
                             {{ formset.management_form }}
-                            {% for form in formset %}
+                            {% for form in formset %} 
                             {{ form|crispy }}
                             {% endfor %}
+                            </div>
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
