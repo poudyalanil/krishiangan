@@ -68,7 +68,7 @@ class Item(models.Model):
     show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
-    thumbnail = models.ImageField(upload_to='images/', default=None)
+    # thumbnail = models.ImageField(upload_to='images/', default=None)
     hit_count_generic = GenericRelation(
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
@@ -125,6 +125,13 @@ class Item(models.Model):
             'user': self.user
         })
 
+    def get_thumbnail_path(self):
+        images = Images.objects.filter(item=self).first()
+        if(images):
+            return images.image.url
+        else:
+            return 
+    
     def get_remaining_days(self):
 
         return (self.expiry_date-self.upload_date)

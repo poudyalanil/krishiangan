@@ -104,7 +104,7 @@ class AdditemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ('title','price','discount_price','category','available','unit','home_delivery','price_negotiable','show_expiry','expiry_date','description','thumbnail')
+        fields = ('title','price','discount_price','category','available','unit','home_delivery','price_negotiable','show_expiry','expiry_date','description')
         exclude = ('likes', 'user', 'sold', 'hit_count_generic', 'featured')
         labels = ({
                     'title': 'नाम',
@@ -117,7 +117,6 @@ class AdditemForm(forms.ModelForm):
                     'show_expiry': 'म्याद सकिने मिति देखाउने',
                     'price_negotiable': 'मूल्य बार्गेनिङ गर्न मिल्ने',
                     'description': 'विवरण',
-                    'thumbnail': 'थम्बनेल',
                     'expiry_date': 'म्याद समाप्ती मिति',
                     'image': 'फोटोहरु',
                 })

@@ -23,4 +23,4 @@ def convertToNepali(input):
 
 @register.filter(name='field_type')
 def field_type(field):
-    return field.field.widget.__class__.__name__
+    return field.field.widget.__class__.__name__ 

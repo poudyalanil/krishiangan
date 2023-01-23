@@ -102,18 +102,19 @@ def updateUserProfile(request,pk):
         user.save();
         
         print(request.FILES)
+        print(request.POST)
         user_profile = UserProfile.objects.get(user_id=pk)
         if(user_profile is None):
             user_profile = UserProfile
             user_profile.user_id=pk
-        user_profile.bio = request.POST.get('user-0-bio');
-        user_profile.phone = request.POST.get('user-0-phone');
-        user_profile.city = request.POST.get('user-0-city');
-        user_profile.country = request.POST.get('user-0-country');
-        user_profile.organization = request.POST.get('user-0-organization');
+        user_profile.bio = request.POST.get('bio');
+        user_profile.phone = request.POST.get('phone');
+        user_profile.city = request.POST.get('city');
+        user_profile.country = request.POST.get('country');
+        user_profile.organization = request.POST.get('organization');
         
         if(request.FILES):
-            user_profile.photo = request.FILES['user-0-photo'];
+            user_profile.photo = request.FILES['photo'];
         else:
             user_profile.photo = user_profile.photo    
         user_profile.save();
@@ -318,7 +319,7 @@ class ItemDetailView(HitCountDetailView):
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
             # userformset = ProfileInlineFormset(instance=self.request.user)
-            profile_id = UserProfile.objects.filter(user=request.user).first()
+            profile_id = UserProfile.objects.filter(user=self.request.user).first()
             userformset = UserProfileForm(instance=profile_id)
             
             biditemform = BidItemForm()
@@ -732,7 +733,7 @@ def user_items(request, pk):
     ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
         'phone', 'city', 'country', 'organization', 'photo',  'bio',))
     # userformset = ProfileInlineFormset(instance=request.user)
-    profile_id = UserProfile.objects.filter(user=request.user).id
+    profile_id = UserProfile.objects.filter(user=request.user).first()
     userformset = UserProfileForm(instance=profile_id)
     
     return render(request, "main/user_category_page.html", {'items': items, 'categories': categoriestest, 'noodle': pknew,

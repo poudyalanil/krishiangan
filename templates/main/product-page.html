@@ -10,7 +10,7 @@
 <meta property="og:url" content="{{request.build_absolute_uri}}" />
 
 <meta property="og:description" content="{{object.description}}"/>
-<meta property="og:image" content="/media/{{object.thumbnail}}" />
+<meta property="og:image" content="/media/{{object.get_thumbnail_path}}" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="कृषिआँगन" />
 <script type="text/javascript">
@@ -60,7 +60,7 @@
                         {% for p in photos %}
                         <div style="background-image: url( {{p.image.url}} );" class="item-box"></div>
                         {% empty %}
-                        <div style="background-image: url( {{object.thumbnail.url}} );" class="item-box"></div>
+                        <div style="background-image: url( {{object.get_thumbnail_path}} );" class="item-box"></div>
                         {% endfor %}
                     </div>
                     <div class="left nonl"><i class="ti-angle-left"></i></div>
@@ -104,7 +104,7 @@
                             class="btn btn-outline-success"><i class="ti-email"></i> सन्देश पठाउनुहोस्</a>
                             {% endif %}
                             <div class="d-flex pt-3">
-                                {% comment %} {% post_to_facebook "<img src='object.thumbnail.url'>" "Post to Facebook!"%} {% endcomment %}
+                                {% comment %} {% post_to_facebook "<img src='object.get_thumbnail_path'>" "Post to Facebook!"%} {% endcomment %}
                                  <div id="fb-root"></div>
                                 <div class="fb-share-button" 
                                     data-href="{{ request.build_absolute_uri }}" 
@@ -369,7 +369,7 @@
                     {% endif%}
                     <figure>
                         <a href=" {{item.get_absolute_url}} ">
-                        <img class="owl-lazy" src=" {{item.image.url}}" data-src="{{item.thumbnail.url}}" alt="">
+                        <img class="owl-lazy" src=" {{item.image.url}}" data-src="{{item.get_thumbnail_path}}" alt="">
                         </a>
                     </figure>
                     <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i

@@ -26,11 +26,11 @@
 						{% endif%}
 						<figure>
 							<a href=" {{item.get_absolute_url}} ">
-								<img class="img-fluid lazy" src=" {{item.thumbnail.url}}" data-src="{{item.thumbnail.url}}" alt="">
+								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href=" {{item.thumbnail.url}} ">
+						<a href=" {{item.get_thumbnail_path}} ">
 							<h3>{{item.title}}</h3>
 						</a>
 						<div class="price_box">
