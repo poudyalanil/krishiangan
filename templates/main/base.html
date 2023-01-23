@@ -534,16 +534,14 @@
                             {%endfor%}
                                 
                             <div class="divider"></div>
-                            {% comment %} {{ userformset.management_form }}
-                            {{userformset|crispy}} {% endcomment %}
+                            
                             {% for uform in userformset %}
                                 {% if uform|field_type == 'TextInput'%}
                                     <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
                                 {% elif uform|field_type in 'Textarea,ClearableFileInput'%}
                                     <div class="col-md-12">{{ uform|as_crispy_field}}</div>
-
                                 {%else%}
-                                    <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
+                                <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
                                 {%endif%}
                             {%endfor%}
                         </div>

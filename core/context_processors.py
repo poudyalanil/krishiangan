@@ -16,9 +16,11 @@ def custom_processor(request):
         postformset = ImageFormSet(queryset=Images.objects.none())
         pknew = request.user.id
         user_form = UserForm(instance=request.user)
-        ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
-            'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-        userformset = ProfileInlineFormset(instance=request.user)
+        profile_id = UserProfile.objects.filter(user=request.user).first()
+        userformset = UserProfileForm(instance=profile_id)
+        # ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
+        #     'phone', 'city', 'country', 'organization', 'photo',  'bio',))
+        # userformset = ProfileInlineFormset(instance=request.user)
 
         return {'postForm': postform, 'formset': postformset, "noodle": pknew,
                 "noodle_form": user_form,
