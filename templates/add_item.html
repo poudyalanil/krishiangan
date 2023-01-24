@@ -1,156 +1,44 @@
 {% extends "account/base.html" %}
 {% load crispy_forms_tags %}
+{% load custom_tags%}
 
 {{ form.media }} {# Adds date-picker required JS and CSS #}
 
 
 {% block content %}
-<style>
-    .card {
-        word-wrap: break-word;
-        border: none;
-    }
-
-    /*add full-width input fields*/
-    input[type=text],
-    input[type=password] {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 2px solid #ccc;
-        box-sizing: border-box;
-    }
-
-    /* set a style for all buttons*/
-    button {
-        background-color: green;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        cursor: pointer;
-        width: 100%;
-    }
-
-    /*set styles for the cancel button*/
-    .cancelbtn {
-        padding: 14px 20px;
-        background-color: #FF2E00;
-    }
-
-    /*float cancel and signup buttons and add an equal width*/
-    .cancelbtn,
-    .signupbtn {
-        float: left;
-        width: 50%
-    }
-
-    /*add padding to container elements*/
-    .container {
-        padding: 16px;
-    }
-
-    /*define the modal’s background*/
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
-        padding-top: 60px;
-    }
-
-    /*define the modal-content background*/
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto 15% auto;
-        border: 1px solid #888;
-        width: 80%;
-    }
-
-    /*define the close button*/
-
-    .close {
-        position: absolute;
-        right: 35px;
-        top: 15px;
-        color: #000;
-        font-size: 40px;
-        font-weight: bold;
-    }
-
-    /*define the close hover and focus effects*/
-
-    .close:hover,
-    .close:focus {
-        color: red;
-        cursor: pointer;
-    }
-
-    .clearfix::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
-
-    @media screen and (max-width: 300px) {
-
-        .cancelbtn,
-        .signupbtn {
-            width: 100%;
-        }
-    }
-</style>
 
 <main>
-
-
-
     <div class="container">
-
-
-        <div class="col s12 m8 offset-m2">
-            <div class="card">
+        <div class="col s12 m8 offset-m2 pb-3">
+            <div class="card p-2">
                 <div class="card-content">
 
                     <h2 class="flow-text">Add your item</h2>
-
-
-
                     <form id="post_form" method="post" action="." enctype="multipart/form-data">
-
                         {% csrf_token %}
-                        {{ postForm|crispy }}
+                        <div class="form-row">
+                                
+                            {% for pform in postForm %}
+                                {% if pform|field_type == 'CheckboxInput'%}
+                                    <div class="col-md-6 py-2">{{ pform|as_crispy_field}}</div>
+                                {% elif pform|field_type in 'Textarea,ClearableFileInput'%}
+                                    <div class="col-md-12">{{ pform|as_crispy_field}}</div>
 
-                        {{ formset.management_form }}
-                        {% for form in formset %}
-                        {{ form|crispy }}
+                                {%else%}
+                                    <div class="col-md-6">{{ pform|as_crispy_field}}</div>
+                                {%endif%}
+                            {%endfor%}
+
+                        {%include 'custom_fields/multiple_images.html' %}    
+                        {% for form in formset %} 
+                            <div class="col-md-12 py-2">{{ form|crispy}}</div>
                         {% endfor %}
-
-
+                        </div>
                         <input class="btn btn-outline-success" type="submit" name="submit" value="Submit" />
-
                 </div>
             </div>
         </div>
     </div>
 
 </main>
-<!--close the modal by just clicking outside of the modal-->
-<script>
-    var modal = document.getElementById('id01');
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
 {% endblock content %}

@@ -651,18 +651,14 @@ def edit_item(request, pk):
 
             postform = AdditemForm(instance=item)
             postformset = ImageFormSet(queryset=Images.objects.none())
+            item_images = Images.objects.filter(item=pk)
             pknew = request.user.id
             user_form = UserForm(instance=request.user)
-            ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
-                'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-            # userformset = ProfileInlineFormset(instance=request.user)
             profile_id = UserProfile.objects.filter(user=request.user).first()
             userformset = UserProfileForm(instance=profile_id)
-            
 
             return render(request, "add_item.html", {'categories': category, 'postForm': postform, 'formset': postformset, "noodle": pknew,
-                                                     "noodle_form": user_form,
-                                                     "userformset": userformset, })
+                                                     "noodle_form": user_form,"userformset": userformset,'item_images':item_images })
         else:
             return render(request, "add_item.html", {'categories': category, })
 
@@ -678,7 +674,10 @@ def edit_item(request, pk):
             post_form.user_id = user.id
 
             mtest = post_form.save()
-            print(post_form.id)
+            
+            # for img in request.FILES.getlist('form-2-image'):
+            #     Images.objects.update_or_create(item=pk, 
+            #                                     defaults={'image':img})
 
             messages.info(request, "Successfully edited your item")
             return HttpResponseRedirect("/")

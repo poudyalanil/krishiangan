@@ -1,13 +1,19 @@
 from django import forms
-from allauth.account.forms import SignupForm,LoginForm,PasswordField
+from allauth.account.forms import SignupForm,PasswordField
 from .models import *
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 from allauth.utils import set_form_field_order
-from django.contrib import messages
-from django.shortcuts import render, HttpResponseRedirect,get_object_or_404,redirect
+
+from django.utils.html import escape, conditional_escape
+from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
+from django.forms.widgets import ClearableFileInput, CheckboxInput
 
 
+class ImageWidget(ClearableFileInput):
+    template_name = "widgets/image_widget.html"
 
 class MyCustomSignupForm(SignupForm):
     mobile = forms.RegexField(
@@ -79,6 +85,7 @@ class UserProfileForm(forms.ModelForm):
         
         widgets = {
             'bio': forms.Textarea(attrs={'rows':3}),
+            'photo':ImageWidget()
         }
 
 # class AddCommentForm(forms.ModelForm):
@@ -134,7 +141,7 @@ class AdditemForm(forms.ModelForm):
 
 class ImageForm(forms.ModelForm):
     image = forms.ImageField(
-    label='फोटोहरु<sub>(१ वा १ भन्दा बढी)<sub>', widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    label='फोटोहरु<sub>(१ वा १ भन्दा बढी)<sub>', widget=ImageWidget(attrs={'multiple': True}))
 
     class Meta:
         model = Images
