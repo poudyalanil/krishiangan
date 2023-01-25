@@ -674,7 +674,10 @@ def edit_item(request, pk):
             post_form.user_id = user.id
 
             mtest = post_form.save()
-            Images.objects.filter(item=item).delete()
+            clear_img = request.POST.get('clear_images')
+            if(clear_img == 'on'):
+                Images.objects.filter(item=item).delete()
+                
             for img in request.FILES.getlist('form-0-image'):
                 Images.objects.create(item=item, image=img)
 

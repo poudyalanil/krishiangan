@@ -1,5 +1,11 @@
+
+<div class="col-md-12">
 {% for item in item_images %}
-<p>
     <img class="rounded app-icon p-2" src="{{ item.image.url }}" height="100" width="150">
-</p>
 {% endfor %}
+</div>
+<br/>
+<div class="p-3">
+    <input type="checkbox" name="clear_images" id="clear_images">
+    <label for="clear_images">Clear images</label>
+</div>
