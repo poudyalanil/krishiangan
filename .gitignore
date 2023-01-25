@@ -1,4 +1,5 @@
 media
+media_root
 media_root/
 *.log
 *.pot
