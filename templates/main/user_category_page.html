@@ -34,12 +34,12 @@
 						<span class="ribbon off">-{{ item.get_discount_percent }}%</span>
 						{% endif%}
 						<figure>
-							<a href=" {% url 'core:home' %}edit/item/{{item.pk}}/ ">
+							<a href="{% url 'core:home' %}edit/item/{{item.pk}}/ ">
 								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href=" {{item.get_thumbnail_path}} ">
+						<a href="{% url 'core:home' %}edit/item/{{item.pk}}/ ">
 							<h3>{{item.title}}</h3>
 						</a>
 						<div class="price_box">

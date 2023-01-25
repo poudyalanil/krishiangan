@@ -14,7 +14,11 @@
                 <div class="card-content">
 
                     <h2 class="flow-text">Add your item</h2>
-                    <form id="post_form" method="post" action="." enctype="multipart/form-data">
+                    {%if item %}
+                        <form id="post_form" method="post" action="/edit/item/{{item.id}}/" enctype="multipart/form-data">
+                     {%else%}   
+                        <form id="post_form" method="post" action="/edit/item/" enctype="multipart/form-data">
+                    {%endif%}
                         {% csrf_token %}
                         <div class="form-row">
                                 

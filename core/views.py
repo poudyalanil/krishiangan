@@ -658,7 +658,7 @@ def edit_item(request, pk):
             userformset = UserProfileForm(instance=profile_id)
 
             return render(request, "add_item.html", {'categories': category, 'postForm': postform, 'formset': postformset, "noodle": pknew,
-                                                     "noodle_form": user_form,"userformset": userformset,'item_images':item_images })
+                                                     "noodle_form": user_form,"userformset": userformset,'item_images':item_images,'item':item })
         else:
             return render(request, "add_item.html", {'categories': category, })
 
@@ -674,13 +674,12 @@ def edit_item(request, pk):
             post_form.user_id = user.id
 
             mtest = post_form.save()
-            
-            # for img in request.FILES.getlist('form-2-image'):
-            #     Images.objects.update_or_create(item=pk, 
-            #                                     defaults={'image':img})
+            Images.objects.filter(item=item).delete()
+            for img in request.FILES.getlist('form-0-image'):
+                Images.objects.create(item=item, image=img)
 
             messages.info(request, "Successfully edited your item")
-            return HttpResponseRedirect("/")
+            return redirect('core:user_items',pk=request.user.id)
         else:
             print(postForm.errors, formset.errors)
 
