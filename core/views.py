@@ -29,6 +29,8 @@ from django.forms.models import modelformset_factory
 
 def accountSignup(request):
     username=request.POST.get('mobile');
+    first_name=request.POST.get('first_name');
+    last_name=request.POST.get('last_name');
     user_exist = User.objects.filter(username=username)
     if(user_exist):
         messages.error(request,'Mobile no. already registered !!')
@@ -42,6 +44,8 @@ def accountSignup(request):
         else:
             user = User.objects.create_user(
                     username=username,
+                    first_name=first_name,
+                    last_name=last_name,
                     email=request.POST.get('email'),
                     password=request.POST.get('password1'),
                 )

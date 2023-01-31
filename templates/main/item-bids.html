@@ -10,10 +10,10 @@
 		<div class="page_header">
 			<div class="breadcrumbs">
 				<ul>
-					<li><a href="{% url 'core:home'%}"><i class="fa fa-home"></i> Home</a></li>
+					<li><a href="{% url 'core:home'%}"><i class="fa fa-home"></i> होम</a></li>
 				</ul>
 			</div>
-			<h1>Item Bids</h1>
+			<h1>बिड गरेका सामानहरु</h1>
 		</div>
 		<!-- /page_header -->
 		<table class="table table-striped">
@@ -50,7 +50,7 @@
                             </td>
                         </tr>
                 {% empty %}
-                        <td colspan='5'> List is empty</td>
+                        <td colspan='5'> कुनै पनि सामान छैन |</td>
 				{% endfor %}
 			</tbody>
 		</table>

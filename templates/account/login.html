@@ -3,7 +3,7 @@
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}{% trans " लगईन " %}{% endblock %}
 
 {% block content %}
   <main>
@@ -11,7 +11,7 @@
       <section class="mb-4">
         <div class="row wow fadeIn">
           <div class='col-6 offset-3'>
-          <h1>{% trans "Sign In" %}</h1>
+          <h1>{% trans "लगईन" %}</h1>
 
           {% get_providers as socialaccount_providers %}
 
@@ -33,8 +33,9 @@
           {% include "socialaccount/snippets/login_extra.html" %}
 
           {% else %}
-          <p>{% blocktrans %}If you have not created an account yet, then please
-          <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-1">SIGN UP</a> first.{% endblocktrans %}</p>
+          {% comment %} <p>{% blocktrans %}If you have not created an account yet, then please {% endcomment %}
+          <p>{% blocktrans %}खाता छैन भने 
+          <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-1">खाता </a> खोल्नुहोला |{% endblocktrans %}</p>
           {% endif %}
 
           <form class="login" method="POST" action="{% url 'core:account_login' %}">
@@ -43,9 +44,9 @@
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+            <button class="btn btn-primary" type="submit">{% trans "लगईन" %}</button>
             <br/>
-            <a class="btn btn-default text-primary" href="{% url 'account_reset_password' %}">{% trans "Forgot Password ?" %}</a>
+            <a class="btn btn-default text-primary" href="{% url 'account_reset_password' %}">{% trans "पासवर्ड विर्सनुभयो ?" %}</a>
           </form>
           </div>
         </div>

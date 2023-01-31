@@ -17,7 +17,7 @@ class ImageWidget(ClearableFileInput):
 
 class MyCustomSignupForm(SignupForm):
     mobile = forms.RegexField(
-        label="Mobile",
+        label="मोबाईल नम्बर",
         widget=forms.TextInput(
             attrs={"placeholder": "Mobile"}
         ),
@@ -25,8 +25,14 @@ class MyCustomSignupForm(SignupForm):
         min_length=10,
         max_length=10
     )
+    first_name= forms.CharField(
+        label="First Name",
+    )
+    last_name= forms.CharField(
+        label="Last Name",
+    )
     
-    field_order = ["mobile","username","email", "password1","password2"]
+    field_order = ["mobile","username","first_name","last_name","email", "password1","password2"]
         
     # def save(self, request):
 
@@ -47,12 +53,12 @@ class MyCustomSignupForm(SignupForm):
   
 class MyCustomLoginForm(forms.Form):
     username = forms.CharField(
-                label="Mobile",
+                label="मोबाईल नम्बर",
                 widget=forms.TextInput(
-                    attrs={"placeholder": "Mobile"}
+                    attrs={"placeholder": "मोबाईल नम्बर"}
                 ),
             )
-    password = PasswordField(label="Password", autocomplete="current-password")
+    password = PasswordField(label="पासवर्ड", autocomplete="current-password")
     
     field_order = ["username",  "password"]
     def __init__(self, *args, **kwargs):
@@ -76,16 +82,17 @@ class UserProfileForm(forms.ModelForm):
         fields = ['phone','city','country','organization','photo', 'bio' ]
         labels = ({
                     'phone': 'मोबाइल नं.',
-                    'city': 'ठेगाना',
+                    'city': 'नगरपालिका / गाउँपालिका',
                     'country': 'देश',
-                    'organization': 'संगठन / संस्था',
-                    'photo': 'फोटो',
-                    'bio': 'छोटो जीवनी',
+                    'organization': 'संस्था (जागिर खाने भएमा)',
+                    'photo': 'प्रोफाईल फोटो',
+                    'bio': 'आफ्नो बारेमा लेख्नुहोस',
                 })
         
         widgets = {
             'bio': forms.Textarea(attrs={'rows':3}),
-            'photo':ImageWidget()
+            'photo':ImageWidget(),
+            'country': forms.TextInput(attrs={'value':"नेपाल"}) ,
         }
 
 # class AddCommentForm(forms.ModelForm):
@@ -114,18 +121,18 @@ class AdditemForm(forms.ModelForm):
         fields = ('title','price','discount_price','category','available','unit','home_delivery','price_negotiable','show_expiry','expiry_date','description')
         exclude = ('likes', 'user', 'sold', 'hit_count_generic', 'featured')
         labels = ({
-                    'title': 'नाम',
+                    'title': 'बेच्ने सामानको नाम',
                     'price': 'मूल्य',
-                    'discount_price': 'छुट पछिको मूल्य',
-                    'category': 'वर्ग',
-                    'available': 'उपलब्ध संख्या',
-                    'unit': 'ईकाई',
-                    'home_delivery': 'होम डेलिभरी',
-                    'show_expiry': 'म्याद सकिने मिति देखाउने',
-                    'price_negotiable': 'मूल्य बार्गेनिङ गर्न मिल्ने',
-                    'description': 'विवरण',
-                    'expiry_date': 'म्याद समाप्ती मिति',
-                    'image': 'फोटोहरु',
+                    'discount_price': 'डिस्काउन्ट दिने हो भने डिस्काउन्ट पछिको मूल्य',
+                    'category': 'वर्ग / समूह ',
+                    'available': 'उपलब्ध परिमाण',
+                    'unit': 'उपलब्ध परिमाणको ईकाई',
+                    'home_delivery': 'होम डेलिभरी सम्भव छ ?',
+                    'show_expiry': 'यो विज्ञापन देखाउने ?',
+                    'price_negotiable': 'मूल्य घटाउन सकिने छ ?',
+                    'description': 'आफ्नो सामानको बारेमा लेख्नुहोस',
+                    'expiry_date': 'विज्ञापन कहिले सम्म देखाउने ?',
+                    'image': 'सामानको फोटोहरु',
                 })
 
         widgets = {
