@@ -102,8 +102,8 @@ def updateUserProfile(request,pk):
     if(user):
         user.first_name =request.POST.get('first_name'); 
         user.last_name =request.POST.get('last_name'); 
-        user.email =request.POST.get('email');
-        user.save();
+        user.email =request.POST.get('email')
+        user.save()
         
         print(request.FILES)
         print(request.POST)
@@ -111,19 +111,19 @@ def updateUserProfile(request,pk):
         if(user_profile is None):
             user_profile = UserProfile
             user_profile.user_id=pk
-        user_profile.bio = request.POST.get('bio');
-        user_profile.phone = request.POST.get('phone');
-        user_profile.city = request.POST.get('city');
-        user_profile.country = request.POST.get('country');
-        user_profile.organization = request.POST.get('organization');
+        user_profile.bio = request.POST.get('bio')
+        user_profile.phone = request.POST.get('phone')
+        user_profile.city = request.POST.get('city')
+        user_profile.country = request.POST.get('country')
+        user_profile.organization = request.POST.get('organization')
         
         if(request.FILES):
-            user_profile.photo = request.FILES['photo'];
+            user_profile.photo = request.FILES['photo']
         else:
             user_profile.photo = user_profile.photo    
-        user_profile.save();
+        user_profile.save()
         
-        statuss='true';
+        statuss='true'
         message='Profile successfully updated !!'
     return JsonResponse({'status':statuss,'message': message})
 
@@ -617,29 +617,23 @@ def itemlist(request):
 
     elif request.method == 'POST':
         postForm = AdditemForm(request.POST, request.FILES)
-        formset = ImageFormSet(request.POST, request.FILES,
-                               queryset=Images.objects.none())
+        # formset = ImageFormSet(request.POST, request.FILES,queryset=Images.objects.none())
 
-        if postForm.is_valid() and formset.is_valid():
+        if postForm.is_valid():
             post_form = postForm.save(commit=False)
-            # user = get_object_or_404(User, pk=request.user.id)
             user = User.objects.get(pk=request.user.id)
-            # print(user.id)
             post_form.user_id = user.id
-
             mtest = post_form.save()
             iteminstance = Item.objects.get(pk=post_form.id)
-            print(request.FILES)
 
             for img in request.FILES.getlist('form-0-image'):
-                print(img)
                 # print(item)
-                Images.objects.create(item=iteminstance, image=img)
+                Images.objects.get_or_create(item=iteminstance, image=img)
 
             messages.info(request, "Successfully posted your item")
             return HttpResponseRedirect("/")
         else:
-            print(postForm.errors, formset.errors)
+            print(postForm.errors)
 
 
 @login_required()  # only logged in users should access this

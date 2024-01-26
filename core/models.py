@@ -49,18 +49,11 @@ class categories(models.Model):
     def get_absolute_url(self):
         return reverse("core:category", kwargs={"pk": self.pk})
     
-    
-def convertToNepali(input):
-    return str(input).replace(',',',').replace('.','.').replace('0','०').replace('1','१').replace('2','२').replace('3','३').replace('4','४').replace('5','५').replace('6','६').replace('7','७').replace('8','८').replace('9','९')
-
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
-    category = models.ForeignKey(
-        categories, to_field='category', on_delete=models.CASCADE, null=True)
-
-    # pk = models.pkField()
+    category = models.ForeignKey(categories, to_field='category', on_delete=models.CASCADE, null=True)
     available = models.IntegerField(default=1)
     sold = models.IntegerField(default=0)
     unit = models.CharField(max_length=10, default="Kg")
@@ -69,16 +62,12 @@ class Item(models.Model):
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
     # thumbnail = models.ImageField(upload_to='images/', default=None)
-    hit_count_generic = GenericRelation(
-        HitCount, object_id_field='object_pk',
-        related_query_name='hit_count_generic_relation')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk',related_query_name='hit_count_generic_relation')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     expiry_date = models.DateField(null=True,blank=True)
     upload_date = models.DateField(auto_now_add=True, null=True)
     featured = models.BooleanField(default=False)
-    likes = models.ManyToManyField(
-        User, related_name='item_like',  blank=True)
+    likes = models.ManyToManyField(User, related_name='item_like',  blank=True)
 
     def number_of_likes(self):
         return self.likes.count()
@@ -146,9 +135,8 @@ class Item(models.Model):
 
 def get_image_filename(instance, filename):
     try:
-
-        id = instance.item.id
-        return "item_images/%s/%s" % (id,filename)
+        item=instance.item
+        return "item_images/%s/%s/%s" % (item.user,item.category,filename)
     except:
         return "item_images/"
 

@@ -24,3 +24,21 @@ def convertToNepali(input):
 @register.filter(name='field_type')
 def field_type(field):
     return field.field.widget.__class__.__name__ 
+
+nepali_numbers = {
+    '0': '०',
+    '1': '१',
+    '2': '२',
+    '3': '३',
+    '4': '४',
+    '5': '५',
+    '6': '६',
+    '7': '७',
+    '8': '८',
+    '9': '९',
+}
+
+def convert_to_nepali_numbers(value):
+    return ''.join(nepali_numbers.get(char, char) for char in str(value))
+
+register.filter('nepali_numbers', convert_to_nepali_numbers)
