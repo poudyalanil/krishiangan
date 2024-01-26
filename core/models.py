@@ -9,12 +9,12 @@ from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(
-        User, related_name='user', on_delete=models.CASCADE)
-    photo = models.ImageField(verbose_name=("Profile Picture"),
-                              upload_to=("profile_photos/"), null=True, blank=True)
+def get_user_photo_path(instance, filename):
+    return 'profile_photos/%s/%s' % (instance.phone,filename)  
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE)
+    photo = models.ImageField(verbose_name=("Profile Picture"),upload_to=get_user_photo_path, null=True, blank=True)
     bio = models.TextField(default='', blank=True)
     phone = models.CharField(max_length=20, blank=True, default='')
     city = models.CharField(max_length=100, default='', blank=True)
