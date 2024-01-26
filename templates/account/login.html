@@ -10,7 +10,7 @@
     <div class="container">
       <section class="mb-4">
         <div class="row wow fadeIn">
-          <div class='col-6 offset-3'>
+          <div class='col-6 offset-3 mt-1'>
           <h1>{% trans "लगईन" %}</h1>
 
           {% get_providers as socialaccount_providers %}
@@ -34,8 +34,7 @@
 
           {% else %}
           {% comment %} <p>{% blocktrans %}If you have not created an account yet, then please {% endcomment %}
-          <p>{% blocktrans %}खाता छैन भने 
-          <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-1">खाता </a> खोल्नुहोला |{% endblocktrans %}</p>
+
           {% endif %}
 
           <form class="login" method="POST" action="{% url 'core:account_login' %}">
@@ -46,6 +45,8 @@
             {% endif %}
             <button class="btn btn-primary" type="submit">{% trans "लगईन" %}</button>
             <br/>
+            <p class="mt-3">{% blocktrans %}खाता छैन भने 
+              <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-3">खाता </a> खोल्नुहोला |{% endblocktrans %}</p>
             <a class="btn btn-default text-primary" href="{% url 'account_reset_password' %}">{% trans "पासवर्ड विर्सनुभयो ?" %}</a>
           </form>
           </div>

@@ -73,15 +73,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_in_env')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 DATABASES = {
     'default': {
@@ -122,7 +114,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'info.krishiangan@gmail.com'
-EMAIL_HOST_PASSWORD = 'btxntmfycjalvhtr'
+EMAIL_HOST_PASSWORD = 'zkqftfutqyytlcsp'
 DEFAULT_FROM_EMAIL = 'MarketSuperviser'
 
 SITE_ID = 1
@@ -130,3 +122,13 @@ LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_in_env/'),
+]
+MEDIA_URL='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
