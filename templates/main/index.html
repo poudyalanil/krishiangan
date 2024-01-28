@@ -67,19 +67,21 @@
         </div>
         <div class="row small-gutters">
             {% for item in items|sort_by:'-upload_date'|slice:"0:8"%}
-            <div class="col-6 col-md-4 col-xl-3">
+            <div class="col-6 col-md-4 col-xl-3 mt-3">
                 <div class="grid_item">
                     <figure>
                         <span class="ribbon off">-{{ item.get_discount_percent|convertToNepali }}%</span>
                         <a href="{{ item.get_absolute_url }}">
                         {% if item.get_thumbnail_path %}
-                        <img class="img-fluid lazy" src="{{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path|default_if_none:'#'}}" alt="">
+                            <img class="img-fluid lazy" src="{{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path|default_if_none:'#'}}" alt="" style="max-height:200px; min-height:200px;">
+                        {% else %}
+                            <img class="img-fluid lazy" src="static/main/img/products/product_placeholder_detail.jpg" alt="" style="max-height:200px; min-height:200px;">
                         {% endif %}
                         </a>
                         {% if item.show_expiry %}
                         <div data-countdown="{{item.expiry_date|date:"Y/m/d"}}" class="countdown">
-                </div>
-                {% endif %}
+                        </div>
+                        {% endif %}
                 </figure>
                 <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
                 <a href="{{ item.get_absolute_url }}">
