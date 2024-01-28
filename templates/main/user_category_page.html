@@ -30,7 +30,12 @@
                   <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
                 {% endif %}
                 <figure>
-                  <a href="{% url 'core:home' %}edit/item/{{ item.pk }}/ "><img class="img-fluid lazy" src=" {{ item.get_thumbnail_path }}" data-src="{{ item.get_thumbnail_path }}" alt="" style="max-height:200px; min-height:200px;" /></a>
+                  <a href="{% url 'core:home' %}edit/item/{{ item.pk }}/ ">
+                    {% if item.get_thumbnail_path %}
+                      <img class="img-fluid lazy" src="{{item.get_thumbnail_path}}"alt="" style="max-height:200px; min-height:200px;">
+                  {% else %}
+                      <img class="img-fluid lazy" src="/static/main/img/products/product_placeholder_detail.jpg" alt="" style="max-height:200px; min-height:200px;">
+                  {% endif %}
                 </figure>
                 <div class="rating">
                   <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i>
