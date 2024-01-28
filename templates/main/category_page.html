@@ -209,9 +209,9 @@
 						<figure>
 							<a href=" {{item.get_absolute_url}} ">
 								{%if item.get_thumbnail_path%}
-								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="" style="max-height:200px; min-height:200px;" >
+									<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="" style="max-height:200px; min-height:200px;" >
 								{%else%}
-								<img class="img-fluid lazy" src="/static/main/img/products/product_placeholder_detail.jpg" alt="" style="max-height:200px; min-height:200px;">
+									<img class="img-fluid lazy" src="/static/main/img/products/product_placeholder_detail.jpg" alt="" style="max-height:200px; min-height:200px;">
 								{%endif%}
 							</a>
 						</figure>
@@ -225,7 +225,7 @@
 							<span class="old_price">रू {{ item.price|convertToNepali }}</span>
 							 {% else %}
 							 <span class="new_price">रू {{ item.price|convertToNepali }}</span>
-							 {% endif %}
+						{% endif %}
 						</div>
 						<ul>
 							{% if post_is_liked %}
@@ -235,7 +235,7 @@
 
 								{% else %}
 							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a></li>
-{% endif %}
+					{% endif %}
 							 
 							<li><a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
 						</ul>
@@ -244,32 +244,8 @@
 				</div>
 				<!-- /col -->
 					{% endfor %}
-
-				
-				
-				
 						
 			</div>
-			<!-- /row -->
-				
-			{% comment %} <div class="pagination__wrapper">
-				<ul class="pagination">
-					<li><a href=" #0 " class="prev" title="previous page">&#10094;</a></li>
-					<li>
-						<a href=" #0 " class="active">1</a>
-					</li>
-					<li>
-						<a href=" #0 ">2</a>
-					</li>
-					<li>
-						<a href=" #0 ">3</a>
-					</li>
-					<li>
-						<a href=" #0 ">4</a>
-					</li>
-					<li><a href=" #0 " class="next" title="next page">&#10095;</a></li>
-				</ul>
-			</div> {% endcomment %}
 				
 		</div>
 		<!-- /container -->

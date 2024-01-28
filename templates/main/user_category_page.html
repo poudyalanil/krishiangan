@@ -42,12 +42,13 @@
                 </div>
                 <a href="{% url 'core:home' %}edit/item/{{ item.pk }}/ "><h3>{{ item.title }}</h3></a>
                 <div class="price_box">
+                  
                   {% if item.discount_price %}
-                    <span class="new_price">Rs.{{ item.discount_price }}</span>
-                    <span class="old_price">Rs.{{ item.price }}</span>
-                  {% else %}
-                    <span class="new_price">Rs.{{ item.price }}</span>
-                  {% endif %}
+                    <span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+                    <span class="old_price">रू {{ item.price|convertToNepali }}</span>
+                   {% else %}
+                    <span class="new_price">रू {{ item.price|convertToNepali }}</span>
+                {% endif %}
                 </div>
                 <ul>
                   {% if post_is_liked %}
