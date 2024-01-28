@@ -208,7 +208,11 @@
 						{% endif%}
 						<figure>
 							<a href=" {{item.get_absolute_url}} ">
-								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="">
+								{%if item.get_thumbnail_path%}
+								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="" style="max-height:200px; min-height:200px;" >
+								{%else%}
+								<img class="img-fluid lazy" src="/static/main/img/products/product_placeholder_detail.jpg" alt="" style="max-height:200px; min-height:200px;">
+								{%endif%}
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
