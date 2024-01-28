@@ -185,22 +185,20 @@
                                     <li>
                                         {% if request.user.is_authenticated %}
                                         <div class="dropdown dropdown-access">
-                                            <a href=" #" data-toggle="modal" data-target="#usermodal"><i
-                                                class="ti-user"></i>
+                                            <a href=" #" data-toggle="modal" data-target="#usermodal">
+                                                <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30"></img>
                                                 {% if request.user.first_name%}
                                                     {{request.user.first_name}}
                                                 {%else%} 
                                                     {{request.user.username}}
                                                 {%endif%}
                                             </a>
-                                            {% comment %} <a href=" {% url 'core:add_item' %} "
-                                                class="access_link"><span>{{request.user.username}}</span></a> {% endcomment %}
                                             <div class="dropdown-menu">
                                                 <a  class="btn_1" data-toggle="modal" data-target="#exampleModalCenter" id="sell-product-btn">उत्पादन वस्तु बेच्नुहोस्</a>
                                                 <ul>
                                                     <li>
-                                                        <a  href=" #" data-toggle="modal" data-target="#usermodal" ><i
-                                                            class="ti-user"></i>
+                                                        <a href=" #" data-toggle="modal" data-target="#usermodal">
+                                                            <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30" style="margin-left:-35px;"/>
 															मेरो प्रोफाइल</a>
                                                     </li>
                                                     <li>
