@@ -28,9 +28,9 @@ from django.views.generic import ListView, DetailView, View, CreateView
 from django.forms.models import modelformset_factory
 
 def accountSignup(request):
-    username=request.POST.get('mobile');
-    first_name=request.POST.get('first_name');
-    last_name=request.POST.get('last_name');
+    username=request.POST.get('mobile')
+    first_name=request.POST.get('first_name')
+    last_name=request.POST.get('last_name')
     user_exist = User.objects.filter(username=username)
     if(user_exist):
         messages.error(request,'Mobile no. already registered !!')
@@ -672,10 +672,16 @@ def edit_item(request, pk):
             post_form.user_id = user.id
 
             mtest = post_form.save()
-            clear_img = request.POST.get('clear_images')
-            if(clear_img == 'on'):
+            clear_all_images = request.POST.get('clear_all_images')
+            clear_images = request.POST.getlist('clear_images')
+            
+            if(clear_all_images == 'on'):
                 Images.objects.filter(item=item).delete()
-                
+            if len(clear_images) > 0:
+                for img in clear_images:
+                    print(clear_images,img)
+                    Images.objects.get(pk=img).delete()
+                        
             for img in request.FILES.getlist('form-0-image'):
                 Images.objects.create(item=item, image=img)
 
