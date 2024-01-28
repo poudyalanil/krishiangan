@@ -1,104 +1,98 @@
-
-{% extends "main/base.html" %}
+{% extends 'main/base.html' %}
 {% load hitcount_tags %}
 {% load custom_tags %}
 
 {% block content %}
-{% load static %}
-		
-	<main>
-		<div class="top_banner version_2">
-			<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0)">
-				<div class="container">
-					<div class="d-flex justify-content-center"><h1>तपाईले बेच्न राख्नु भएका सामानहरु</h1></div>
-				</div>
-			</div>
-			<img src="# " class="img-fluid" alt="">
-		</div>
-		<!-- /top_banner -->
-		
-			<div id="stick_here"></div>		
-		
+  {% load static %}
 
-			<div class="container margin_30">
-			<div class="row small-gutters">
-			{% if items %}
+  <main>
+    <div class="top_banner version_2">
+      <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0)">
+        <div class="container">
+          <div class="d-flex justify-content-center">
+            <h1>तपाईले बेच्न राख्नु भएका सामानहरु</h1>
+          </div>
+        </div>
+      </div>
+      <img src="# " class="img-fluid" alt="" />
+    </div>
+    <!-- /top_banner -->
 
-			{% for item in items|sort_by:'-upload_date'|slice:"0:6"%}
-			
+    <div id="stick_here"></div>
 
+    <div class="container margin_30">
+      <div class="row small-gutters">
+        {% if items %}
+          {% for item in items|sort_by:'-upload_date'|slice:'0:6' %}
+            <div class="col-6 col-md-4 col-xl-3">
+              <div class="grid_item">
+                {% if item.discount_price %}
+                  <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                {% endif %}
+                <figure>
+                  <a href="{% url 'core:home' %}edit/item/{{ item.pk }}/ "><img class="img-fluid lazy" src=" {{ item.get_thumbnail_path }}" data-src="{{ item.get_thumbnail_path }}" alt="" /></a>
+                </figure>
+                <div class="rating">
+                  <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i>
+                </div>
+                <a href="{% url 'core:home' %}edit/item/{{ item.pk }}/ "><h3>{{ item.title }}</h3></a>
+                <div class="price_box">
+                  {% if item.discount_price %}
+                    <span class="new_price">Rs.{{ item.discount_price }}</span>
+                    <span class="old_price">Rs.{{ item.price }}</span>
+                  {% else %}
+                    <span class="new_price">Rs.{{ item.price }}</span>
+                  {% endif %}
+                </div>
+                <ul>
+                  {% if post_is_liked %}
+                    <li>
+                      <a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-down"></i><span>Unlike</span></a>
+                    </li>
+                  {% else %}
+                    <li>
+                      <a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a>
+                    </li>
+                  {% endif %}
 
-				<div class="col-6 col-md-4 col-xl-3">
-					<div class="grid_item">
-					 {% if item.discount_price %}
-						<span class="ribbon off">-{{ item.get_discount_percent }}%</span>
-						{% endif%}
-						<figure>
-							<a href="{% url 'core:home' %}edit/item/{{item.pk}}/ ">
-								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="">
-							</a>
-						</figure>
-						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="{% url 'core:home' %}edit/item/{{item.pk}}/ ">
-							<h3>{{item.title}}</h3>
-						</a>
-						<div class="price_box">
-						{% if item.discount_price %}
-							<span class="new_price">Rs.{{ item.discount_price }}</span>
-							<span class="old_price">Rs.{{ item.price }}</span>
-							 {% else %}
-							 <span class="new_price">Rs.{{ item.price }}</span>
-							 {% endif %}
-						</div>
-						<ul>
-							{% if post_is_liked %}
-							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-down"></i><span>Unlike</span></a></li>
-					
+                  <li>
+                    <a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                  </li>
+                </ul>
+              </div>
+              <!-- /grid_item -->
+            </div>
+            <!-- /col -->
+          {% endfor %}
+        {% else %}
+          <h4>तपाईले हाल सम्म केहि सामान बेच्न राख्नुभएको छैन |</h4>
+        {% endif %}
+      </div>
+      <!-- /row -->
 
-
-								{% else %}
-							<li><a href="{{ item.get_like_url }}" class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to favorites"><i class="ti-thumb-up"></i><span>Like</span></a></li>
-{% endif %}
-							 
-							<li><a href=" {{ item.get_add_to_cart_url }} " class="tooltip-1" data-toggle="tooltip" data-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-						</ul>
-					</div>
-					<!-- /grid_item -->
-				</div>
-				<!-- /col -->
-				
-					{% endfor %}
-					{% else %}
-			<h4> तपाईले हाल सम्म केहि सामान बेच्न राख्नुभएको छैन | </h4>
-			{% endif %}
-
-				
-				
-				
-						
-			</div>
-			<!-- /row -->
-				
-			<div class="pagination__wrapper">
-				<ul class="pagination">
-					<li><a href=" #0 " class="prev" title="previous page">&#10094;</a></li>
-					<li>
-						<a href=" #0 " class="active">1</a>
-					</li>
-					<li>
-						<a href=" #0 ">2</a>
-					</li>
-					<li>
-						<a href=" #0 ">3</a>
-					</li>
-					<li>
-						<a href=" #0 ">4</a>
-					</li>
-					<li><a href=" #0 " class="next" title="next page">&#10095;</a></li>
-				</ul>
-			</div>
-				
-		</div>
-		<!-- /container -->
-	</main>
-	{% endblock content %}
+      <div class="pagination__wrapper">
+        <ul class="pagination">
+          <li>
+            <a href=" #0 " class="prev" title="previous page">&#10094;</a>
+          </li>
+          <li>
+            <a href=" #0 " class="active">1</a>
+          </li>
+          <li>
+            <a href=" #0 ">2</a>
+          </li>
+          <li>
+            <a href=" #0 ">3</a>
+          </li>
+          <li>
+            <a href=" #0 ">4</a>
+          </li>
+          <li>
+            <a href=" #0 " class="next" title="next page">&#10095;</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- /container -->
+  </main>
+{% endblock %}

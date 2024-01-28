@@ -247,3 +247,19 @@ class aboutpage(models.Model):
 
 class subscripiton(models.Model):
     email = models.EmailField()
+    
+class Partner(models.Model):
+    name_en = models.CharField(max_length=100)
+    name_lc = models.CharField(max_length=100,null=True,blank=True)
+    url = models.URLField(blank=True,null=True)
+    logo_url = models.URLField(blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(null=True)
+
+class PoweredBy(models.Model):
+    name_en = models.CharField(max_length=100)
+    name_lc = models.CharField(max_length=100,null=True,blank=True)
+    logo_url = models.URLField(blank=True,null=True)
+    url = models.URLField(blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(null=True)

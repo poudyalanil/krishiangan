@@ -30,5 +30,6 @@ admin.site.register(Comment)
 admin.site.register(aboutpage)
 admin.site.register(subscripiton)
 
-
+admin.site.register(Partner)
+admin.site.register(PoweredBy)
 admin.site.register(UserProfile)
