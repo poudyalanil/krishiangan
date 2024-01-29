@@ -1,9 +1,5 @@
-{% load static %}
-{% load hitcount_tags %}
-{% load cart_template_tags %}
-{% load crispy_forms_tags %}
+{% load static hitcount_tags cart_template_tags crispy_forms_tags custom_tags %}
 {{ form.media }} {# Adds date-picker required JS and CSS #}
-{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -186,7 +182,11 @@
                                         {% if request.user.is_authenticated %}
                                         <div class="dropdown dropdown-access">
                                             <a href=" #" data-toggle="modal" data-target="#usermodal">
-                                                <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30"></img>
+                                                {% if request.user.profile.photo%}
+                                                    <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30"></img>
+                                                {% else %}
+                                                    <img class="rounded-circle" src="{% static '/main/img/avatar2.jpg'%}" height="30" width="30"></img>
+                                                {% endif %}
                                                 {% if request.user.first_name%}
                                                     {{request.user.first_name}}
                                                 {%else%} 
@@ -198,8 +198,12 @@
                                                 <ul>
                                                     <li>
                                                         <a href=" #" data-toggle="modal" data-target="#usermodal">
-                                                            <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30" style="margin-left:-35px;"/>
-															मेरो प्रोफाइल</a>
+                                                            {% if request.user.profile.photo%}
+                                                                <img class="rounded-circle" src="{{ request.user.profile.photo.url}}"height="30" width="30" style="margin-left:-35px;"> &nbsp;मेरो प्रोफाइल</img>
+                                                            {% else %}
+                                                                <img class="rounded-circle" src="{% static '/main/img/avatar2.jpg'%}" height="30" width="30" style="margin-left:-35px;">&nbsp; मेरो प्रोफाइल</img>
+                                                            {% endif %}
+                                                        </a>
                                                     </li>
                                                     <li>
                                                         <a href=" {% url 'account_logout' %} "><i
