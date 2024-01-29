@@ -53,7 +53,7 @@ class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
-    category = models.ForeignKey(categories, to_field='category', on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(categories, on_delete=models.CASCADE, null=True)
     available = models.IntegerField(default=1)
     sold = models.IntegerField(default=0)
     unit = models.CharField(max_length=10, default="Kg")
