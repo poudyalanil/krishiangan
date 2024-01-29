@@ -241,10 +241,41 @@ class Comment(models.Model):
         return
 
 
+def get_image_path(instance, filename):
+    try:
+        return "about_images/%s" % (filename)
+    except:
+        return "about_images/"
+    
 class aboutpage(models.Model):
-    Content = models.TextField()
+    main_title = models.CharField(max_length=200,default=None)
+    main_content = models.TextField(null=True,blank=True)
+    bottom_title = models.CharField(max_length=200,default=None)
+    bottom_content = models.TextField(null=True,blank=True)
+   
+    
+class PageSections(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField(null=True,blank=True)
+    image = models.ImageField(upload_to=get_image_path)
+    is_for_bottom_section = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(null=True)
 
+def get_staff_image_path(instance, filename):
+    try:
+        return "staff_images/%s/%s" % (instance.name_en,filename)
+    except:
+        return "staff_images/"
 
+class Staffs(models.Model):
+    name_en = models.CharField(max_length=100)
+    name_lc = models.CharField(max_length=100,null=True,blank=True)
+    post_en = models.CharField(max_length=100)
+    post_lc = models.CharField(max_length=100,null=True,blank=True)
+    image = models.ImageField(upload_to=get_staff_image_path)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(null=True)
 class subscripiton(models.Model):
     email = models.EmailField()
     
