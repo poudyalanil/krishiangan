@@ -25,6 +25,10 @@ def convertToNepali(input):
 def field_type(field):
     return field.field.widget.__class__.__name__ 
 
+@register.filter(name='is_odd')
+def is_odd(value):
+    return value % 2 != 0
+
 nepali_numbers = {
     '0': '०',
     '1': '१',

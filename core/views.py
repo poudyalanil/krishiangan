@@ -150,12 +150,15 @@ def subscribe(request):
 def about(request):
 
     category = categories.objects.all()
-    ImageFormSet = modelformset_factory(Images,
-                                        form=ImageForm
-                                        )
+    ImageFormSet = modelformset_factory(Images,form=ImageForm)
     postform = AdditemForm()
     postformset = ImageFormSet(queryset=Images.objects.none())
 
+    about_us = aboutpage.objects.first()
+    about_sections = PageSections.objects.filter(is_active=True,is_for_bottom_section=False).order_by('display_order')
+    staffs = Staffs.objects.filter(is_active=True).order_by('display_order')
+    bottom_sections = PageSections.objects.filter(is_active=True,is_for_bottom_section=True).order_by('display_order')
+    
     if request.user.is_authenticated:
 
         pknew = request.user.id
@@ -166,12 +169,26 @@ def about(request):
         userformset = UserProfileForm(instance=profile_id)
         
         # userformset = ProfileInlineFormset(instance=request.user)
-
-        return render(request, "main/about.html", {'categories': category, 'postForm': postform, 'formset': postformset, "noodle": pknew,
-                                                   "noodle_form": user_form,
-                                                   "userformset": userformset, })
+        
+        context={
+            'categories': category, 
+            'postForm': postform, 
+            'formset': postformset, 
+            "noodle": pknew,
+            "noodle_form": user_form,
+            "userformset": userformset,
+            'about_us':about_us,
+            'about_sections':about_sections,
+            'bottom_sections':bottom_sections,
+            'staffs':staffs
+        }
+        return render(request, "main/about.html", context)
     else:
-        return render(request, "main/about.html", {'categories': category, 'postForm': form, 'formset': formset})
+        return render(request, "main/about.html", {'categories': category,
+                                    'about_us':about_us,
+                                    'about_sections':about_sections,
+                                    'bottom_sections':bottom_sections,
+                                    'staffs':staffs})
 
 
 def terms(request):
