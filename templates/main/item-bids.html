@@ -35,7 +35,7 @@
                             <td>
                                 <figure>
                                     <a href=" {% url 'core:product' item.item.pk%}">
-                                        <img class="img-fluid lazy" style="height:50px; width:50px;" src=" {{item.item.thumbnail.url}}" data-src="{{item.item.thumbnail.url}}" alt="">
+                                        <img class="img-fluid lazy" style="height:50px; width:50px;" src=" {{item.item.get_thumbnail_path}}" data-src="{{item.item.get_thumbnail_path}}" alt="">
                                     </a>
 							        <h6>{{item.item.title}}</h6>
                                 </figure>
