@@ -44,24 +44,33 @@ class categories(models.Model):
         verbose_name_plural = "categories"
 
     def __str__(self):
-        return f"{self.category}"
+        return f"{self.category_ne}" if self.category_ne else f"{self.category}"
 
     def get_absolute_url(self):
         return reverse("core:category", kwargs={"pk": self.pk})
     
+class Unit(models.Model):
+    title_en = models.CharField(max_length=100)
+    title_lc = models.CharField(max_length=100,null=True,blank=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"{self.title_lc}" if self.title_lc else f"{self.title_en}"
+    
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
+    has_discount = models.BooleanField(default=False)
     discount_price = models.FloatField(blank=True, null=True)
     category = models.ForeignKey(categories, on_delete=models.CASCADE, null=True)
     available = models.IntegerField(default=1)
     sold = models.IntegerField(default=0)
-    unit = models.CharField(max_length=10, default="Kg")
+    unit = models.ForeignKey(Unit,on_delete=models.CASCADE,null=True,blank=True)
     home_delivery = models.BooleanField(default=False)
     show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
-    # thumbnail = models.ImageField(upload_to='images/', default=None)
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk',related_query_name='hit_count_generic_relation')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     expiry_date = models.DateField(null=True,blank=True)
@@ -260,7 +269,7 @@ class PageSections(models.Model):
     image = models.ImageField(upload_to=get_image_path)
     is_for_bottom_section = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    display_order = models.IntegerField(null=True)
+    display_order = models.IntegerField(default=0)
 
 def get_staff_image_path(instance, filename):
     try:
@@ -275,7 +284,7 @@ class Staffs(models.Model):
     post_lc = models.CharField(max_length=100,null=True,blank=True)
     image = models.ImageField(upload_to=get_staff_image_path)
     is_active = models.BooleanField(default=True)
-    display_order = models.IntegerField(null=True)
+    display_order = models.IntegerField(default=0)
 class subscripiton(models.Model):
     email = models.EmailField()
     
@@ -285,7 +294,7 @@ class Partner(models.Model):
     url = models.URLField(blank=True,null=True)
     logo_url = models.URLField(blank=True,null=True)
     is_active = models.BooleanField(default=True)
-    display_order = models.IntegerField(null=True)
+    display_order = models.IntegerField(default=0)
 
 class PoweredBy(models.Model):
     name_en = models.CharField(max_length=100)
@@ -293,4 +302,4 @@ class PoweredBy(models.Model):
     logo_url = models.URLField(blank=True,null=True)
     url = models.URLField(blank=True,null=True)
     is_active = models.BooleanField(default=True)
-    display_order = models.IntegerField(null=True)
+    display_order = models.IntegerField(default=0)

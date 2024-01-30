@@ -1,14 +1,11 @@
 {% extends "account/base.html" %}
-{% load crispy_forms_tags %}
-{% load custom_tags%}
+{% load  static custom_tags crispy_forms_tags %}
 
 {{ form.media }} {# Adds date-picker required JS and CSS #}
-
-
 {% block content %}
 
 <main>
-    <div class="container">
+    <div class="container add_bottom_20">
         <div class="col s12 m8 offset-m2 pb-3">
             <div class="card p-2">
                 <div class="card-content">
@@ -20,29 +17,41 @@
                         <form id="post_form" method="post" action="/edit/item/" enctype="multipart/form-data">
                     {%endif%}
                         {% csrf_token %}
-                        <div class="form-row">
+                        <div class="form-row margin_20 py-2 px-3">
                                 
                             {% for pform in postForm %}
-                                {% if pform|field_type == 'CheckboxInput'%}
-                                    <div class="col-md-6 py-2">{{ pform|as_crispy_field}}</div>
-                                {% elif pform|field_type in 'Textarea,ClearableFileInput'%}
-                                    <div class="col-md-12">{{ pform|as_crispy_field}}</div>
-
-                                {%else%}
-                                    <div class="col-md-6">{{ pform|as_crispy_field}}</div>
-                                {%endif%}
+                                    <div>{{ pform|as_crispy_field}}</div>
                             {%endfor%}
-
+                        <div class="row px-3"><h5 class="text-primary"> सम्बन्धित फोटोहरु</div>
                         {%include 'custom_fields/multiple_images.html' %}    
                         {% for form in formset %} 
                             <div class="col-md-12 py-2">{{ form|crispy}}</div>
                         {% endfor %}
                         </div>
-                        <input class="btn btn-success text-right float-right" type="submit" name="submit" value="Submit" />
+                        <div class="col-md-2 float-right">
+                            <button class="btn btn-success btn-sm text-right float-right" type="submit" name="submit" value="Submit" /><i class="fa fa-floppy-o"></i> Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
 </main>
+
 {% endblock content %}
+
+{%block extra_script %}
+<script src="{% static 'main/js/create_update.js' %} "></script>
+<script>
+    toggleDiscountField();
+
+    function toggleDiscountField(){
+        var checkbox = document.getElementById("id_has_discount");
+        var discountField = document.getElementById("id_discount_price");
+
+        // Enable or disable the field based on the checkbox state
+        discountField.disabled = !checkbox.checked;
+    }
+</script>
+{%endblock%}

@@ -51,7 +51,7 @@
 								<img class="owl-lazy" src=" {{category.image.url}}" data-src="{{category.image.url}}" alt="">
 								</a>
 							</figure>
-							<div><a href=" {{category.get_absolute_url}} "><span class="btn_1">{{category.category}}</span></a></div>
+							<div><a href=" {{category.get_absolute_url}} "><span class="btn_1">{{category.category_ne|default:category.category}}</span></a></div>
 						</div>
 					</div>
 					{% endfor %}

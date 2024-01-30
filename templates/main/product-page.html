@@ -361,7 +361,7 @@
             <p>User who viewed this item also viewed: </p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
-            {% for item in items|sort_by:'-hit_count_generic__hits'|filter_category:object.category.category|slice:":6"%}
+            {% for item in items|sort_by:'-hit_count_generic__hits'|filter_category:object.category.id|slice:":6"%}
             <div class="item">
                 <div class="grid_item">
                     {% if item.discount_price %}

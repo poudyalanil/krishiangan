@@ -47,7 +47,13 @@ class PoweredByAdmin(admin.ModelAdmin):
         model = PoweredBy
     list_display = ('name_en','name_lc', 'url','logo_url','display_order','is_active')
     
+class UnitAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Unit
+    list_display = ('title_en','title_lc','display_order','is_active')
     
+    
+admin.site.register(Unit, UnitAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Images, ImagesAdmin)
 
@@ -56,7 +62,7 @@ admin.site.register(categories)
 
 admin.site.register(OrderItem)
 admin.site.register(Comment)
-admin.site.register(aboutpage,AboutPageAdmin)
+admin.site.register(aboutpage,AboutPageAdmin)   
 admin.site.register(PageSections,PageSectionsAdmin)
 admin.site.register(Staffs,StaffsAdmin)
 admin.site.register(subscripiton)

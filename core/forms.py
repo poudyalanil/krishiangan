@@ -118,18 +118,19 @@ class AdditemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ('title','price','discount_price','category','available','unit','home_delivery','price_negotiable','show_expiry','expiry_date','description')
+        fields = ('title','category','price','has_discount','discount_price','available','unit','home_delivery','price_negotiable','show_expiry','expiry_date','description')
         exclude = ('likes', 'user', 'sold', 'hit_count_generic', 'featured')
         labels = ({
                     'title': 'बेच्ने सामानको नाम',
                     'price': 'मूल्य',
-                    'discount_price': 'डिस्काउन्ट दिने हो भने डिस्काउन्ट पछिको मूल्य',
+                    'has_discount': 'डिस्काउन्ट दिन सकिने',
+                    'discount_price': 'डिस्काउन्ट पछिको मूल्य',
                     'category': 'वर्ग / समूह ',
                     'available': 'उपलब्ध परिमाण',
                     'unit': 'उपलब्ध परिमाणको ईकाई',
-                    'home_delivery': 'होम डेलिभरी सम्भव छ ?',
-                    'show_expiry': 'यो विज्ञापन देखाउने ?',
-                    'price_negotiable': 'मूल्य घटाउन सकिने छ ?',
+                    'home_delivery': 'होम डेलिभरी सम्भव छ',
+                    'show_expiry': 'यो विज्ञापन देखाउने',
+                    'price_negotiable': 'मूल्य घटाउन सकिने',
                     'description': 'आफ्नो सामानको बारेमा लेख्नुहोस',
                     'expiry_date': 'विज्ञापन कहिले सम्म देखाउने ?',
                     'image': 'सामानको फोटोहरु',
@@ -138,13 +139,25 @@ class AdditemForm(forms.ModelForm):
         widgets = {
             'expiry_date': forms.DateInput(attrs={'type':'date','required':False}),
             'description': forms.Textarea(attrs={'rows':3}),
+            'has_discount': forms.CheckboxInput(attrs={'onclick':"toggleDiscountField()"}),
+            'unit': forms.Select(attrs={'required':True}),
         }
         # fields = ['title', 'price', 'discount_price', 'category', 'available', 'unit',
         #   'home_delivery', 'price_negotiable', 'description', 'image', 'expiry_date', 'featured']
 
     def __init__(self, *args, **kwargs):
         super(AdditemForm, self).__init__(*args, **kwargs)
-
+        for visible in self.visible_fields():
+            if visible.name in ['title','category','available','unit']:
+                visible.field.widget.attrs['col']='col-md-6'
+            elif visible.name in ['price','has_discount','discount_price']:
+                visible.field.widget.attrs['col']='col-md-4'
+            elif visible.name in ['home_delivery','price_negotiable','show_expiry','expiry_date']:
+                visible.field.widget.attrs['col']='col-md-3'
+            elif visible.name in ['description']:
+                visible.field.widget.attrs['col']='col-md-12 my-3'
+            else:
+                visible.field.widget.attrs['col'] = 'col-md-4' 
 
 class ImageForm(forms.ModelForm):
     image = forms.ImageField(

@@ -501,17 +501,10 @@
                         <form id="post_form" method="post" action="/add-item/" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-row">
-                                
                                 {% for pform in postForm %}
-                                    {% if pform|field_type == 'CheckboxInput'%}
-                                        <div class="col-md-6 py-2">{{ pform|as_crispy_field}}</div>
-                                    {% elif pform|field_type in 'Textarea,ClearableFileInput'%}
-                                        <div class="col-md-12">{{ pform|as_crispy_field}}</div>
-
-                                    {%else%}
-                                        <div class="col-md-6">{{ pform|as_crispy_field}}</div>
-                                    {%endif%}
+                                    <div>{{ pform|as_crispy_field}}</div>
                                 {%endfor%}
+                                {%include 'custom_fields/multiple_images.html' %}    
                             {% for form in formset %} 
                                 <div class="col-md-12 py-2">{{ form|crispy}}</div>
                             {% endfor %}
@@ -525,10 +518,22 @@
                     {% else %}
                     <h3>पहिला लग-इन गर्नुहोस् ! </h3>
                     {% endif %}
+                    <script src="{% static 'main/js/create_update.js' %} "></script>
+                    <script>
+                        toggleDiscountField();
+                        function toggleDiscountField(){
+                            var checkbox = document.getElementById("id_has_discount");
+                            var discountField = document.getElementById("id_discount_price");
+                    
+                            // Enable or disable the field based on the checkbox state
+                            discountField.disabled = !checkbox.checked;
+                        }
+                    </script>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="usermodal" tabindex="-1" role="dialog" aria-labelledby="usermodalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
@@ -657,4 +662,6 @@
     </div>
 </div>
     </body>
+    {% block extra_script %}
+    {% endblock %}
 </html>
