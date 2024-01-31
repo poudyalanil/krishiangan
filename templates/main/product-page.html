@@ -82,7 +82,7 @@
             <div class="breadcrumbs">
                 <ul>
                     <li><a href="http://127.0.0.1:8000">गृहपृष्ठ</a></li>
-                    <li><a href="#">{{object.category.category}}</a></li>
+                    <li><a href="{% url 'core:category' pk=object.category_id %}">{{object.category.category}}</a></li>
                     <li>{{ object.title}}</li>
                 </ul>
             </div>
