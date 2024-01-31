@@ -8,7 +8,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('messages/', include("pinax.messages.urls", namespace="pinax_messages")),
-
 ]
 
 if settings.DEBUG:

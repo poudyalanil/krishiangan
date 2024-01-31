@@ -52,6 +52,11 @@ class UnitAdmin(admin.ModelAdmin):
         model = Unit
     list_display = ('title_en','title_lc','display_order','is_active')
     
+class SocialMediaAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Unit
+    list_display = ('title','url','icon','display_order','is_active')
+    
     
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(Item, ItemAdmin)
@@ -69,3 +74,4 @@ admin.site.register(subscripiton)
 admin.site.register(Partner,PartnerAdmin)
 admin.site.register(PoweredBy,PoweredByAdmin)
 admin.site.register(UserProfile)
+admin.site.register(SocialMedia,SocialMediaAdmin)

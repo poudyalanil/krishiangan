@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "pinax.templates",
     'material',
     'hitcount',
-    'django_social_share'
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -108,7 +108,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 
 ]
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -4,7 +4,6 @@ from django.shortcuts import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 
@@ -301,5 +300,19 @@ class PoweredBy(models.Model):
     name_lc = models.CharField(max_length=100,null=True,blank=True)
     logo_url = models.URLField(blank=True,null=True)
     url = models.URLField(blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+class SocialMedia(models.Model):
+    
+    MEDIA_CHOICES= [
+        ('facebook','Facebook'),
+        ('instagram','Instagram'),
+        ('twitter','Twitter'),
+        ('youtube','Youtube'),
+    ]
+    
+    title = models.CharField(max_length=100)
+    url = models.URLField(blank=True,null=True)
+    icon = models.CharField(choices=MEDIA_CHOICES, max_length=20)
     is_active = models.BooleanField(default=True)
     display_order = models.IntegerField(default=0)
