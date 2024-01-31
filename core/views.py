@@ -188,43 +188,11 @@ class SearchResultsView(ListView):
     model = Item
     template_name = 'main/search_results.html'
 
-    # def get_queryset(self):  # new
-    #     query = self.request.GET.get('q')
-    #     object_list = Item.objects.filter(
-    #         Q(title__icontains=query)
-    #     )
-    #     return object_list
-
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         query = self.request.GET.get('q')
-        items = Item.objects.filter(Q(title__icontains=query)
-                                    )
-        category = categories.objects.all()
-        data['categories'] = category
+        items = Item.objects.filter(Q(title__icontains=query))
         data['items'] = items
-        ImageFormSet = modelformset_factory(Images,
-                                            form=ImageForm
-                                            )
-
-        if self.request.user.is_authenticated:
-            pknew = self.request.user.id
-            user_form = UserForm(instance=self.request.user)
-            ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
-                'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-            profile_id = UserProfile.objects.filter(user=request.user).first()
-            userformset = UserProfileForm(instance=profile_id)
-            
-            # userformset = ProfileInlineFormset(instance=self.request.user)
-
-            postForm = AdditemForm()
-            itemformset = ImageFormSet(queryset=Images.objects.none())
-            data['noodle'] = pknew
-            data['noodle_form'] = user_form
-            data['userformset'] = userformset
-            data['postForm'] = postForm
-            data['formset'] = itemformset
-
         return data
 
 
