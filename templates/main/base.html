@@ -73,27 +73,27 @@
                                   
                                         {% load pinax_messages_tags %}
                                         {% if request.user.is_authenticated %}
-                                        {% with user|unread_thread_count as user_unread %}
-                                        <li >
-                                            <a href="{% url 'pinax_messages:inbox' %}" class="header-title"><i class="fa fa-envelope"></i>
-                                                इनबक्स 
-                                            {% if user_unread %}<sup class="badge red z-depth-1 mr-1" >{{ user_unread }}</sup>{% endif %}
-                                            </a>
-                                        </li>
-                                        {% endwith %}
-                                        <li>
-                                            <a  href=" #" data-toggle="modal" class="header-title" data-target="#usermodal" ><i class="fa fa-user"></i> प्रोफाइल</a>
-                                        </li>
-                                        <li>
-                                            <a href="{% url 'core:home' %}users/items/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> मेरो उत्पादन</a>
-                                        </li>
-                                       
-                                        <li>
-                                            <a  href="#"  data-toggle="modal" class="header-title" data-target="#exampleModalCenter" id="sell-product-btn" ><i class="fa fa-sellsy"></i> उत्पादन वस्तु बेच्नुहोस्</a> 
-                                        </li>
-                                        <li>
-                                            <a href="{% url 'core:home' %}users/items-bid/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> बिडगरेका सामान </a>
-                                        </li>
+                                            {% comment %} <li>
+                                                <a  href=" #" data-toggle="modal" class="header-title" data-target="#usermodal" ><i class="fa fa-user"></i> प्रोफाइल</a>
+                                            </li> {% endcomment %}
+                                            <li>
+                                                <a href="{% url 'core:home' %}users/items/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> मेरो उत्पादन</a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a  href="#"  data-toggle="modal" class="header-title" data-target="#exampleModalCenter" id="sell-product-btn" ><i class="fa fa-sellsy"></i> उत्पादन वस्तु बेच्नुहोस्</a> 
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'core:home' %}users/items-bid/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> बिडगरेका सामान </a>
+                                            </li>
+                                            {% with user|unread_thread_count as user_unread %}
+                                            <li >
+                                                <a href="{% url 'pinax_messages:inbox' %}" class="header-title"><i class="fa fa-envelope"></i>
+                                                    इनबक्स 
+                                                {% if user_unread %}<sup class="badge red z-depth-1 mr-1" >{{ user_unread }}</sup>{% endif %}
+                                                </a>
+                                            </li>
+                                            {% endwith %}
                                         {% endif %}
 
                                     </ul>
@@ -101,7 +101,7 @@
                                 <!--/main-menu -->
                             </nav>
                             <div class="col-xl-2 col-lg-2 d-lg-flex d-sm-d-md-inline-block align-items-center justify-content-end text-right font-small">
-                                {% comment %} <a class="text-white" href="http://price.krishiangan.com/" target="_blank"><span class="fa fa-money"> मूल्य खण्ड</span></a> {% endcomment %}
+                                <a class="text-white" href="http://price.krishiangan.com/" target="_blank"><span class="fa fa-money"> मूल्य खण्ड</span></a>
                                 <a class="text-white" href="{% static 'main/app/krishiaangan.apk' %}" download="Krishiaangan.apk"><span class="fa fa-android pl-3"> मोबाइल एप</span></a>
                             </div>
                         </div>
