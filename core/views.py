@@ -135,13 +135,10 @@ def subscribe(request):
         if receiveForm.is_valid():
             try:
                 subs = subscripiton.objects.get(email=request.POST['email'])
-                print(' exist from try')
-                messages.info(request, "Already subscribed")
+                messages.info(request, "This email has already subscribed !")
                 return redirect('/')
 
             except:
-                print('doesnot exist from expect')
-
                 receiveForm.save()
                 messages.info(request, "Successfully subscribed")
                 return redirect('/')

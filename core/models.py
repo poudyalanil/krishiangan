@@ -284,6 +284,7 @@ class Staffs(models.Model):
     image = models.ImageField(upload_to=get_staff_image_path)
     is_active = models.BooleanField(default=True)
     display_order = models.IntegerField(default=0)
+    
 class subscripiton(models.Model):
     email = models.EmailField()
     

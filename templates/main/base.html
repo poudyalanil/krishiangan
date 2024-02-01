@@ -347,13 +347,13 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 footer_title">
-                            <h3 data-target="#collapse_4">सम्पर्कमा रहनुस्</h3>
+                            <h3 data-target="#collapse_4">सदस्यता लिनुहोस्</h3>
                             <div class="collapse dont-collapse-sm" id="collapse_4">
                                 <div id="newsletter">
                                     <div class="form-group">
-                                        <form id="#"  method="POST" action="/subscribe/ " enctype="multipart/form-data">
+                                        <form id="#"  method="POST" action="{% url 'core:subscribe'%}" enctype="multipart/form-data">
                                             {% csrf_token %}
-                                            <input type="email" name="email" id="email_newsletter"
+                                            <input type="email" name="email" id="email_newsletter" required="true"
                                                 class="form-control" placeholder="हजूरको ई-मेल">
                                             <button type="submit" id="submit-newsletter"><i
                                                 class="ti-angle-double-right"></i></button>
