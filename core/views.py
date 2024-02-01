@@ -159,6 +159,12 @@ def about(request):
                                 'about_sections':about_sections,
                                 'bottom_sections':bottom_sections,
                                 'staffs':staffs})
+def partners(request):
+
+    partners = Partner.objects.filter(is_active=True).order_by('display_order')
+
+  
+    return render(request, "main/partners.html", {'partners':partners})
 
 
 def terms(request):

@@ -26,6 +26,7 @@ urlpatterns = [
     
     path('place-item-bid/<int:pk>/', place_item_bid, name='place-item-bid'),
     path('about/', about, name='about'),
+    path('partners/', partners, name='partners'),
     path('terms/', terms, name='terms'),
 
 

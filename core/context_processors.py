@@ -6,7 +6,6 @@ from django.forms.models import inlineformset_factory
 
 def custom_processor(request):
     category = categories.objects.all()
-    partners = Partner.objects.filter(is_active=True).order_by('display_order')
     powered_by = PoweredBy.objects.filter(is_active=True).order_by('display_order').first()
     social_media= SocialMedia.objects.filter(is_active=True).order_by('display_order')
     if request.user.is_authenticated:
@@ -20,13 +19,11 @@ def custom_processor(request):
                 "noodle_form": user_form,
                 "userformset": userformset, 
                 'categories': category,
-                'partners': partners,
                 'powered_by': powered_by,
                 'social_media': social_media,
                 }
     else:
         return {'categories': category,
-                'partners': partners,
                 'powered_by': powered_by,
                 'social_media': social_media,
                 }

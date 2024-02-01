@@ -320,7 +320,8 @@
                             <div class="collapse dont-collapse-sm links" id="collapse_1">
                                 <ul>
                                     <li><a href=" {% url 'core:about' %} ">हाम्रो बारेमा</a></li>
-                                    <li><a href="#">हेल्प</a></li>
+                                    {% comment %} <li><a href="#">हेल्प</a></li> {% endcomment %}
+                                    <li><a href=" {% url 'core:partners' %} ">साझेदारहरू</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -336,29 +337,17 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 footer_title">
-                            <h3 data-target="#collapse_3">साझेदारहरू</h3>
-                            <div class="collapse dont-collapse-sm links" id="collapse_3">
+                            <h3 data-target="#collapse_3">सम्पर्क</h3>
+                            <div class="collapse dont-collapse-sm contacts" id="collapse_4">
                                 <ul>
-                                    {% for partner in partners%}
-                                    <li>
-                                        <img src="{{partner.logo_url}}" class="rounded" height:"25" width="25">
-                                        <a class="pl-2" target="_blank" title="{{partner.name_lc|default:partner.name_en}}" href="{{partner.url}}">{{partner.name_lc|default:partner.name_en|slice:25}}{% if partner.name_lc|default:partner.name_en|length > 25 %}...{% endif %}</a>
-                                    </img>
-                                    </li>
-                                    {% endfor %}
+                                    <li><i class="ti-home"></i> बालाजु, काठमाडौँ-१६</li>
+                                    <li><i class="ti-email"></i><a href="mailto:info.krishiangan@gmail.com?subject=Inquiry">info.krishiangan@gmail.com</a></li>
+                                    <li><i class="ti-mobile"></i><a href="javascript:;"></a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 footer_title">
-                            {% comment %} <h3 data-target="#collapse_4">सम्पर्कमा रहनुस्</h3> {% endcomment %}
-                            <h3 data-target="#collapse_4">सम्पर्क </h3>
-                            <div class="collapse dont-collapse-sm contacts" id="collapse_4">
-                                <ul>
-                                    <li><i class="ti-home"></i> बालाजु, काठमाडौँ-१६</li>
-                                    <li><i class="ti-email"></i><a href=" #0 ">info@krishiangan.com</a></li>
-                                </ul>
-                            </div>
-
+                            <h3 data-target="#collapse_4">सम्पर्कमा रहनुस्</h3>
                             <div class="collapse dont-collapse-sm" id="collapse_4">
                                 <div id="newsletter">
                                     <div class="form-group">
