@@ -1,6 +1,5 @@
 from django.forms.models import inlineformset_factory
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404,redirect
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,25 +7,22 @@ from .models import Item, OrderItem, Order, Comment
 from django.utils import timezone
 from django.contrib import messages
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail,BadHeaderError
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from .serializers import *
-from rest_framework.response import Response
-from rest_framework import status
 from .forms import *
 from hitcount.views import HitCountDetailView
 from django.http import HttpResponseRedirect, HttpResponse,JsonResponse
 from django.urls import reverse
 from django.db.models import Q
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
-
+from django.template.loader import render_to_string
 
 from django.views.generic import ListView, DetailView, View, CreateView
 
 from django.forms.models import modelformset_factory
-
+import smtplib,ssl
 def accountSignup(request):
     username=request.POST.get('mobile')
     first_name=request.POST.get('first_name')
@@ -135,13 +131,33 @@ def subscribe(request):
         if receiveForm.is_valid():
             try:
                 subs = subscripiton.objects.get(email=request.POST['email'])
-                messages.info(request, "This email has already subscribed !")
+                messages.info(request, "The provided email has already subscribed to our news letter !")
                 return redirect('/')
 
             except:
-                receiveForm.save()
-                messages.info(request, "Successfully subscribed")
-                return redirect('/')
+                # receiveForm.save()
+                #also send message to user
+                subject = 'Subscription-Krishiangan News Letter'
+                from_email= settings.EMAIL_HOST_USER
+                recipient_email=[request.POST['email']]
+                
+                context={
+                    'from_email':from_email,
+                    'recipient_email':request.POST['email'],
+                }
+                email_content = render_to_string('account/email/user_subscription.html',context)
+                
+                try:
+                    send_mail(subject, '', from_email, recipient_email, html_message=email_content)
+                    messages.success(request, "Successfully Subscribed !!")
+                except BadHeaderError:
+                    messages.info(request, "Invalid Header found !!")
+                except Exception as e:
+                    # Handle other exceptions (e.g., SMTP errors) here
+                    print('**********************************')
+                    print(e)
+                    messages.warning(request, "An error occurred while sending the email !!")
+            return redirect('/')
 
 
 def about(request):

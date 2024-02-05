@@ -3,12 +3,8 @@ from allauth.account.forms import SignupForm,PasswordField
 from .models import *
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from django.utils.safestring import mark_safe
 from allauth.utils import set_form_field_order
 
-from django.utils.html import escape, conditional_escape
-from django.utils.encoding import force_text
-from django.utils.safestring import mark_safe
 from django.forms.widgets import ClearableFileInput, CheckboxInput
 
 

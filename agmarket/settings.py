@@ -15,17 +15,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'core',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'crispy_forms',
     "pinax.messages",
     'rest_framework',
     "bootstrapform",
     "pinax.templates",
-    'viewflow',
     'hitcount',
     'django_social_share',
 ]
@@ -39,7 +38,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'agmarket.urls'
@@ -74,7 +72,6 @@ TIME_ZONE = 'Asia/Kathmandu'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 
 DATABASES = {
@@ -112,11 +109,11 @@ AUTHENTICATION_BACKENDS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'info.krishiangan@gmail.com'
 EMAIL_HOST_PASSWORD = 'zkqftfutqyytlcsp'
-DEFAULT_FROM_EMAIL = 'MarketSuperviser'
+DEFAULT_FROM_EMAIL = 'Krishiangan'
 
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
