@@ -5,7 +5,7 @@ media_root/
 *.pot
 *.pyc
 __pycache__
-
+.vscode
 .env 
 .venv 
 env/ 
