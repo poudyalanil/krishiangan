@@ -38,6 +38,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'agmarket.urls'
@@ -117,6 +118,9 @@ DEFAULT_FROM_EMAIL = 'Krishiangan'
 
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
+
+# BASE_URL='https://krishiangan.com'
+BASE_URL='http://127.0.0.1:8000'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

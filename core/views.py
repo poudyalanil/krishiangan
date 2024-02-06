@@ -135,15 +135,16 @@ def subscribe(request):
                 return redirect('/')
 
             except:
-                # receiveForm.save()
+                receiveForm.save()
                 #also send message to user
                 subject = 'Subscription-Krishiangan News Letter'
                 from_email= settings.EMAIL_HOST_USER
                 recipient_email=[request.POST['email']]
-                
+                base_url = settings.BASE_URL
                 context={
                     'from_email':from_email,
                     'recipient_email':request.POST['email'],
+                    'base_url':base_url
                 }
                 email_content = render_to_string('account/email/user_subscription.html',context)
                 
@@ -154,12 +155,35 @@ def subscribe(request):
                     messages.info(request, "Invalid Header found !!")
                 except Exception as e:
                     # Handle other exceptions (e.g., SMTP errors) here
-                    print('**********************************')
-                    print(e)
                     messages.warning(request, "An error occurred while sending the email !!")
             return redirect('/')
 
-
+def unsubscribe(request):
+    email = request.GET['email']
+    if email :
+        record_exists = subscripiton.objects.filter(email=email)
+        if record_exists.exists():
+            record_exists.delete()
+            
+            subject = 'Unsubscription--Krishiangan News Letter'
+            from_email= settings.EMAIL_HOST_USER
+            recipient_email=[email]
+            email_content = render_to_string('account/email/user_unsubscription.html')
+            
+            try:
+                send_mail(subject, '', from_email, recipient_email, html_message=email_content)
+                messages.success(request, "Successfully Unsubscribed !!")
+            except BadHeaderError:
+                messages.info(request, "Invalid Header found !!")
+            except Exception as e:
+            # Handle other exceptions (e.g., SMTP errors) here
+                messages.warning(request, "An error occurred while sending the email !!")
+        else:
+            messages.info(request, "Sorry, the provided email information has no any active subscription !")
+                
+    return redirect('/')
+    
+    
 def about(request):
 
     about_us = aboutpage.objects.first()

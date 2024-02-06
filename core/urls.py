@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('add-item/', itemlist, name='add_item'),
     path('subscribe/', subscribe, name='subscribe'),
+    path('unsubscribe/', unsubscribe, name='unsubscribe'),
 
     path('remove-from-cart/<int:pk>/', remove_from_cart, name='remove-from-cart'),
     path('remove-item-from-cart/<int:pk>/', remove_single_item_from_cart,
