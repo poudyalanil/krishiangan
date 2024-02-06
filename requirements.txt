@@ -18,7 +18,7 @@ oauthlib
 packaging
 pep8
 pillow
-pinax-messages`
+pinax-messages
 pinax-templates
 pycodestyle
 pycparser
