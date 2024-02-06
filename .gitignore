@@ -4,10 +4,12 @@ media_root/
 *.log
 *.pot
 *.pyc
-__pycache__
+*__pycache__
 .vscode
 .env 
 .venv 
+*.pyc
+*.cpython-310.pyc
 env/ 
 venv/ 
 ENV/ 
