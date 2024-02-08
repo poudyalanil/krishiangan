@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Item, OrderItem, Order, Comment
 from django.utils import timezone
+from datetime import timedelta
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail,BadHeaderError
@@ -18,7 +19,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
-
+import requests,time,random
 from django.views.generic import ListView, DetailView, View, CreateView
 
 from django.forms.models import modelformset_factory
@@ -123,6 +124,55 @@ def updateUserProfile(request,pk):
         message='Profile successfully updated !!'
     return JsonResponse({'status':statuss,'message': message})
 
+# Function to generate a unique 6-digit OTP
+def generate_otp():
+    # Get the current timestamp
+    current_timestamp = int(time.time())
+
+    # Generate a random component
+    random_component = random.randint(100000, 999999)
+
+    # Combine timestamp and random component to create the OTP
+    otp = (current_timestamp % 1000000) * 1000000 + random_component
+
+    return otp % 1000000  # Ensure the result is a 6-digit number
+
+def verify_mobile(request):
+    if request.user.is_authenticated:
+        user = request.user
+        user_profile = user.profile
+        mobile_number=user_profile.phone
+        if user_profile.is_mobile_verified is False:
+            if mobile_number:
+                
+                if user_profile.otp_code is None:
+                    otp_code = generate_otp()
+                    r = requests.post(
+                            "http://api.sparrowsms.com/v2/sms/",
+                            data={'token' :"v2_kGCHEN8VopIfLY1xgDTsAf5CFlE.yfaD",
+                                'from'  : 'TheAlert',
+                                'to'    : mobile_number,
+                                'text'  : f'Your OTP verification code is : {otp_code}'})
+                    status_code = r.status_code
+                    response = r.text
+                    response_json = r.json()
+                    #Also inset that code and time in user database
+                    if status_code == 200:
+                        user_profile = user.profile
+                        user_profile.otp_code = otp_code
+                        user_profile.valid_until=timezone.now() + timedelta(minutes=5)
+                        user_profile.save()
+                        messages.success(request,'OTP is sent to registered mobile number !!')
+                    else:
+                        messages.error(request,response_json['response'])    
+                else:
+                    messages.info(request,'OTP has already been sent to registered mobile number. Please try after some time !!')
+            else:
+                messages.warning(request,'Logged in user does not have mobile number !!')
+        else:
+            messages.info(request,'The users phone number is already verified !!')
+            
+    return redirect('/')    
 
 def subscribe(request):
     if request.method == 'POST':

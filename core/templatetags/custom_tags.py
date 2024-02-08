@@ -1,4 +1,5 @@
 from django import template
+import json
 register = template.Library()
 
 
@@ -46,3 +47,10 @@ def convert_to_nepali_numbers(value):
     return ''.join(nepali_numbers.get(char, char) for char in str(value))
 
 register.filter('nepali_numbers', convert_to_nepali_numbers)
+
+@register.filter
+def messages_to_json(messages):
+    """
+    Convert Django messages to a JSON-formatted string.
+    """
+    return json.dumps([{'message': str(message),'type':message.tags} for message in messages])

@@ -11,6 +11,8 @@ urlpatterns = [
     path('accounts/login',accountLogin , name='account_login'),
     path('accounts/update/<int:pk>',updateUserProfile , name='account_update'),
     
+    path('verify_mobile',verify_mobile,name='verify_mobile_number'),
+    
 
     path('product/<int:pk>/', ItemDetailView.as_view(), name='product'),
     path('product/<int:pk>/withdraw-bid', withdraw_bid, name='withdraw_bid'),

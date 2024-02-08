@@ -125,7 +125,8 @@ BASE_URL='https://krishiangan.com'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
-
+SMS_TOKEN='v2_kGCHEN8VopIfLY1xgDTsAf5CFlE.yfaD'
+SMS_FROM='Krishiangan'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
