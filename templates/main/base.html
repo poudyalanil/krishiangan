@@ -1,4 +1,4 @@
-{% load static hitcount_tags cart_template_tags crispy_forms_tags custom_tags %}
+{% load static crispy_forms_tags hitcount_tags cart_template_tags  custom_tags %}
 {{ form.media }} {# Adds date-picker required JS and CSS #}
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,6 @@
             href=" {% static 'main/img/apple-touch-icon-144x144-precomposed.png' %} ">
         <!-- GOOGLE WEB FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet">
-        <link href=" https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css " rel="stylesheet">
         <!-- BASE CSS -->
         <link href=" {% static 'main/css/bootstrap.custom.min.css' %} " rel="stylesheet">
         <link href=" {% static 'main/css/style.css' %} " rel="stylesheet">

@@ -19,6 +19,10 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=100, default='', blank=True)
     country = models.CharField(max_length=100, default='', blank=True)
     organization = models.CharField(max_length=100, default='', blank=True)
+    is_mobile_verified= models.BooleanField(default=False)
+    is_email_verified= models.BooleanField(default=False)
+    otp_code =models.IntegerField(blank=True,null=True)
+    valid_until = models.DateTimeField(blank=True,null=True)
 
     def create_profile(sender, **kwargs):
 

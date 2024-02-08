@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     "pinax.messages",
     'rest_framework',
-    "bootstrapform",
+    'crispy_bootstrap4',
     "pinax.templates",
     'hitcount',
     'django_social_share',
