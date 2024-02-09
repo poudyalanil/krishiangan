@@ -23,8 +23,61 @@ import requests,time,random
 from django.views.generic import ListView, DetailView, View, CreateView
 from core.templatetags.custom_tags import convert_to_english_numbers
 from django.forms.models import modelformset_factory
-import smtplib,ssl
+from allauth.account.views import PasswordResetView, PasswordResetFromKeyView
 
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'account/custom_password_reset.html'
+
+class CustomPasswordResetFromKeyView(PasswordResetFromKeyView):
+    template_name = 'account/custom_password_reset_from_key.html'
+
+
+def account_reset_send_otp(request):
+    if request.method == 'POST':
+        mobile = request.POST['phone']
+        user_profile = UserProfile.objects.filter(phone=mobile)
+        
+        if user_profile.exists():
+            user_profile= user_profile.first()
+            otp_code = generate_otp()
+            # r = send_otp_via_sms(mobile, otp_code)
+            status_code = 200
+            if status_code == 200:
+            # if r.status_code == 200:
+                user_profile.otp_code = otp_code
+                user_profile.valid_until = timezone.now() + timedelta(minutes=5)
+                user_profile.save()
+                messages.success(request, 'OTP is sent to the registered mobile number!!')
+            else:
+                messages.error(request, r.json().get('response', 'Failed to send OTP'))
+        else:
+            messages.error(request,'Sorry, we cannot find the records with provided infomation! \n Please contact Administrator !!')
+            return redirect('core:account_reset_password')            
+    return render(request,'main/otp_screen_for_reset.html',{'mobile_number':mobile});        
+
+
+def account_reset_verify_otp(request):
+    if request.method == 'POST':
+        mobile = request.POST['mobile_number']
+        verification_code = request.POST['verification_code']
+        user_profile = UserProfile.objects.get(phone=mobile)
+        user = user_profile.user
+        if len(verification_code) == 6:
+            if int(verification_code) == user_profile.otp_code:
+                user_profile.otp_code = None
+                user_profile.valid_until = None
+                user_profile.save()
+                messages.success(request,'Mobile Number is verified successfully !')
+                return redirect('/')
+            else:    
+                messages.error(request,'Incorrect OTP Verification Code !')
+                redirect(request.META.get('HTTP_REFERER'))
+        else:
+                messages.error(request,'OTP Verification Code does not match !')
+                redirect(request.META.get('HTTP_REFERER'))
+    return redirect('core:account_reset_password_from_otp')    
+    
+    
 def accountSignup(request):
     username=request.POST.get('mobile')
     first_name=request.POST.get('first_name')
