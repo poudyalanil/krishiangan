@@ -11,6 +11,11 @@ urlpatterns = [
     path('accounts/login',accountLogin , name='account_login'),
     path('accounts/update/<int:pk>',updateUserProfile , name='account_update'),
     
+    path('accounts/password/reset/', CustomPasswordResetView.as_view(), name='account_reset_password'),
+    path('accounts/password/reset/send-otp', account_reset_send_otp, name='account_reset_otp_send'),
+    path('accounts/password/reset/verify-otp', account_reset_verify_otp, name='account_reset_otp_verify'),
+    path('accounts/password/reset/otp/verified/change-password', password_change, name='account_reset_password_from_otp'),
+    
     # path('send-otp-to-registered-mobile',send_otp_code,name='send_otp_code'),
     path('verify_mobile',verify_mobile,name='verify_mobile_number'),
     

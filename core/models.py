@@ -21,15 +21,17 @@ class UserProfile(models.Model):
     organization = models.CharField(max_length=100, default='', blank=True)
     is_mobile_verified= models.BooleanField(default=False)
     is_email_verified= models.BooleanField(default=False)
+    verified_datetime = models.DateTimeField(blank=True,null=True)
     otp_code =models.IntegerField(blank=True,null=True)
     valid_until = models.DateTimeField(blank=True,null=True)
+    allow_password_change=models.BooleanField(default=False)
 
     def create_profile(sender, **kwargs):
 
         user = kwargs["instance"]
         if kwargs["created"]:
             user_profile = UserProfile(
-                user=user, bio='my bio')
+                user=user, bio='User Bio Here', phone=user.username)
             user_profile.save()
     post_save.connect(create_profile, sender=User)
 
