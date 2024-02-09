@@ -184,9 +184,9 @@
                                         <div class="dropdown dropdown-access">
                                             <a href=" #" data-toggle="modal" data-target="#usermodal">
                                                 {% if request.user.profile.photo%}
-                                                    <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30"></img>
+                                                    <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30"/>
                                                 {% else %}
-                                                    <img class="rounded-circle" src="{% static '/main/img/avatar2.jpg'%}" height="30" width="30"></img>
+                                                    <img class="rounded-circle" src="{% static '/main/img/avatar2.jpg'%}" height="30" width="30"/>
                                                 {% endif %}
                                                 {% if request.user.first_name%}
                                                     {{request.user.first_name}}

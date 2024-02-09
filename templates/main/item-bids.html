@@ -45,7 +45,7 @@
                             <td>{{ item.quantity}}</a></td>
                             <td>{{ item.price}}</td>
                             <td>
-                                <a href="{% url "pinax_messages:message_user_create" user_id=item.user.id %}"
+                                <a href="{% url 'pinax_messages:message_user_create' user_id=item.user.id %}"
                                 class="btn btn-outline-success btn-sm"><i class="ti-email"></i> सन्देश पठाउनुहोस्</a>
                             </td>
                         </tr>
