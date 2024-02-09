@@ -1,0 +1,17 @@
+{% comment %} {{widget.value}} {% endcomment %}
+{% comment %} {% for file in widget.value %}
+    <img class="rounded app-icon" src="{{ file.url }}" height="100" width="100">
+{% endfor %} {% endcomment %}
+
+{% comment %} {% for file in widget.value %} {% endcomment %}
+    {% if widget.is_initial %}
+        <p>
+            <img class="rounded app-icon" src="{{ widget.value.url }}" height="100" width="100">
+            {% if not widget.required %}
+                <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+                <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>
+            {% endif %}<br>
+        </p>
+    {% endif %}
+{% comment %} {% endfor %} {% endcomment %}
+<input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>

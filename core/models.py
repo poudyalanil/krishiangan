@@ -4,29 +4,42 @@ from django.shortcuts import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
 from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 
 
+<<<<<<< HEAD
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, related_name='user', on_delete=models.CASCADE)
     photo = models.ImageField(verbose_name=("Profile Picture"),
                               upload_to=("profile_photos/"), null=True, blank=True)
+=======
+def get_user_photo_path(instance, filename):
+    return 'profile_photos/%s/%s' % (instance.phone,filename)  
+>>>>>>> new-main
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    photo = models.ImageField(verbose_name=("Profile Picture"),upload_to=get_user_photo_path, null=True, blank=True)
     bio = models.TextField(default='', blank=True)
     phone = models.CharField(max_length=20, blank=True, default='')
     city = models.CharField(max_length=100, default='', blank=True)
     country = models.CharField(max_length=100, default='', blank=True)
     organization = models.CharField(max_length=100, default='', blank=True)
+    is_mobile_verified= models.BooleanField(default=False)
+    is_email_verified= models.BooleanField(default=False)
+    verified_datetime = models.DateTimeField(blank=True,null=True)
+    otp_code =models.IntegerField(blank=True,null=True)
+    valid_until = models.DateTimeField(blank=True,null=True)
+    allow_password_change=models.BooleanField(default=False)
 
     def create_profile(sender, **kwargs):
 
         user = kwargs["instance"]
         if kwargs["created"]:
             user_profile = UserProfile(
-                user=user, bio='my bio')
+                user=user, bio='User Bio Here', phone=user.username)
             user_profile.save()
     post_save.connect(create_profile, sender=User)
 
@@ -44,41 +57,55 @@ class categories(models.Model):
         verbose_name_plural = "categories"
 
     def __str__(self):
-        return f"{self.category}"
+        return f"{self.category_ne}" if self.category_ne else f"{self.category}"
 
     def get_absolute_url(self):
         return reverse("core:category", kwargs={"pk": self.pk})
     
+<<<<<<< HEAD
     
 def convertToNepali(input):
     return str(input).replace(',',',').replace('.','.').replace('0','०').replace('1','१').replace('2','२').replace('3','३').replace('4','४').replace('5','५').replace('6','६').replace('7','७').replace('8','८').replace('9','९')
 
+=======
+class Unit(models.Model):
+    title_en = models.CharField(max_length=100)
+    title_lc = models.CharField(max_length=100,null=True,blank=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"{self.title_lc}" if self.title_lc else f"{self.title_en}"
+    
+>>>>>>> new-main
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
+    has_discount = models.BooleanField(default=False)
     discount_price = models.FloatField(blank=True, null=True)
-    category = models.ForeignKey(
-        categories, to_field='category', on_delete=models.CASCADE, null=True)
-
-    # pk = models.pkField()
+    category = models.ForeignKey(categories, on_delete=models.CASCADE, null=True)
     available = models.IntegerField(default=1)
     sold = models.IntegerField(default=0)
-    unit = models.CharField(max_length=10, default="Kg")
+    unit = models.ForeignKey(Unit,on_delete=models.CASCADE,null=True,blank=True)
     home_delivery = models.BooleanField(default=False)
     show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
+<<<<<<< HEAD
     thumbnail = models.ImageField(upload_to='images/', default=None)
     hit_count_generic = GenericRelation(
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
+=======
+    hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk',related_query_name='hit_count_generic_relation')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+>>>>>>> new-main
     expiry_date = models.DateField(null=True,blank=True)
     upload_date = models.DateField(auto_now_add=True, null=True)
     featured = models.BooleanField(default=False)
-    likes = models.ManyToManyField(
-        User, related_name='item_like',  blank=True)
+    likes = models.ManyToManyField(User, related_name='item_like',  blank=True)
 
     def number_of_likes(self):
         return self.likes.count()
@@ -125,6 +152,13 @@ class Item(models.Model):
             'user': self.user
         })
 
+    def get_thumbnail_path(self):
+        images = Images.objects.filter(item=self).first()
+        if(images):
+            return images.image.url
+        else:
+            return 
+    
     def get_remaining_days(self):
 
         return (self.expiry_date-self.upload_date)
@@ -139,9 +173,8 @@ class Item(models.Model):
 
 def get_image_filename(instance, filename):
     try:
-
-        id = instance.item.id
-        return "item_images/%s" % (id)
+        item=instance.item
+        return "item_images/%s/%s/%s" % (item.user,item.category,filename)
     except:
         return "item_images/"
 
@@ -246,9 +279,71 @@ class Comment(models.Model):
         return
 
 
+def get_image_path(instance, filename):
+    try:
+        return "about_images/%s" % (filename)
+    except:
+        return "about_images/"
+    
 class aboutpage(models.Model):
-    Content = models.TextField()
+    main_title = models.CharField(max_length=200,default=None)
+    main_content = models.TextField(null=True,blank=True)
+    bottom_title = models.CharField(max_length=200,default=None)
+    bottom_content = models.TextField(null=True,blank=True)
+   
+    
+class PageSections(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField(null=True,blank=True)
+    image = models.ImageField(upload_to=get_image_path)
+    is_for_bottom_section = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
 
+def get_staff_image_path(instance, filename):
+    try:
+        return "staff_images/%s/%s" % (instance.name_en,filename)
+    except:
+        return "staff_images/"
 
+class Staffs(models.Model):
+    name_en = models.CharField(max_length=100)
+    name_lc = models.CharField(max_length=100,null=True,blank=True)
+    post_en = models.CharField(max_length=100)
+    post_lc = models.CharField(max_length=100,null=True,blank=True)
+    image = models.ImageField(upload_to=get_staff_image_path)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+    
 class subscripiton(models.Model):
     email = models.EmailField()
+    
+class Partner(models.Model):
+    name_en = models.CharField(max_length=100)
+    name_lc = models.CharField(max_length=100,null=True,blank=True)
+    url = models.URLField(blank=True,null=True)
+    logo_url = models.URLField(blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+
+class PoweredBy(models.Model):
+    name_en = models.CharField(max_length=100)
+    name_lc = models.CharField(max_length=100,null=True,blank=True)
+    logo_url = models.URLField(blank=True,null=True)
+    url = models.URLField(blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
+class SocialMedia(models.Model):
+    
+    MEDIA_CHOICES= [
+        ('facebook','Facebook'),
+        ('instagram','Instagram'),
+        ('twitter','Twitter'),
+        ('youtube','Youtube'),
+    ]
+    
+    title = models.CharField(max_length=100)
+    url = models.URLField(blank=True,null=True)
+    icon = models.CharField(choices=MEDIA_CHOICES, max_length=20)
+    is_active = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)

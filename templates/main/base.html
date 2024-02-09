@@ -1,9 +1,5 @@
-{% load static %}
-{% load hitcount_tags %}
-{% load cart_template_tags %}
-{% load crispy_forms_tags %}
+{% load static crispy_forms_tags hitcount_tags cart_template_tags  custom_tags %}
 {{ form.media }} {# Adds date-picker required JS and CSS #}
-{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,7 +23,6 @@
             href=" {% static 'main/img/apple-touch-icon-144x144-precomposed.png' %} ">
         <!-- GOOGLE WEB FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet">
-        <link href=" https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css " rel="stylesheet">
         <!-- BASE CSS -->
         <link href=" {% static 'main/css/bootstrap.custom.min.css' %} " rel="stylesheet">
         <link href=" {% static 'main/css/style.css' %} " rel="stylesheet">
@@ -39,9 +34,11 @@
         <link href=" {% static 'main/css/home_1.css' %} " rel="stylesheet">
         <link href=" {% static 'main/css/product_page.css' %} " rel="stylesheet">
         <link href=" {% static 'main/css/leave_review.css' %} " rel="stylesheet">
-        <link href=" {% static 'main/css/about.css' %} " rel="stylesheet">  
+        <link href=" {% static 'main/css/about.css' %}" rel="stylesheet">  
+        <link href=" {% static 'faicon/css/faicon.css' %}" rel="stylesheet">  
         <!-- YOUR CUSTOM CSS -->
         <link href=" {% static 'main/css/custom.css' %} " rel="stylesheet">
+        <link href=" {% static 'main/css/toastr.min.css' %} " rel="stylesheet">
     </head>
     <body>
         <div id="page">
@@ -57,7 +54,7 @@
                                         width="100" height="35"></a>
                                 </div>
                             </div>
-                            <nav class="col-xl-7 col-lg-7">
+                            <nav class="col-xl-8 col-lg-8">
                                 <a class="open_close" href=" # ">
                                     <div class="hamburger hamburger--spin">
                                         <div class="hamburger-box">
@@ -76,34 +73,34 @@
                                   
                                         {% load pinax_messages_tags %}
                                         {% if request.user.is_authenticated %}
-                                        {% with user|unread_thread_count as user_unread %}
-                                        <li >
-                                            <a href="{% url 'pinax_messages:inbox' %}" class="header-title"><i class="fa fa-envelope"></i>
-                                                इनबक्स 
-                                            {% if user_unread %}<sup class="badge red z-depth-1 mr-1" >{{ user_unread }}</sup>{% endif %}
-                                            </a>
-                                        </li>
-                                        {% endwith %}
-                                        <li>
-                                            <a  href=" #" data-toggle="modal" class="header-title" data-target="#usermodal" ><i class="fa fa-user"></i> प्रोफाइल</a>
-                                        </li>
-                                        <li>
-                                            <a href="{% url 'core:home' %}users/items/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> मेरो उत्पादन</a>
-                                        </li>
-                                       
-                                        <li>
-                                            <a  href="#"  data-toggle="modal" class="header-title" data-target="#exampleModalCenter" id="sell-product-btn" ><i class="fa fa-sellsy"></i> उत्पादन वस्तु बेच्नुहोस्</a> 
-                                        </li>
-                                        <li>
-                                            <a href="{% url 'core:home' %}users/items-bid/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> Item Bids</a>
-                                        </li>
+                                            {% comment %} <li>
+                                                <a  href=" #" data-toggle="modal" class="header-title" data-target="#usermodal" ><i class="fa fa-user"></i> प्रोफाइल</a>
+                                            </li> {% endcomment %}
+                                            <li>
+                                                <a href="{% url 'core:home' %}users/items/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> मेरो उत्पादन</a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a  href="#"  data-toggle="modal" class="header-title" data-target="#exampleModalCenter" id="sell-product-btn" ><i class="fa fa-sellsy"></i> उत्पादन वस्तु बेच्नुहोस्</a> 
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'core:home' %}users/items-bid/{{ request.user.id}}/" class="header-title"><i class="fa fa-product-hunt"></i> बिडगरेका सामान </a>
+                                            </li>
+                                            {% with user|unread_thread_count as user_unread %}
+                                            <li >
+                                                <a href="{% url 'pinax_messages:inbox' %}" class="header-title"><i class="fa fa-envelope"></i>
+                                                    इनबक्स 
+                                                {% if user_unread %}<sup class="badge red z-depth-1 mr-1" >{{ user_unread }}</sup>{% endif %}
+                                                </a>
+                                            </li>
+                                            {% endwith %}
                                         {% endif %}
 
                                     </ul>
                                 </div>
                                 <!--/main-menu -->
                             </nav>
-                            <div class="col-xl-3 col-lg-3 d-lg-flex d-sm-d-md-inline-block align-items-center justify-content-end text-right font-small">
+                            <div class="col-xl-2 col-lg-2 d-lg-flex d-sm-d-md-inline-block align-items-center justify-content-end text-right font-small">
                                 <a class="text-white" href="http://price.krishiangan.com/" target="_blank"><span class="fa fa-money"> मूल्य खण्ड</span></a>
                                 <a class="text-white" href="{% static 'main/app/krishiaangan.apk' %}" download="Krishiaangan.apk"><span class="fa fa-android pl-3"> मोबाइल एप</span></a>
                             </div>
@@ -142,7 +139,7 @@
                                     </ul>
                                 </nav>
                             </div>
-                            <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
+                            <div class="col-xl-5 col-lg-5 col-md-5 d-none d-md-block">
                                 <div class="custom-search-input">
                                     <form action="{% url 'core:search_results' %}" method="get">
                                         <input name="q"  type="text" placeholder="उत्पादन वस्तु खोज्नुहोस्">
@@ -150,7 +147,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-2 col-md-3"> 
+                            <div class="col-xl-4 col-lg-4 col-md-4"> 
                                 {% load pinax_messages_tags %}
                                 <ul class="top_tools">
                                     {% if request.user.is_authenticated %}
@@ -185,26 +182,38 @@
                                     <li>
                                         {% if request.user.is_authenticated %}
                                         <div class="dropdown dropdown-access">
-                                            <a href=" #" data-toggle="modal" data-target="#usermodal"><i
-                                                class="ti-user"></i> {{request.user.username}}</a>
-                                            {% comment %} <a href=" {% url 'core:add_item' %} "
-                                                class="access_link"><span>{{request.user.username}}</span></a> {% endcomment %}
+                                            <a href=" #" data-toggle="modal" data-target="#usermodal">
+                                                {% if request.user.profile.photo%}
+                                                    <img class="rounded-circle" src="{{ request.user.profile.photo.url}}" height="30" width="30"></img>
+                                                {% else %}
+                                                    <img class="rounded-circle" src="{% static '/main/img/avatar2.jpg'%}" height="30" width="30"></img>
+                                                {% endif %}
+                                                {% if request.user.first_name%}
+                                                    {{request.user.first_name}}
+                                                {%else%} 
+                                                    {{request.user.username}}
+                                                {%endif%}
+                                            </a>
                                             <div class="dropdown-menu">
                                                 <a  class="btn_1" data-toggle="modal" data-target="#exampleModalCenter" id="sell-product-btn">उत्पादन वस्तु बेच्नुहोस्</a>
                                                 <ul>
                                                     <li>
-                                                        <a  href=" #" data-toggle="modal" data-target="#usermodal" ><i
-                                                            class="ti-user"></i>
-															मेरो प्रोफाइल</a>
+                                                        <a href=" #" data-toggle="modal" data-target="#usermodal">
+                                                            {% if request.user.profile.photo%}
+                                                                <img class="rounded-circle" src="{{ request.user.profile.photo.url}}"height="30" width="30" style="margin-left:-35px;"> &nbsp;मेरो प्रोफाइल</img>
+                                                            {% else %}
+                                                                <img class="rounded-circle" src="{% static '/main/img/avatar2.jpg'%}" height="30" width="30" style="margin-left:-35px;">&nbsp; मेरो प्रोफाइल</img>
+                                                            {% endif %}
+                                                        </a>
                                                     </li>
                                                     <li>
                                                         <a href=" {% url 'account_logout' %} "><i
                                                             class="ti-power-off"></i>लग-आउट</a>
                                                     </li>
-                                                    <li>
+                                                    {% comment %} <li>
                                                         <a href=" {% static 'main/help.html' %} "><i
                                                             class="ti-help-alt"></i>हेल्प </a>
-                                                    </li>
+                                                    </li> {% endcomment %}
                                                 </ul>
                                             </div>
                                         </div>
@@ -268,7 +277,7 @@
                     .modal.show .modal-dialog {
                     -webkit-transform: none;
                     transform: none;
-                    margin-top: 60px;
+                    margin-top: 30px;
                     }
                     .modal-content {
                     margin-top:60px !important;
@@ -290,18 +299,19 @@
                 <!-- /main_nav -->
             </header>
             <!-- /header -->
-            {% if messages %}
+            {% comment %} {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show bg-light text-{{message.tags}} text-center" role="alert">
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             {% endfor %}
-            {% endif %}
+            {% endif %} {% endcomment %}
             {% block content %}
             {% endblock content %}
+
             <footer class="revealed">
                 <div class="container">
                     <div class="row">
@@ -310,7 +320,8 @@
                             <div class="collapse dont-collapse-sm links" id="collapse_1">
                                 <ul>
                                     <li><a href=" {% url 'core:about' %} ">हाम्रो बारेमा</a></li>
-                                    <li><a href="#">हेल्प</a></li>
+                                    {% comment %} <li><a href="#">हेल्प</a></li> {% endcomment %}
+                                    <li><a href=" {% url 'core:partners' %} ">साझेदारहरू</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -326,25 +337,23 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 footer_title">
-                            <h3 data-target="#collapse_3">सम्पर्क </h3>
-                            <div class="collapse dont-collapse-sm contacts" id="collapse_3">
+                            <h3 data-target="#collapse_3">सम्पर्क</h3>
+                            <div class="collapse dont-collapse-sm contacts" id="collapse_4">
                                 <ul>
-                                    <li><i class="ti-home"></i> बालाजु<br>काठमाडौँ-१६, नेपाल</li>
-                                    {% comment %} 
-                                    <li><i class="ti-headphone-alt"></i>+977 423-23-221</li>
-                                    {% endcomment %}
-                                    <li><i class="ti-email"></i><a href=" #0 ">info@krishiangan.com</a></li>
+                                    <li><i class="ti-home"></i> बालाजु, काठमाडौँ-१६</li>
+                                    <li><i class="ti-email"></i><a href="mailto:info.krishiangan@gmail.com?subject=Inquiry">info.krishiangan@gmail.com</a></li>
+                                    <li><i class="ti-mobile"></i><a href="javascript:;"></a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 footer_title">
-                            <h3 data-target="#collapse_4">सम्पर्कमा रहनुस्</h3>
+                            <h3 data-target="#collapse_4">सदस्यता लिनुहोस्</h3>
                             <div class="collapse dont-collapse-sm" id="collapse_4">
                                 <div id="newsletter">
                                     <div class="form-group">
-                                        <form id="#"  method="POST" action="/subscribe/ " enctype="multipart/form-data">
+                                        <form id="#"  method="POST" action="{% url 'core:subscribe'%}" enctype="multipart/form-data">
                                             {% csrf_token %}
-                                            <input type="email" name="email" id="email_newsletter"
+                                            <input type="email" name="email" id="email_newsletter" required="true"
                                                 class="form-control" placeholder="हजूरको ई-मेल">
                                             <button type="submit" id="submit-newsletter"><i
                                                 class="ti-angle-double-right"></i></button>
@@ -354,22 +363,12 @@
                                 <div class="follow_us">
                                     <h5>फलो गर्नुहोस्</h5>
                                     <ul>
-                                        <li><a href=" #0 ">
-                                            <i class="ti-facebook"></i> 
-                                            </a>
-                                        </li>
-                                        <li><a href=" #0 ">
-                                            <i class="ti-instagram"></i> 
-                                            </a>
-                                        </li>
-                                        <li><a href=" #0 ">
-                                            <i class="ti-twitter"></i> 
-                                            </a>
-                                        </li>
-                                        <li><a href=" #0 ">
-                                            <i class="ti-youtube"></i> 
-                                            </a>
-                                        </li>
+                                        {% for media in social_media %}
+                                            <li><a target="_blank" class="text-white" href="{{media.url}}">
+                                                <i class="ti-{{media.icon}}"></i> 
+                                                </a>
+                                            </li>
+                                        {%endfor%}
                                     </ul>
                                 </div>
                             </div>
@@ -378,7 +377,7 @@
                     <!-- /row-->
                     <hr>
                     <div class="row add_bottom_25">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <ul class="footer-selector clearfix">
                                 <li>
                                     <div class="styled-select lang-selector">
@@ -398,10 +397,16 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
+                            <ul class="footer-selector clearfix text-white text-center" style="opacity: .8;">
+                                {% if powered_by %}
+                                <li>Powered By: <a href="{{powered_by.url}}">{{powered_by.name_en}}</a></li>
+                                {%endif%}
+                            </ul> 
+                        </div>
+                        <div class="col-lg-4">
                             <ul class="additional_links">
                                 <li><a href=" {% url 'core:terms' %} ">नियम र सर्तहरू</a></li>
-                                <li><a href=" {% url 'core:terms' %}  ">नियम र सर्तहरू</a></li>
                                 <li><span>© २०२० कृषि आंगन</span></li>
                             </ul>
                         </div>
@@ -426,13 +431,17 @@
         <script src=" {% static 'main/js/datatable.min.js' %} "></script>
         <script src=" {% static 'main/js/carousel-home.min.js' %} "></script>
         <script src=" {% static 'main/js/isotope.min.js' %} "></script>
+
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script>
             // Isotope filter
             $(window).on('load', function () {
             	var $container = $('.isotope-wrapper');
             	$container.isotope({ itemSelector: '.isotope-item', layoutMode: 'masonry' });
+
+                
+
             });
             $('.isotope_filter').on('click', 'a', 'change', function () {
             	var selector = $(this).attr('data-filter');
@@ -441,6 +450,9 @@
             
             $('.leavecomment').on('click', function (event) {
             	$(this).next('.testdiv').toggle('swing');
+            });
+            $.ajaxSetup({
+                data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
             });
 
             $('#bid-table').DataTable({
@@ -455,12 +467,37 @@
             $('#sell-product-btn').on('click',function(){
                 $('.main-menu').removeClass('show');
             });
-
-            
         </script>
-        <!-- Modal -->
+
+        <!-- Mobile otp verification-->
+        <div class="modal fade" id="mobileVerificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Mobile Verification</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add your mobile verification form or content here -->
+                        <form method="post" action="{% url 'core:verify_mobile_number' %}">
+                            {% csrf_token %}
+                            <!-- Add your form fields and submit button here -->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- You can add additional buttons or actions here if needed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Sell item Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">आफ्नो उत्पादन वस्तु बेच्नुहोस्</h5>
@@ -472,66 +509,131 @@
                         {% if request.user.is_authenticated %}
                         <form id="post_form" method="post" action="/add-item/" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {{ postForm|crispy }}
-                            {{ formset.management_form }}
-                            {% for form in formset %}
-                            {{ form|crispy }}
+                            <div class="form-row">
+                                {% for pform in postForm %}
+                                    <div>{{ pform|as_crispy_field}}</div>
+                                {%endfor%}
+                                {%include 'custom_fields/multiple_images.html' %}    
+                            {% for form in formset %} 
+                                <div class="col-md-12 py-2">{{ form|crispy}}</div>
                             {% endfor %}
+                            </div>
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">बन्द गर्नुहोस्</button>
                     {% comment %} <button type="input" class="btn btn-primary">Save changes</button> {% endcomment %}
-                    <input class="btn btn-primary" type="submit" name="submit" value="Submit" />
+                    <input class="btn btn-primary" type="submit" name="submit" value="सेभ गर्नुहोस्" />
                     </form>
                     {% else %}
                     <h3>पहिला लग-इन गर्नुहोस् ! </h3>
                     {% endif %}
+                    <script src="{% static 'main/js/create_update.js' %} "></script>
+                    <script>
+                        toggleDiscountField();
+                        function toggleDiscountField(){
+                            var checkbox = document.getElementById("id_has_discount");
+                            var discountField = document.getElementById("id_discount_price");
+                    
+                            // Enable or disable the field based on the checkbox state
+                            discountField.disabled = !checkbox.checked;
+                        }
+                    </script>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- user profile modal -->
         <div class="modal fade" id="usermodal" tabindex="-1" role="dialog" aria-labelledby="usermodalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="usermodalLongTitle">Update Your Info</h5>
+                        <h5 class="modal-title" id="usermodalLongTitle">आफ्नो प्रोफाइल अपडेट गर्नुहोस् </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         {% if request.user.is_authenticated %}
-                        <form id="search_form"  method="POST" action="/accounts/update/ " enctype="multipart/form-data">
-                            {% csrf_token %} {{ noodle_form|crispy }}
+                        <form id="user_profile_form" method="POST" action="{% url 'core:account_update' request.user.id %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-row"> 
+                            {% for nform in noodle_form %}
+                                {% if nform|field_type == 'TextInput'%}
+                                    <div class="col-md-6 py-2">{{ nform|as_crispy_field}}</div>
+                                {% elif nform|field_type == 'EmailInput'%}
+                                    <div class="col-md-12">{{ nform|as_crispy_field}}</div>
+                                {%endif%}
+                            {%endfor%}
+                                
                             <div class="divider"></div>
-                            {{ userformset.management_form }}
-                            {{ userformset|crispy }}
+                            
+                            {% for uform in userformset %}
+                                {% if uform|field_type == 'TextInput'%}
+                                    <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
+                                {% elif uform|field_type in 'Textarea,ClearableFileInput,ImageWidget'%}
+                                    <div class="col-md-12">{{ uform|as_crispy_field}}</div>
+                                {%else%}
+                                <div class="col-md-6 py-2">{{ uform|as_crispy_field}}</div>
+                                {%endif%}
+                            {%endfor%}
+                        </div>
                         </form>
                         {% else %}
                         <h3>Login First </h3>
                         {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">बन्द गर्नुहोस्</button>
                         {% if request.user.is_authenticated %}
-                            <button onclick="form_submit()" class="btn btn-primary">Save changes</button> 
+                            <a id="form_submit_btn" type="button" class="btn btn-primary text-white">सेभ गर्नुहोस्</a> 
                             {% else %}
                             <a href=" {% url 'account_login' %} " class="btn_1">साइन इन </a>
                         {% endif %}    
                     </div>
                     <script type="text/javascript">
-                        function form_submit(){
-                         document.getElementById("search_form").submit();
-                        
-                        }
-                        
+                        $('#form_submit_btn').click(function(){
+                            let form = $('#user_profile_form')[0];
+                            let form_data = new FormData(document.getElementById('user_profile_form'))
+                            let upload_files = '';     
+
+                            if($("[name='user-0-photo']").val()){
+                                upload_files = $("[name='user-0-photo']")[0].files;
+                            }
+                    
+                            if(upload_files !=''){
+                                form_data.append('user-0-photo',upload_files[0],upload_files[0].name)
+                            }
+                            $.ajax({
+                                    type:'POST',
+                                    url:form.action,
+                                    data:form_data,
+                                    processData: false,
+                                    contentType: false,
+                                    enctype: 'multipart/form-data',
+                                }).done(function(response){
+                                    if(response.status == 'true'){
+                                        swal({
+                                        position: 'top',
+                                        icon: 'success',
+                                        title: response.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                        })
+                                        location.reload();
+                                    }
+                                    if(response.status =='false'){
+                                        swal(response.message)
+                                    }
+                                });
+                        });
                         
                     </script> 
                 </div>
             </div>
         </div>
 
-         <!-- bid item modal -->
+<!-- bid item modal -->
 <div class="modal fade" id="itemBidModal" tabindex="-1" role="dialog" aria-labelledby="itemBidModalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -570,4 +672,47 @@
     </div>
 </div>
     </body>
+    {% block extra_script %}
+
+    <script>
+        // Check if there are error messages in the Django messages framework
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "500",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+          }
+            // Load the JSON data from the Django template variable
+            let messages_res = {{ messages|messages_to_json|safe }};
+            // Display error messages using toastr
+            if (messages_res) {
+                messages_res.forEach(function(message) {
+                    switch (message.type) {
+                        case 'error':
+                            toastr.error(message.message, 'Error');
+                            break;
+                        case 'success':
+                            toastr.success(message.message, 'Success');
+                            break;
+                        case 'warning':
+                            toastr.warning(message.message, 'Warning');
+                            break;
+                        case 'info':
+                            toastr.info(message.message, 'Info');
+                            break;
+                    }    });
+            }
+    </script>
+    {% endblock %}
 </html>

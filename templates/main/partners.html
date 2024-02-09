@@ -1,0 +1,25 @@
+
+{% extends "account/base.html" %}
+{% load static custom_tags %}
+{% block content %}
+<main class="bg_gray">
+	<div class="container margin_30 add_bottom_30 px-5">
+        <div class="main_title">
+            <h2>Partners</h2>
+        </div>
+
+        <div class="row content padding_30">
+            {%for partner in partners%}
+            <div class="card col-sm-4 col-md-3 col-lg-2 m-3 rounded_corner">
+                <a href="{{partner.url}}" target="_blank" title="{{partner.name_en}}">
+                    <div class="card-body text-center rounded-circle">
+                        <img src="{{partner.logo_url}}" class="rounded" height:"70" width="70">
+                    </div>
+                </a>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+
+</main>
+{% endblock content %}

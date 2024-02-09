@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Successful</title>
+    <!-- Add your own styling here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        p {
+            color: #666666;
+        }
+        a{
+            font-weight:600;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #63d568;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .regards{
+            color:black;
+            font-size:15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Subscription Successful</h1>
+        <p>Thank you for subscribing to our newsletter! You'll now receive the latest updates and news.</p>
+        
+        <!-- Add any additional content here -->
+
+        <p>If you have any questions, feel free to <a href="mailto:{{from_email}}">contact us</a>.</p>
+
+        <br/>
+        <br/>
+        <p class="regards">Best regards,<br>Krishiangan Team</p>
+
+        <br/>
+        <!-- Add social media or other links if needed -->
+        <p>You may unsubscribe at any time if you would no longer like to get updates !</p>
+
+        <p>
+            <a href="{{base_url}}/unsubscribe?email={{recipient_email}}" class="button">Unsubscribe</a>
+        </p>
+    </div>
+</body>
+</html>

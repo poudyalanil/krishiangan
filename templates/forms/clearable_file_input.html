@@ -1,0 +1,21 @@
+{% load static %}
+<div class="clearable-file-input">
+    {% if value %}
+        <div class="current-file">
+            <img src="{{ value.url }}" width="200" height="200" alt="Current Image"/>
+            <p>{{ value }}</p>
+            <a href="#" class="clear-checkbox" onclick="clearFileInput(this); return false;">Clear</a>
+        </div>
+    {% endif %}
+    <input type="file" name="{{ name }}"{% if value %} style="display:none;"{% endif %} {% include "attrs.html" %}>
+</div>
+
+<script>
+    function clearFileInput(input) {
+        input.previousElementSibling.style.display = 'block';
+        input.previousElementSibling.previousElementSibling.src = '';
+        input.previousElementSibling.previousElementSibling.alt = '';
+        input.previousElementSibling.previousElementSibling.previousElementSibling.value = '';
+        input.style.display = 'none';
+    }
+</script>

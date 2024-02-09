@@ -10,7 +10,7 @@
 <meta property="og:url" content="{{request.build_absolute_uri}}" />
 
 <meta property="og:description" content="{{object.description}}"/>
-<meta property="og:image" content="/media/{{object.thumbnail}}" />
+<meta property="og:image" content="/media/{{object.get_thumbnail_path}}" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="कृषिआँगन" />
 <script type="text/javascript">
@@ -60,7 +60,7 @@
                         {% for p in photos %}
                         <div style="background-image: url( {{p.image.url}} );" class="item-box"></div>
                         {% empty %}
-                        <div style="background-image: url( {{object.thumbnail.url}} );" class="item-box"></div>
+                        <div style="background-image: url( {{object.get_thumbnail_path}} );" class="item-box"></div>
                         {% endfor %}
                     </div>
                     <div class="left nonl"><i class="ti-angle-left"></i></div>
@@ -82,7 +82,7 @@
             <div class="breadcrumbs">
                 <ul>
                     <li><a href="http://127.0.0.1:8000">गृहपृष्ठ</a></li>
-                    <li><a href="#">{{object.category.category}}</a></li>
+                    <li><a href="{% url 'core:category' pk=object.category_id %}">{{object.category.category}}</a></li>
                     <li>{{ object.title}}</li>
                 </ul>
             </div>
@@ -92,7 +92,7 @@
                 <span class="rating">
                 <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
                     class="icon-star voted"></i><i class="icon-star"></i><em>{{ number_of_likes|convertToNepali }} मानिसहरूले यो उत्पादन मन पराए</em></span>
-                <p><small>प्रयोगकर्ता : {{ object.user.username }}</small></p>
+                <p><small>बिक्रेता : {{ object.user.first_name }} {{object.user.last_name}}</small></p>
                 <span class="new_price">उपलब्ध : {{object.get_available_item}}</span>
                 <div class="prod_options">
                     <div class="row">
@@ -104,7 +104,7 @@
                             class="btn btn-outline-success"><i class="ti-email"></i> सन्देश पठाउनुहोस्</a>
                             {% endif %}
                             <div class="d-flex pt-3">
-                                {% comment %} {% post_to_facebook "<img src='object.thumbnail.url'>" "Post to Facebook!"%} {% endcomment %}
+                                {% comment %} {% post_to_facebook "<img src='object.get_thumbnail_path'>" "Post to Facebook!"%} {% endcomment %}
                                  <div id="fb-root"></div>
                                 <div class="fb-share-button" 
                                     data-href="{{ request.build_absolute_uri }}" 
@@ -361,15 +361,19 @@
             <p>User who viewed this item also viewed: </p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
-            {% for item in items|sort_by:'-hit_count_generic__hits'|filter_category:object.category.category|slice:":6"%}
+            {% for item in items|sort_by:'-hit_count_generic__hits'|filter_category:object.category.id|slice:":6"%}
             <div class="item">
                 <div class="grid_item">
                     {% if item.discount_price %}
-                    <span class="ribbon off">-{{ item.get_discount_percent }}%</span>
+                    <span class="ribbon off">-{{ item.get_discount_percent|convertToNepali }}%</span>
                     {% endif%}
                     <figure>
                         <a href=" {{item.get_absolute_url}} ">
-                        <img class="owl-lazy" src=" {{item.image.url}}" data-src="{{item.thumbnail.url}}" alt="">
+                            {%if item.get_thumbnail_path%}
+								<img class="img-fluid lazy" src=" {{item.get_thumbnail_path}}" data-src="{{item.get_thumbnail_path}}" alt="" style="max-height:200px; min-height:200px;" >
+							{%else%}
+								<img class="img-fluid lazy" src="/static/main/img/products/product_placeholder_detail.jpg" alt="" style="max-height:200px; min-height:200px;">
+							{%endif%}
                         </a>
                     </figure>
                     <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i
@@ -380,11 +384,11 @@
                     </a>
                     <div class="price_box">
                         {% if item.discount_price %}
-                        <span class="new_price">Rs.{{ item.discount_price }}</span>
-                        <span class="old_price">Rs.{{ item.price }}</span>
-                        {% else %}
-                        <span class="new_price">Rs.{{ item.price }}</span>
-                        {% endif %}
+							<span class="new_price">रू {{ item.discount_price|convertToNepali }}</span>
+							<span class="old_price">रू {{ item.price|convertToNepali }}</span>
+							 {% else %}
+							 <span class="new_price">रू {{ item.price|convertToNepali }}</span>
+						{% endif %}
                     </div>
                     <ul>
                         {% if post_is_liked %}

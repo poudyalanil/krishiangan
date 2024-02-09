@@ -8,25 +8,29 @@ SECRET_KEY = '-05sgp9!deq=q1nltm@^^2cc+v29i(tyybv3v2t77qi66czazj'
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'core',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'crispy_forms',
     "pinax.messages",
     'rest_framework',
-    "bootstrapform",
+    'crispy_bootstrap4',
     "pinax.templates",
-    'material',
     'hitcount',
+<<<<<<< HEAD
     'django_social_share'
+=======
+    'django_social_share',
+>>>>>>> new-main
 ]
 
 MIDDLEWARE = [
@@ -38,15 +42,26 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'core.middleware.MobileVerificationMiddleware'
 ]
 
 ROOT_URLCONF = 'agmarket.urls'
+<<<<<<< HEAD
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+=======
+>>>>>>> new-main
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+ACCOUNT_USERNAME_REQUIRED = False
+
+ACCOUNT_FORMS = {'signup': 'core.forms.MyCustomSignupForm',
+                 'login': 'core.forms.MyCustomLoginForm'
+                }
 
 TEMPLATES = [
     {
@@ -72,15 +87,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_in_env')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 DATABASES = {
     'default': {
@@ -89,7 +95,7 @@ DATABASES = {
         'PORT': 5432,
         'NAME': 'krishiangan',
         'USER': 'postgres',
-        'PASSWORD': 'admin'
+        'PASSWORD': 'admin',
     }
 }
 
@@ -115,16 +121,34 @@ AUTHENTICATION_BACKENDS = [
 
 ]
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'info.krishiangan@gmail.com'
-EMAIL_HOST_PASSWORD = 'btxntmfycjalvhtr'
-DEFAULT_FROM_EMAIL = 'MarketSuperviser'
+EMAIL_HOST_PASSWORD = 'zkqftfutqyytlcsp'
+DEFAULT_FROM_EMAIL = 'Krishiangan'
 
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
+BASE_URL='https://krishiangan.com'
+# BASE_URL='http://127.0.0.1:8000'
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+SMS_TOKEN='v2_kGCHEN8VopIfLY1xgDTsAf5CFlE.yfaD'
+SMS_FROM='Krishiangan'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_in_env/'),
+]
+MEDIA_URL='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE= True
+SESSION_COOKIE_AGE = 1800
+SESSION_SAVE_EVERY_REQUEST = True
