@@ -24,13 +24,10 @@ from django.views.generic import ListView, DetailView, View, CreateView
 from core.templatetags.custom_tags import convert_to_english_numbers
 from django.forms.models import modelformset_factory
 from allauth.account.views import PasswordResetView, PasswordResetFromKeyView
+from django.contrib.auth.hashers import make_password
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'account/custom_password_reset.html'
-
-class CustomPasswordResetFromKeyView(PasswordResetFromKeyView):
-    template_name = 'account/custom_password_reset_from_key.html'
-
 
 def account_reset_send_otp(request):
     if request.method == 'POST':
@@ -40,43 +37,87 @@ def account_reset_send_otp(request):
         if user_profile.exists():
             user_profile= user_profile.first()
             otp_code = generate_otp()
-            # r = send_otp_via_sms(mobile, otp_code)
-            status_code = 200
-            if status_code == 200:
-            # if r.status_code == 200:
+            r = send_otp_via_sms(mobile, otp_code)
+            # status_code = 200
+            # if status_code == 200:
+            if r.status_code == 200:
                 user_profile.otp_code = otp_code
                 user_profile.valid_until = timezone.now() + timedelta(minutes=5)
                 user_profile.save()
                 messages.success(request, 'OTP is sent to the registered mobile number!!')
+                request.session['mobile_number']=mobile
+                return redirect('core:account_reset_otp_verify')
             else:
                 messages.error(request, r.json().get('response', 'Failed to send OTP'))
         else:
             messages.error(request,'Sorry, we cannot find the records with provided infomation! \n Please contact Administrator !!')
             return redirect('core:account_reset_password')            
-    return render(request,'main/otp_screen_for_reset.html',{'mobile_number':mobile});        
-
+    else:
+        return redirect('/')
+        
 
 def account_reset_verify_otp(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        mobile_number = request.session.get('mobile_number',None)
+        return render(request,'main/otp_screen_for_reset.html',{'mobile_number':mobile_number})
+    else :
         mobile = request.POST['mobile_number']
         verification_code = request.POST['verification_code']
         user_profile = UserProfile.objects.get(phone=mobile)
         user = user_profile.user
+        
         if len(verification_code) == 6:
             if int(verification_code) == user_profile.otp_code:
+                user_profile.allow_password_change = True
                 user_profile.otp_code = None
                 user_profile.valid_until = None
                 user_profile.save()
-                messages.success(request,'Mobile Number is verified successfully !')
-                return redirect('/')
+                messages.success(request,'OTP code verified successfully !')
+                return redirect('core:account_reset_password_from_otp')
             else:    
                 messages.error(request,'Incorrect OTP Verification Code !')
-                redirect(request.META.get('HTTP_REFERER'))
         else:
-                messages.error(request,'OTP Verification Code does not match !')
-                redirect(request.META.get('HTTP_REFERER'))
-    return redirect('core:account_reset_password_from_otp')    
-    
+            messages.error(request,'OTP Verification Code does not match !')
+        return render(request,'main/otp_screen_for_reset.html',{'mobile_number':mobile});        
+
+def password_change(request):
+    mobile_number_session = request.session.get('mobile_number',None)
+    if request.method == 'GET':
+        if mobile_number_session:
+            user_profile= UserProfile.objects.get(phone=mobile_number_session)
+            if user_profile.allow_password_change:
+                return render(request,'account/custom_password_reset_from_otp.html',{'mobile_number':mobile_number_session})
+            else:
+                messages.warning(request,'User is not authorized to change password !!')
+                return redirect('/')
+    else:
+        try:
+            mobile_number= request.POST.get('mobile_number')
+            #check if user input data matches session data
+            if mobile_number != mobile_number_session:
+                messages.error(request,'There has been some breach in the data !!')
+                return redirect('/')
+            password1= request.POST.get('password1')
+            password2= request.POST.get('password2')
+            if password1 == password2:
+                user_profile=UserProfile.objects.get(phone=mobile_number)
+                user = user_profile.user
+                User.objects.filter(username=user.username).update(password=make_password(password1))
+                user_profile.allow_password_change= False
+                user_profile.save()
+                #delete mobile number from sesssion
+                del request.session['mobile_number']
+                messages.success(request,'Password Changed Successfully \n Proceed to Login')
+                return redirect('core:account_login')
+            else:
+                messages.error(request,'Password does not match !!')
+                return redirect('core:account_reset_password_from_otp')
+                
+        except Exception as e:
+            print(e)
+            messages.error(request,e)
+            return redirect('core:account_reset_password_from_otp')
+            
     
 def accountSignup(request):
     username=request.POST.get('mobile')
@@ -117,6 +158,7 @@ def accountLogin(request):
         login(request, user)
         return redirect("/")
     else:
+        messages.error(request,"Credentials doesn't match with our records !")
         return redirect('/accounts/login/')
 
     
@@ -249,6 +291,7 @@ def verify_mobile(request):
             if len(verification_code) == 6:
                 if int(verification_code) == user_profile.otp_code:
                     user_profile.is_mobile_verified = True
+                    user_profile.verified_datetime = timezone.now()
                     user_profile.otp_code = None
                     user_profile.valid_until = None
                     user_profile.save()
