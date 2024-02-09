@@ -11,7 +11,7 @@ urlpatterns = [
     path('accounts/login',accountLogin , name='account_login'),
     path('accounts/update/<int:pk>',updateUserProfile , name='account_update'),
     
-    path('send-otp-to-registered-mobile',send_otp_code,name='send_otp_code'),
+    # path('send-otp-to-registered-mobile',send_otp_code,name='send_otp_code'),
     path('verify_mobile',verify_mobile,name='verify_mobile_number'),
     
 
