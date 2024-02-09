@@ -128,52 +128,80 @@ def updateUserProfile(request,pk):
 def generate_otp():
     # Get the current timestamp
     current_timestamp = int(time.time())
-
     # Generate a random component
     random_component = random.randint(100000, 999999)
-
     # Combine timestamp and random component to create the OTP
     otp = (current_timestamp % 1000000) * 1000000 + random_component
 
     return otp % 1000000  # Ensure the result is a 6-digit number
 
+
+def send_otp_via_sms(mobile_number, otp_code):
+    url = "http://api.sparrowsms.com/v2/sms/"
+    token = "v2_kGCHEN8VopIfLY1xgDTsAf5CFlE.yfaD"
+    message = f'Your OTP verification code is: {otp_code}'
+    data = {'token': token, 'from': 'TheAlert', 'to': mobile_number, 'text': message}
+    
+    r = requests.post(url, data=data)
+    return r
+
+def send_otp_code(request):
+    if request.user.is_authenticated:
+        user = request.user
+        user_profile = user.profile
+        mobile_number = user_profile.phone
+
+        if not user_profile.is_mobile_verified:
+            if mobile_number:
+                if user_profile.otp_code is None:
+                    otp_code = generate_otp()
+                    # r = send_otp_via_sms(mobile_number, otp_code)
+                    r.status_code =200
+                    if r.status_code == 200:
+                        user_profile.otp_code = otp_code
+                        user_profile.valid_until = timezone.now() + timedelta(minutes=5)
+                        user_profile.save()
+                        messages.success(request, 'OTP is sent to the registered mobile number!!')
+                    else:
+                        messages.error(request, r.json().get('response', 'Failed to send OTP'))
+                else:
+                    messages.info(request, 'OTP has already been sent to the registered mobile number. Please try after some time!!')
+            else:
+                messages.warning(request, 'Logged-in user does not have a mobile number!!')
+        else:
+            messages.info(request, 'The user\'s phone number is already verified!!')
+
+    return redirect('/')
+
 def verify_mobile(request):
     if request.user.is_authenticated:
         user = request.user
         user_profile = user.profile
-        mobile_number=user_profile.phone
-        if user_profile.is_mobile_verified is False:
-            if mobile_number:
-                
-                if user_profile.otp_code is None:
-                    otp_code = generate_otp()
-                    r = requests.post(
-                            "http://api.sparrowsms.com/v2/sms/",
-                            data={'token' :"v2_kGCHEN8VopIfLY1xgDTsAf5CFlE.yfaD",
-                                'from'  : 'TheAlert',
-                                'to'    : mobile_number,
-                                'text'  : f'Your OTP verification code is : {otp_code}'})
-                    status_code = r.status_code
-                    response = r.text
-                    response_json = r.json()
-                    #Also inset that code and time in user database
-                    if status_code == 200:
-                        user_profile = user.profile
-                        user_profile.otp_code = otp_code
-                        user_profile.valid_until=timezone.now() + timedelta(minutes=5)
-                        user_profile.save()
-                        messages.success(request,'OTP is sent to registered mobile number !!')
-                    else:
-                        messages.error(request,response_json['response'])    
-                else:
-                    messages.info(request,'OTP has already been sent to registered mobile number. Please try after some time !!')
+        mobile_num = user_profile.phone
+        masked_number = mobile_num[:1] + 'x'*6 + mobile_num[7:]
+        
+        if request.method == 'GET':
+            if user_profile.is_mobile_verified:
+                return redirect('/')
+            return render(request,'main/otp_screen.html',{'masked_number':masked_number})
+        else:    
+            verification_code = request.POST['verification_code']
+            if len(verification_code) == 6:
+                print(verification_code,user_profile.otp_code)
+                if int(verification_code) == user_profile.otp_code:
+                    user_profile.is_mobile_verified = True
+                    user_profile.otp_code = None
+                    user_profile.valid_until = None
+                    user_profile.save()
+                    messages.success(request,'Mobile Number is verified successfully !')
+                    return redirect('/')
+                else:    
+                    messages.error(request,'Incorrect OTP Verification Code !')
             else:
-                messages.warning(request,'Logged in user does not have mobile number !!')
-        else:
-            messages.info(request,'The users phone number is already verified !!')
-            
-    return redirect('/')    
-
+                    messages.error(request,'OTP Verification Code does not match !')
+        return redirect('core:verify_mobile_number')
+       
+                        
 def subscribe(request):
     if request.method == 'POST':
         receiveForm = SubscriptionForm(request.POST)

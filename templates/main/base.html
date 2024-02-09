@@ -207,10 +207,6 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href=" {% url 'core:verify_mobile_number' %} "><i
-                                                            class="ti-mobile"></i>Verify Mobile</a>
-                                                    </li>
-                                                    <li>
                                                         <a href=" {% url 'account_logout' %} "><i
                                                             class="ti-power-off"></i>लग-आउट</a>
                                                     </li>
@@ -472,7 +468,34 @@
                 $('.main-menu').removeClass('show');
             });
         </script>
-        <!-- Modal -->
+
+        <!-- Mobile otp verification-->
+        <div class="modal fade" id="mobileVerificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Mobile Verification</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add your mobile verification form or content here -->
+                        <form method="post" action="{% url 'core:verify_mobile_number' %}">
+                            {% csrf_token %}
+                            <!-- Add your form fields and submit button here -->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- You can add additional buttons or actions here if needed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Sell item Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
@@ -520,6 +543,7 @@
             </div>
         </div>
 
+        <!-- user profile modal -->
         <div class="modal fade" id="usermodal" tabindex="-1" role="dialog" aria-labelledby="usermodalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
@@ -609,7 +633,7 @@
             </div>
         </div>
 
-         <!-- bid item modal -->
+<!-- bid item modal -->
 <div class="modal fade" id="itemBidModal" tabindex="-1" role="dialog" aria-labelledby="itemBidModalTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
