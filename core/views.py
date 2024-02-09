@@ -500,14 +500,10 @@ class ItemDetailView(HitCountDetailView):
             user_form = UserForm(instance=self.request.user)
             ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
                 'phone', 'city', 'country', 'organization', 'photo',  'bio',))
-<<<<<<< HEAD
-            userformset = ProfileInlineFormset(instance=self.request.user)
-=======
             # userformset = ProfileInlineFormset(instance=self.request.user)
             profile_id = UserProfile.objects.filter(user=self.request.user).first()
             userformset = UserProfileForm(instance=profile_id)
             
->>>>>>> new-main
             biditemform = BidItemForm()
             postForm = AdditemForm()
             itemformset = ImageFormSet(queryset=Images.objects.none())
@@ -931,15 +927,11 @@ def user_items_bids(request,pk):
     
     bid_items = BidItem.objects.filter(item__in=items,is_withdrawn=False)
     
-<<<<<<< HEAD
-    return render(request, "main/item-bids.html",{'bid_items':bid_items})
-=======
     user_form = UserForm(instance=request.user)
     profile_id = UserProfile.objects.filter(user=request.user).first()
     userformset = UserProfileForm(instance=profile_id)
     
     return render(request, "main/item-bids.html",{'bid_items':bid_items,'noodle_form':user_form,'userformset':userformset})
->>>>>>> new-main
 
 @login_required()    
 def withdraw_bid(request,pk):
