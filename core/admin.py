@@ -4,8 +4,8 @@ from .models import *
 
 class ImagesAdmin(admin.StackedInline):
     model = Images
-
-
+    
+    
 class ItemAdmin(admin.ModelAdmin):
     inlines = [ImagesAdmin]
 
@@ -14,6 +14,12 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_display = ('title', 'category', 'available','unit','price','sold','discount_price','home_delivery','price_negotiable','user','upload_date','expiry_date')
     list_filter = ('user','category','featured','upload_date','price_negotiable','home_delivery')
+class UserProfileAdmin(admin.ModelAdmin):
+    class Meta:
+        model = UserProfile()
+    search_fields = ('title',)
+    list_display = ('phone', 'user', 'is_email_verified','is_mobile_verified')
+    list_filter = ('phone', 'user', 'is_email_verified','is_mobile_verified')
 
 
 class ImagesAdmin(admin.ModelAdmin):
@@ -73,5 +79,6 @@ admin.site.register(Staffs,StaffsAdmin)
 admin.site.register(subscripiton)
 admin.site.register(Partner,PartnerAdmin)
 admin.site.register(PoweredBy,PoweredByAdmin)
-admin.site.register(UserProfile)
 admin.site.register(SocialMedia,SocialMediaAdmin)
+
+admin.site.register(UserProfile,UserProfileAdmin)

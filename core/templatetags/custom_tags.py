@@ -48,6 +48,25 @@ def convert_to_nepali_numbers(value):
 
 register.filter('nepali_numbers', convert_to_nepali_numbers)
 
+
+english_numbers = {
+     '०' :'0',
+     '१' :'1',
+     '२' :'2',
+     '३' :'3',
+     '४' :'4',
+     '५' :'5',
+     '६' :'6',
+     '७' :'7',
+     '८' :'8',
+     '९' :'9',
+}
+
+def convert_to_english_numbers(value):
+    return ''.join(english_numbers.get(char, char) for char in str(value))
+
+register.filter('english_numbers', convert_to_english_numbers)
+
 @register.filter
 def messages_to_json(messages):
     """

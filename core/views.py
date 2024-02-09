@@ -21,9 +21,10 @@ from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 import requests,time,random
 from django.views.generic import ListView, DetailView, View, CreateView
-
+from core.templatetags.custom_tags import convert_to_english_numbers
 from django.forms.models import modelformset_factory
 import smtplib,ssl
+
 def accountSignup(request):
     username=request.POST.get('mobile')
     first_name=request.POST.get('first_name')
@@ -101,15 +102,18 @@ def updateUserProfile(request,pk):
         user.last_name =request.POST.get('last_name'); 
         user.email =request.POST.get('email')
         user.save()
-        
-        print(request.FILES)
-        print(request.POST)
         user_profile = UserProfile.objects.get(user_id=pk)
         if(user_profile is None):
             user_profile = UserProfile
             user_profile.user_id=pk
         user_profile.bio = request.POST.get('bio')
-        user_profile.phone = request.POST.get('phone')
+        
+        if user_profile.is_mobile_verified :
+            if user_profile.phone != request.POST.get('phone'):
+                messages.warning(request,'Verified Mobile number cannot be changed.\n Please Contact Administrator  !!' )
+        else:    
+            user_profile.phone = request.POST.get('phone')
+            
         user_profile.city = request.POST.get('city')
         user_profile.country = request.POST.get('country')
         user_profile.organization = request.POST.get('organization')
@@ -155,8 +159,8 @@ def send_otp_code(request):
             if mobile_number:
                 if user_profile.otp_code is None:
                     otp_code = generate_otp()
-                    # r = send_otp_via_sms(mobile_number, otp_code)
-                    r.status_code =200
+                    r = send_otp_via_sms(mobile_number, otp_code)
+                    # r.status_code =200
                     if r.status_code == 200:
                         user_profile.otp_code = otp_code
                         user_profile.valid_until = timezone.now() + timedelta(minutes=5)
@@ -178,6 +182,9 @@ def verify_mobile(request):
         user = request.user
         user_profile = user.profile
         mobile_num = user_profile.phone
+        
+        #check if mobile number is nepali; convert if nepali
+        mobile_num = convert_to_english_numbers(mobile_num) if not isinstance(mobile_num,int) else mobile_num
         masked_number = mobile_num[:1] + 'x'*6 + mobile_num[7:]
         
         if request.method == 'GET':
@@ -187,7 +194,6 @@ def verify_mobile(request):
         else:    
             verification_code = request.POST['verification_code']
             if len(verification_code) == 6:
-                print(verification_code,user_profile.otp_code)
                 if int(verification_code) == user_profile.otp_code:
                     user_profile.is_mobile_verified = True
                     user_profile.otp_code = None
@@ -769,14 +775,12 @@ def edit_item(request, pk):
 
 @login_required()  # only logged in users should access this
 def edit_user(request):
-    print("i am inside request")
 
     if request.method == "POST":
         user_form = UserForm(instance=request.user)
         ProfileInlineFormset = inlineformset_factory(User, UserProfile, fields=(
             'phone', 'city', 'country', 'organization', 'photo',  'bio',))
 
-        print("i am inside post dialoag user")
         user = User.objects.get(pk=request.user.id)
 
         user_form = UserForm(request.POST, request.FILES, instance=user)

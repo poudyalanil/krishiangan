@@ -14,7 +14,7 @@ class ImageWidget(ClearableFileInput):
 class MyCustomSignupForm(SignupForm):
     mobile = forms.RegexField(
         label="मोबाईल नम्बर",
-        widget=forms.TextInput(
+        widget=forms.NumberInput(
             attrs={"placeholder": "Mobile"}
         ),
         regex="^\\d+$",
@@ -87,6 +87,7 @@ class UserProfileForm(forms.ModelForm):
         
         widgets = {
             'bio': forms.Textarea(attrs={'rows':3}),
+            'phone':forms.NumberInput(),
             'photo':ImageWidget(),
             'country': forms.TextInput(attrs={'value':"नेपाल"}) ,
         }
