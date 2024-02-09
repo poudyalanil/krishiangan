@@ -8,16 +8,8 @@ from hitcount.models import HitCountMixin, HitCount
 from django.contrib.contenttypes.fields import GenericRelation
 
 
-<<<<<<< HEAD
-class UserProfile(models.Model):
-    user = models.OneToOneField(
-        User, related_name='user', on_delete=models.CASCADE)
-    photo = models.ImageField(verbose_name=("Profile Picture"),
-                              upload_to=("profile_photos/"), null=True, blank=True)
-=======
 def get_user_photo_path(instance, filename):
     return 'profile_photos/%s/%s' % (instance.phone,filename)  
->>>>>>> new-main
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
@@ -62,12 +54,6 @@ class categories(models.Model):
     def get_absolute_url(self):
         return reverse("core:category", kwargs={"pk": self.pk})
     
-<<<<<<< HEAD
-    
-def convertToNepali(input):
-    return str(input).replace(',',',').replace('.','.').replace('0','०').replace('1','१').replace('2','२').replace('3','३').replace('4','४').replace('5','५').replace('6','६').replace('7','७').replace('8','८').replace('9','९')
-
-=======
 class Unit(models.Model):
     title_en = models.CharField(max_length=100)
     title_lc = models.CharField(max_length=100,null=True,blank=True)
@@ -77,7 +63,6 @@ class Unit(models.Model):
     def __str__(self):
         return f"{self.title_lc}" if self.title_lc else f"{self.title_en}"
     
->>>>>>> new-main
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
@@ -91,17 +76,8 @@ class Item(models.Model):
     show_expiry = models.BooleanField(default=False)
     price_negotiable = models.BooleanField(default=True)
     description = models.TextField()
-<<<<<<< HEAD
-    thumbnail = models.ImageField(upload_to='images/', default=None)
-    hit_count_generic = GenericRelation(
-        HitCount, object_id_field='object_pk',
-        related_query_name='hit_count_generic_relation')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-=======
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk',related_query_name='hit_count_generic_relation')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
->>>>>>> new-main
     expiry_date = models.DateField(null=True,blank=True)
     upload_date = models.DateField(auto_now_add=True, null=True)
     featured = models.BooleanField(default=False)

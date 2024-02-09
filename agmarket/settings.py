@@ -26,11 +26,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     "pinax.templates",
     'hitcount',
-<<<<<<< HEAD
-    'django_social_share'
-=======
     'django_social_share',
->>>>>>> new-main
 ]
 
 MIDDLEWARE = [
@@ -47,14 +43,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'agmarket.urls'
-<<<<<<< HEAD
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
-=======
->>>>>>> new-main
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 ACCOUNT_USERNAME_REQUIRED = False
