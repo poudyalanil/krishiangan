@@ -37,22 +37,12 @@
           {% endif %}
           <p class="mt-3">{% blocktrans %}खाता छैन भने 
             <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-3">खाता </a> खोल्नुहोला |{% endblocktrans %}</p>
-          <p class="mt-3">{% blocktrans %}खाता छैन भने 
-            <a href="{{ signup_url }}" class="btn btn-sm btn-secondary p-0 px-3">खाता </a> खोल्नुहोला |{% endblocktrans %}</p>
-          <form class="login" method="POST" action="{% url 'core:account_login' %}">
+               <form class="login" method="POST" action="{% url 'core:account_login' %}">
             {% csrf_token %}
             {{ form|crispy }}
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            <div class="mb-3 form-check p-2 ml-4">
-              <input class="form-check-input" type="checkbox" name="toggle" id="togglePassword">
-              <label class="form-check-label" for="togglePassword">पासवर्ड देखाउनुहोस्</label>
-          </div>
-            <div class="text-center">
-              <button class="btn btn-primary" type="submit" style="width:200px"><span class="ti-lock"></span>{% trans "  लगईन" %}</button></br>
-                <a class="btn btn-default text-primary mt-2" href="{% url 'account_reset_password' %}">{% trans "पासवर्ड विर्सनुभयो ?" %}</a>
-            </div>
             <div class="mb-3 form-check p-2 ml-4">
               <input class="form-check-input" type="checkbox" name="toggle" id="togglePassword">
               <label class="form-check-label" for="togglePassword">पासवर्ड देखाउनुहोस्</label>
